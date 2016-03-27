@@ -219,6 +219,7 @@ namespace Server.Mobiles
 	public class BaseCreature : Mobile, IHonorTarget
 	{
         public const int MaxLoyalty = NpcConfig.NpcPetMaxLoyalty;
+        public const int OldMaxLoyalty = NpcConfig.NpcPetMaxLoyalty;
 
 		#region Var declarations
 		private BaseAI m_AI; // THE AI
@@ -253,12 +254,12 @@ namespace Server.Mobiles
 
         private PetLoyalty m_Loyalty;
 
+        private int m_OldLoyalty;
+
         public override bool IsControlled { get { return m_bControlled; } }
         public override bool IsControlMaster(Mobile m) { return m_ControlMaster == m; }
         public override bool IsControlOrderWithMe { get { return (m_ControlOrder == OrderType.Guard || m_ControlOrder == OrderType.Follow || m_ControlOrder == OrderType.Come); } }
         public override bool IsPetBonded { get { return m_IsBonded; } }
-
-		//private int m_Loyalty;
 
 		private double m_dMinTameSkill;
 		private bool m_bTamable;
@@ -1250,54 +1251,72 @@ namespace Server.Mobiles
 
         public virtual bool CheckControlChance(Mobile m, double offset)
 		{
-            double v = GetControlChance(m) + offset;
-
-            if (v > Utility.RandomDouble())
-                return true;
-
-			//if (GetControlChance(m) > Utility.RandomDouble())
-			//{
-			//	Loyalty += 1;
-			//	return true;
-			//}
-
-			//PlaySound(GetAngerSound());
-
-			if (Body.IsAnimal)
-			{
-				Animate(10, 5, 1, true, false, 0);
-			}
-			else if (Body.IsMonster)
-			{
-				Animate(18, 5, 1, true, false, 0);
-			}
-
-            if ((IsBonded ? 0.25 : 0.5) > Utility.RandomDouble())
-                --Loyalty;
-
-            if (Loyalty == PetLoyalty.Confused)
+            if (Core.SA)
             {
-                Say(1043270, Name); // * ~1_NAME~ looks around desperately *
-                PlaySound(GetIdleSound());
-            }
-            else if (Loyalty == PetLoyalty.None)
-            {
-                Say(1043255, Name); // ~1_NAME~ appears to have decided that is better off without a master!
-                Loyalty = PetLoyalty.WonderfullyHappy;
-                IsBonded = false;
-                BondingBegin = DateTime.MinValue;
-                OwnerAbandonTime = DateTime.MinValue;
-                ControlTarget = null;
-                AIObject.DoOrderRelease(); // this will prevent no release of creatures left alone with AI disabled (and consequent bug of Followers)
-                DropBackpack();
+                double v = GetControlChance(m) + offset;
+
+                if (v > Utility.RandomDouble())
+                    return true;
+
+                if (Body.IsAnimal)
+                {
+                    Animate(10, 5, 1, true, false, 0);
+                }
+                else if (Body.IsMonster)
+                {
+                    Animate(18, 5, 1, true, false, 0);
+                }
+
+                if ((IsBonded ? 0.25 : 0.5) > Utility.RandomDouble())
+                {
+                    --Loyalty;
+                }
+
+                if (Loyalty == PetLoyalty.Confused)
+                {
+                    Say(1043270, Name); // * ~1_NAME~ looks around desperately *
+                    PlaySound(GetIdleSound());
+                }
+                else if (Loyalty == PetLoyalty.None)
+                {
+                    Say(1043255, Name); // ~1_NAME~ appears to have decided that is better off without a master!
+                    Loyalty = PetLoyalty.WonderfullyHappy;
+                    IsBonded = false;
+                    BondingBegin = DateTime.MinValue;
+                    OwnerAbandonTime = DateTime.MinValue;
+                    ControlTarget = null;
+                    AIObject.DoOrderRelease(); // this will prevent no release of creatures left alone with AI disabled (and consequent bug of Followers)
+                    DropBackpack();
+                }
+                else
+                {
+                    PlaySound(GetAngerSound());
+                }
+
+                return false;
             }
             else
             {
-                PlaySound(GetAngerSound());
-            }
+                if (GetControlChance(m) > Utility.RandomDouble())
+                {
+                    OldLoyalty += 1;
+                    return true;
+                }
 
-			//Loyalty -= 3;
-			return false;
+                PlaySound(GetAngerSound());
+
+                if (Body.IsAnimal)
+                {
+                    Animate(10, 5, 1, true, false, 0);
+                }
+                else if (Body.IsMonster)
+                {
+                    Animate(18, 5, 1, true, false, 0);
+                }
+
+                OldLoyalty -= 3;
+                return false;
+            }
 		}
 
 		public virtual bool CanBeControlledBy(Mobile m)
@@ -1312,115 +1331,133 @@ namespace Server.Mobiles
 
 		public virtual double GetControlChance(Mobile m, bool useBaseSkill)
 		{
-			if (m_dMinTameSkill <= 29.1 || m_bSummoned || m.AccessLevel >= AccessLevel.GameMaster)
-			{
-				return 1.0;
-			}
-            /*
-            if (this is Hiryu || this is LesserHiryu)
+            if (Core.SA)
             {
-                if (!SamuraiSpell.CheckExpansion(m))
+                if (m_dMinTameSkill <= 29.1 || m_bSummoned || m.AccessLevel >= AccessLevel.GameMaster)
                 {
-                    m.SendLocalizedMessage(1070697); // You must upgrade to the Samurai Empire expansion in order to control this creature.
-                    return 0;
+                    return 1.0;
                 }
+
+                double dMinTameSkill = m_dMinTameSkill;
+
+                if (dMinTameSkill > -24.9 && AnimalTaming.CheckMastery(m, this))
+                {
+                    dMinTameSkill = -24.9;
+                }
+
+                int tamingModifier = 6;
+                int loreModifier = 6;
+
+                double tamingBonus, loreBonus;
+
+                if ((tamingBonus = (m.Skills[SkillName.AnimalTaming].Value - dMinTameSkill)) < 0)
+                {
+                    tamingModifier = 28;
+                }
+
+                if ((loreBonus = (m.Skills[SkillName.AnimalLore].Value - dMinTameSkill)) < 0)
+                {
+                    loreModifier = 14;
+                }
+
+                tamingBonus *= tamingModifier;
+                loreBonus *= loreModifier;
+
+                double skillBonus = (tamingBonus + loreBonus) / 2;
+
+                double chance = (70 + skillBonus) / 100;
+
+                if (chance >= 0 && chance < 0.2)
+                {
+                    chance = 0.2;
+                }
+                else if (chance > 0.99)
+                {
+                    chance = 0.99;
+                }
+
+                if (FeaturesConfig.XmlMobFactionsEnabled)
+                {
+                    chance += (int)XmlMobFactions.GetScaledFaction(m, this, -250, 250, 0.001);
+                }
+
+                return chance;
             }
-             */
-
-			double dMinTameSkill = m_dMinTameSkill;
-
-			if (dMinTameSkill > -24.9 && AnimalTaming.CheckMastery(m, this))
-			{
-				dMinTameSkill = -24.9;
-			}
-
-            int tamingModifier = 6;
-            int loreModifier = 6;
-
-            double tamingBonus, loreBonus;
-
-            if ((tamingBonus = (m.Skills[SkillName.AnimalTaming].Value - dMinTameSkill)) < 0)
-                tamingModifier = 28;
-
-            if ((loreBonus = (m.Skills[SkillName.AnimalLore].Value - dMinTameSkill)) < 0)
-                loreModifier = 14;
-
-            tamingBonus *= tamingModifier;
-            loreBonus *= loreModifier;
-
-            double skillBonus = (tamingBonus + loreBonus) / 2;
-
-            double chance = (70 + skillBonus) / 100;
-
-            if (chance >= 0 && chance < 0.2)
-                chance = 0.2;
-            else if (chance > 0.99)
-                chance = 0.99;
-
-            return chance;
-
-            /*
-			int taming = (int)((useBaseSkill ? m.Skills[SkillName.AnimalTaming].Base : m.Skills[SkillName.AnimalTaming].Value) * 10);
-			int lore = (int)((useBaseSkill ? m.Skills[SkillName.AnimalLore].Base : m.Skills[SkillName.AnimalLore].Value) * 10);
-			int bonus = 0, chance = 700;
-
-			if (Core.ML)
-			{
-				int SkillBonus = taming - (int)(dMinTameSkill * 10);
-				int LoreBonus = lore - (int)(dMinTameSkill * 10);
-
-				int SkillMod = 6, LoreMod = 6;
-
-				if (SkillBonus < 0)
-				{
-					SkillMod = 28;
-				}
-				if (LoreBonus < 0)
-				{
-					LoreMod = 14;
-				}
-
-				SkillBonus *= SkillMod;
-				LoreBonus *= LoreMod;
-
-				bonus = (SkillBonus + LoreBonus) / 2;
-			}
-			else
-			{
-				int difficulty = (int)(dMinTameSkill * 10);
-				int weighted = ((taming * 4) + lore) / 5;
-				bonus = weighted - difficulty;
-
-				if (bonus <= 0)
-				{
-					bonus *= 14;
-				}
-				else
-				{
-					bonus *= 6;
-				}
-			}
-
-			chance += bonus;
-
-			if (chance >= 0 && chance < 200)
-			{
-				chance = 200;
-			}
-			else if (chance > 990)
-			{
-				chance = 990;
-			}
-
-			//chance -= (MaxLoyalty - m_Loyalty) * 10;
-
-            if (FeaturesConfig.XmlMobFactionsEnabled)
+            else
             {
-                chance += (int)XmlMobFactions.GetScaledFaction(m, this, -250, 250, 0.001);
-            }
+                if (m_dMinTameSkill <= 29.1 || m_bSummoned || m.AccessLevel >= AccessLevel.GameMaster)
+                {
+                    return 1.0;
+                }
 
-			return ((double)chance / 1000);
-             */
+                double dMinTameSkill = m_dMinTameSkill;
+
+                if (dMinTameSkill > -24.9 && AnimalTaming.CheckMastery(m, this))
+                {
+                    dMinTameSkill = -24.9;
+                }
+
+                int taming = (int)((useBaseSkill ? m.Skills[SkillName.AnimalTaming].Base : m.Skills[SkillName.AnimalTaming].Value) * 10);
+                int lore = (int)((useBaseSkill ? m.Skills[SkillName.AnimalLore].Base : m.Skills[SkillName.AnimalLore].Value) * 10);
+                int bonus = 0, chance = 700;
+
+                if (Core.ML)
+                {
+                    int SkillBonus = taming - (int)(dMinTameSkill * 10);
+                    int LoreBonus = lore - (int)(dMinTameSkill * 10);
+
+                    int SkillMod = 6, LoreMod = 6;
+
+                    if (SkillBonus < 0)
+                    {
+                        SkillMod = 28;
+                    }
+                    if (LoreBonus < 0)
+                    {
+                        LoreMod = 14;
+                    }
+
+                    SkillBonus *= SkillMod;
+                    LoreBonus *= LoreMod;
+
+                    bonus = (SkillBonus + LoreBonus) / 2;
+                }
+                else
+                {
+                    int difficulty = (int)(dMinTameSkill * 10);
+                    int weighted = ((taming * 4) + lore) / 5;
+                    bonus = weighted - difficulty;
+
+                    if (bonus <= 0)
+                    {
+                        bonus *= 14;
+                    }
+                    else
+                    {
+                        bonus *= 6;
+                    }
+                }
+
+                chance += bonus;
+
+                if (chance >= 0 && chance < 200)
+                {
+                    chance = 200;
+                }
+                else if (chance > 990)
+                {
+                    chance = 990;
+                }
+
+                chance -= (OldMaxLoyalty - m_OldLoyalty) * 10;
+
+                if (FeaturesConfig.XmlMobFactionsEnabled)
+                {
+                    chance += (int)XmlMobFactions.GetScaledFaction(m, this, -250, 250, 0.001);
+                }
+
+                return ((double)chance / 1000);
+            }
 		}
 
 		private static readonly Type[] m_AnimateDeadTypes = new[]
@@ -1596,8 +1633,8 @@ namespace Server.Mobiles
             }
         }
 
-		//[CommandProperty(AccessLevel.GameMaster)]
-		//public int Loyalty { get { return m_Loyalty; } set { m_Loyalty = Math.Min(Math.Max(value, 0), MaxLoyalty); } }
+		[CommandProperty(AccessLevel.GameMaster)]
+		public int OldLoyalty { get { return m_OldLoyalty; } set { m_OldLoyalty = Math.Min(Math.Max(value, 0), OldMaxLoyalty); } }
 
 		[CommandProperty(AccessLevel.GameMaster)]
 		public WayPoint CurrentWayPoint { get { return m_CurrentWayPoint; } set { m_CurrentWayPoint = value; } }
@@ -2139,8 +2176,14 @@ namespace Server.Mobiles
 				iRangePerception = DefaultRangePerception;
 			}
 
-			//m_Loyalty = MaxLoyalty; // Wonderfully Happy
-            m_Loyalty = PetLoyalty.WonderfullyHappy;
+            if (Core.SA)
+            {
+                m_Loyalty = PetLoyalty.WonderfullyHappy;
+            }
+            else
+            {
+                m_OldLoyalty = OldMaxLoyalty; // Wonderfully Happy
+            }
 
 			m_CurrentAI = ai;
 			m_DefaultAI = ai;
@@ -2263,8 +2306,14 @@ namespace Server.Mobiles
 			writer.Write(m_iControlSlots);
 
 			// Version 3
-			//writer.Write(m_Loyalty);
-            writer.Write((int)m_Loyalty);
+            if(Core.SA)
+            {
+                writer.Write((int)m_Loyalty);
+            }
+            else
+            {
+                writer.Write(m_OldLoyalty);
+            }
 
 			// Version 4
 			writer.Write(m_CurrentWayPoint);
@@ -2476,13 +2525,25 @@ namespace Server.Mobiles
 
 			if (version >= 3)
 			{
-				//m_Loyalty = reader.ReadInt();
-                m_Loyalty = (PetLoyalty)reader.ReadInt();
+                if (Core.SA)
+                {
+                    m_Loyalty = (PetLoyalty)reader.ReadInt();
+                }
+                else
+                {
+                    m_OldLoyalty = reader.ReadInt();
+                }
 			}
 			else
 			{
-				//m_Loyalty = MaxLoyalty; // Wonderfully Happy
-                m_Loyalty = PetLoyalty.WonderfullyHappy;
+                if(Core.SA)
+                {
+                    m_Loyalty = PetLoyalty.WonderfullyHappy;
+                }
+                else
+                {
+                    m_OldLoyalty = OldMaxLoyalty; // Wonderfully Happy
+                }
 			}
 
 			if (version >= 4)
@@ -2566,10 +2627,10 @@ namespace Server.Mobiles
 				++m_ControlOrder;
 			}
 
-			//if (version < 16 && Loyalty != MaxLoyalty)
-			//{
-			//	Loyalty *= 10;
-			//}
+			if (version < 16 && OldLoyalty != OldMaxLoyalty)
+			{
+				OldLoyalty *= 10;
+			}
 
 			double activeSpeed = m_dActiveSpeed;
 			double passiveSpeed = m_dPassiveSpeed;
@@ -2912,32 +2973,35 @@ namespace Server.Mobiles
 						{
 							Stam += stamGain;
 						}
-                        /*
-						if (Core.SE)
-						{
-							if (m_Loyalty < MaxLoyalty)
-							{
-								m_Loyalty = MaxLoyalty;
-								happier = true;
-							}
-						}
-						else
-						{
-							for (int i = 0; i < amount; ++i)
-							{
-								if (m_Loyalty < MaxLoyalty && 0.5 >= Utility.RandomDouble())
-								{
-									m_Loyalty += 10;
-									happier = true;
-								}
-							}
-						}
-                         */
-
-                        if (m_Loyalty != PetLoyalty.WonderfullyHappy)
+                        if (Core.SA)
                         {
-                            m_Loyalty = PetLoyalty.WonderfullyHappy;
-                            happier = true;
+                            if (m_Loyalty != PetLoyalty.WonderfullyHappy)
+                            {
+                                m_Loyalty = PetLoyalty.WonderfullyHappy;
+                                happier = true;
+                            }
+                        }
+                        else
+                        {
+                            if (Core.SE)
+                            {
+                                if (m_OldLoyalty < OldMaxLoyalty)
+                                {
+                                    m_OldLoyalty = OldMaxLoyalty;
+                                    happier = true;
+                                }
+                            }
+                            else
+                            {
+                                for (int i = 0; i < amount; ++i)
+                                {
+                                    if (m_OldLoyalty < OldMaxLoyalty && 0.5 >= Utility.RandomDouble())
+                                    {
+                                        m_OldLoyalty += 10;
+                                        happier = true;
+                                    }
+                                }
+                            }
                         }
 
                         #region PetBondingGate
@@ -2994,8 +3058,7 @@ namespace Server.Mobiles
 								}
 								else if (Core.ML)
 								{
-									from.SendLocalizedMessage(1075268);
-									// Your pet cannot form a bond with you until your animal taming ability has risen.
+									from.SendLocalizedMessage(1075268);// Your pet cannot form a bond with you until your animal taming ability has risen.
 								}
 							}
 						}
@@ -7505,99 +7568,151 @@ namespace Server.Mobiles
 						return;
 					}
 
-					if (m is BaseCreature)
-					{
-						BaseCreature c = (BaseCreature)m;
-
-						if (c.IsDeadPet)
-						{
-							Mobile owner = c.ControlMaster;
-
-							if (!c.IsStabled &&
-								(owner == null || owner.Deleted || owner.Map != c.Map || !owner.InRange(c, 12) || !c.CanSee(owner) ||
-								 !c.InLOS(owner)))
-							{
-								if (c.OwnerAbandonTime == DateTime.MinValue)
-								{
-									c.OwnerAbandonTime = DateTime.UtcNow;
-								}
-								else if ((c.OwnerAbandonTime + c.BondingAbandonDelay) <= DateTime.UtcNow)
-								{
-									toRemove.Add(c);
-								}
-							}
-							else
-							{
-								c.OwnerAbandonTime = DateTime.MinValue;
-							}
-						}
-                            /*
-						else if (c.Controlled && c.Commandable)
-						{
-							c.OwnerAbandonTime = DateTime.MinValue;
-
-							if (c.Map != Map.Internal)
-							{
-								c.Loyalty -= (BaseCreature.MaxLoyalty / 10);
-
-								if (c.Loyalty < (BaseCreature.MaxLoyalty / 10))
-								{
-									c.Say(1043270, c.Name); // * ~1_NAME~ looks around desperately *
-									c.PlaySound(c.GetIdleSound());
-								}
-
-								if (c.Loyalty <= 0)
-								{
-									toRelease.Add(c);
-								}
-							}
-						}
-                             */
-                        else if (c.Controlled && c.Commandable && c.Loyalty > PetLoyalty.None && c.Map != Map.Internal)
+                    if(Core.SA)
+                    {
+                        if (m is BaseCreature)
                         {
-                            //Mobile owner = c.ControlMaster;
+                            BaseCreature c = (BaseCreature)m;
 
-                            // changed loyalty decrement
-                            if (hasHourElapsed)
+                            if (c.IsDeadPet)
                             {
-                                --c.Loyalty;
+                                Mobile owner = c.ControlMaster;
 
-                                if (c.Loyalty == PetLoyalty.Confused)
+                                if (!c.IsStabled &&
+                                    (owner == null || owner.Deleted || owner.Map != c.Map || !owner.InRange(c, 12) || !c.CanSee(owner) ||
+                                     !c.InLOS(owner)))
                                 {
-                                    c.Say(1043270, c.Name); // * ~1_NAME~ looks around desperately *
-                                    c.PlaySound(c.GetIdleSound());
+                                    if (c.OwnerAbandonTime == DateTime.MinValue)
+                                    {
+                                        c.OwnerAbandonTime = DateTime.UtcNow;
+                                    }
+                                    else if ((c.OwnerAbandonTime + c.BondingAbandonDelay) <= DateTime.UtcNow)
+                                    {
+                                        toRemove.Add(c);
+                                    }
+                                }
+                                else
+                                {
+                                    c.OwnerAbandonTime = DateTime.MinValue;
                                 }
                             }
+                            else if (c.Controlled && c.Commandable && c.Loyalty > PetLoyalty.None && c.Map != Map.Internal)
+                            {
+                                //Mobile owner = c.ControlMaster;
 
-                            c.OwnerAbandonTime = DateTime.MinValue;
+                                // changed loyalty decrement
+                                if (hasHourElapsed)
+                                {
+                                    --c.Loyalty;
 
-                            if (c.Loyalty == PetLoyalty.None)
-                                toRelease.Add(c);
+                                    if (c.Loyalty == PetLoyalty.Confused)
+                                    {
+                                        c.Say(1043270, c.Name); // * ~1_NAME~ looks around desperately *
+                                        c.PlaySound(c.GetIdleSound());
+                                    }
+                                }
+
+                                c.OwnerAbandonTime = DateTime.MinValue;
+
+                                if (c.Loyalty == PetLoyalty.None)
+                                    toRelease.Add(c);
+                            }
+
+                            // added lines to check if a wild creature in a house region has to be removed or not
+                            if (!c.Controlled && !c.IsStabled && ((c.Region.IsPartOf(typeof(HouseRegion)) && c.CanBeDamaged()) || (c.RemoveIfUntamed && c.Spawner == null)))
+                            {
+                                c.RemoveStep++;
+
+                                if (c.RemoveStep >= 20)
+                                {
+                                    lock (toRemove)
+                                        toRemove.Add(c);
+                                }
+                            }
+                            else
+                            {
+                                c.RemoveStep = 0;
+                            }
                         }
+                    }
+                    else
+                    {
+                        if (m is BaseCreature)
+                        {
+                            BaseCreature c = (BaseCreature)m;
 
-						// added lines to check if a wild creature in a house region has to be removed or not
-						if (!c.Controlled && !c.IsStabled && ((c.Region.IsPartOf(typeof(HouseRegion)) && c.CanBeDamaged()) || (c.RemoveIfUntamed && c.Spawner == null)))
-						{
-							c.RemoveStep++;
+                            if (c.IsDeadPet)
+                            {
+                                Mobile owner = c.ControlMaster;
 
-							if (c.RemoveStep >= 20)
-							{
-								lock (toRemove)
-									toRemove.Add(c);
-							}
-						}
-						else
-						{
-							c.RemoveStep = 0;
-						}
-					}
+                                if (!c.IsStabled &&
+                                    (owner == null || owner.Deleted || owner.Map != c.Map || !owner.InRange(c, 12) || !c.CanSee(owner) ||
+                                     !c.InLOS(owner)))
+                                {
+                                    if (c.OwnerAbandonTime == DateTime.MinValue)
+                                    {
+                                        c.OwnerAbandonTime = DateTime.UtcNow;
+                                    }
+                                    else if ((c.OwnerAbandonTime + c.BondingAbandonDelay) <= DateTime.UtcNow)
+                                    {
+                                        toRemove.Add(c);
+                                    }
+                                }
+                                else
+                                {
+                                    c.OwnerAbandonTime = DateTime.MinValue;
+                                }
+                            }
+                            if (c.Controlled && c.Commandable)
+                            {
+                                c.OwnerAbandonTime = DateTime.MinValue;
+
+                                if (c.Map != Map.Internal)
+                                {
+                                    c.OldLoyalty -= (BaseCreature.OldMaxLoyalty / 10);
+
+                                    if (c.OldLoyalty < (BaseCreature.OldMaxLoyalty / 10))
+                                    {
+                                        c.Say(1043270, c.Name); // * ~1_NAME~ looks around desperately *
+                                        c.PlaySound(c.GetIdleSound());
+                                    }
+
+                                    if (c.OldLoyalty <= 0)
+                                    {
+                                        toRelease.Add(c);
+                                    }
+                                }
+                            }
+                            // added lines to check if a wild creature in a house region has to be removed or not
+                            if (!c.Controlled && !c.IsStabled && ((c.Region.IsPartOf(typeof(HouseRegion)) && c.CanBeDamaged()) || (c.RemoveIfUntamed && c.Spawner == null)))
+                            {
+                                c.RemoveStep++;
+
+                                if (c.RemoveStep >= 20)
+                                {
+                                    lock (toRemove)
+                                        toRemove.Add(c);
+                                }
+                            }
+                            else
+                            {
+                                c.RemoveStep = 0;
+                            }
+                        }
+                    }
 				});
 
 			foreach (BaseCreature c in toRelease)
 			{
 				c.Say(1043255, c.Name); // ~1_NAME~ appears to have decided that is better off without a master!
-				//c.Loyalty = BaseCreature.MaxLoyalty; // Wonderfully Happy
-                c.Loyalty = PetLoyalty.WonderfullyHappy;
+                if(Core.SA)
+                {
+                    c.Loyalty = PetLoyalty.WonderfullyHappy;
+                }
+                else
+                {
+                    c.OldLoyalty = BaseCreature.OldMaxLoyalty; // Wonderfully Happy
+                }
 				c.IsBonded = false;
 				c.BondingBegin = DateTime.MinValue;
 				c.OwnerAbandonTime = DateTime.MinValue;

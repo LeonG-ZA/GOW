@@ -14,7 +14,7 @@ namespace Server.MainConfiguration
         }
         /// <summary>
         /// Expansion Settings
-        /// AOS/ML/SE/SA/HS/TOL/None
+        /// AOS/SE/ML/SA/HS/TOL/None
         /// </summary>
         public static readonly Expansion MainExpansion = Expansion.TOL;
         /// <summary>
