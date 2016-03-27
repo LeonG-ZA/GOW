@@ -1,0 +1,8 @@
+This quest is simple. Add Guard Jedrek and add 5 breakable crates on a spawner or put 5 out for
+testing the quest.
+
+[add GuardJedrek
+
+then add 5 BreakableCrate
+
+5x [add BreakableCrate  

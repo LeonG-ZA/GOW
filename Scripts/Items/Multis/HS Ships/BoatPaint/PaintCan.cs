@@ -1,0 +1,127 @@
+using System;
+using Server;
+using Server.Mobiles;
+using Server.Multis;
+using Server.Targeting;
+
+namespace Server.Items
+{
+    public class PaintCan : Item
+    {
+        private bool m_Redyable;
+        private int m_DyedHue;
+        public override int LabelNumber { get { return 1116236; } }
+
+        public virtual CustomHuePicker CustomHuePicker { get { return null; } }
+
+        public virtual bool AllowRepaint { get { return false; } }
+        public virtual bool AllowHouse { get { return false; } }
+
+        public virtual bool AllowWood { get { return false; } } //Wood walls and doors
+        public virtual bool AllowStone { get { return false; } } //Stone walls and doors
+        public virtual bool AllowMarble { get { return false; } } //Marble walls and doors
+        public virtual bool AllowPlaster { get { return false; } } //Plaster and clay walls and doors
+        public virtual bool AllowSandstone { get { return false; } } //Sandstone walls and doors
+        public virtual bool AllowOther { get { return false; } } //Hide, Paper, Bamboo or Rattan walls and doors
+
+        public override bool DisplayWeight { get { return false; } }
+
+        public override void Serialize(GenericWriter writer)
+        {
+            base.Serialize(writer);
+
+            writer.Write((int)0); // version
+
+            writer.Write((bool)m_Redyable);
+            writer.Write((int)m_DyedHue);
+        }
+
+        public override void Deserialize(GenericReader reader)
+        {
+            base.Deserialize(reader);
+
+            int version = reader.ReadInt();
+
+            switch (version)
+            {
+                case 0:
+                    {
+                        m_Redyable = reader.ReadBool();
+                        m_DyedHue = reader.ReadInt();
+
+                        break;
+                    }
+            }
+        }
+
+        [CommandProperty(AccessLevel.GameMaster)]
+        public bool Redyable { get { return m_Redyable; } set { m_Redyable = value; } }
+
+        [CommandProperty(AccessLevel.GameMaster)]
+        public virtual int DyedHue { get { return m_DyedHue; } set { if (m_Redyable) { m_DyedHue = value; Hue = value; } } }
+
+        [Constructable]
+        public PaintCan()
+            : this(1)
+        {
+        }
+
+        [Constructable]
+        public PaintCan(int uses) : base(0xFAB)
+        {
+            Weight = 10.0;
+            m_Redyable = false;
+        }
+
+        public PaintCan(Serial serial)
+            : base(serial)
+        {
+        }
+
+        public override void OnDoubleClick(Mobile from)
+        {
+            if (from.InRange(this.GetWorldLocation(), 1))
+            {
+                from.SendLocalizedMessage(1116613);//Select the main mast of the ship you wish to dye.
+                from.Target = new InternalTarget(this);
+            }
+            else
+            {
+                from.SendLocalizedMessage(500446); // That is too far away.
+            }
+        }
+
+        private class InternalTarget : Target
+        {
+            private PaintCan m_Can;
+            public InternalTarget(PaintCan can)
+                : base(3, false, TargetFlags.None)
+            {
+                m_Can = can;
+            }
+
+            protected override void OnTarget(Mobile from, object targeted)
+            {
+                bool GM = from.AccessLevel >= AccessLevel.GameMaster;
+                int id = 0;
+                if (targeted is BaseSmoothMulti)
+                {
+                    BaseSmoothMulti target = targeted as BaseSmoothMulti;
+                    id = target.ItemID;
+                    target.Hue = m_Can.DyedHue;
+                    from.SendLocalizedMessage(1116771);//You apply a fresh coat of paint to your ship.
+                    m_Can.Delete();
+
+                }
+                else if (targeted is MainMast)
+                {
+                    MainMast target = targeted as MainMast;
+                    id = target.ItemID;
+                    target.Hue = m_Can.DyedHue;
+                    from.SendLocalizedMessage(1116771);//You apply a fresh coat of paint to your ship.
+                    m_Can.Delete();
+                }
+            }
+        }
+    }
+}

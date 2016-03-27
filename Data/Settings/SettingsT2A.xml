@@ -1,0 +1,9 @@
+<SettingsT2A>
+  <T2AHouseGumpEnabled active="false" />
+  <T2AHouseDoorKeysEnabled active="false" />
+  <T2AItemIDEnabled active="false" />
+  <T2AClassicMoonGenEnabled active="false" />
+  <T2AFeluccaOnlyClassicEnabled active="false" />
+  <T2AClassicHarborMEnabled active="false" />
+  <T2AArchitectEnabled active="false" />
+</SettingsT2A>

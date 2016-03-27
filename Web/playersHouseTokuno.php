@@ -1,0 +1,57 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+<style type="text/css">
+#map
+{
+background:#ffa url("./maps/Tokuno.jpg") no-repeat;
+width:2896px;
+height:2896px;
+}
+.player
+{
+background:url("./house.gif") no-repeat;
+width:18px;
+height:18px;
+}
+</style>
+<meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
+<title>Tokuno</title>
+</head>
+<body>
+	<div id="map">
+<?php
+$xml = simplexml_load_file("playersHousePosistion.xml");
+
+foreach ($xml->children() as $child)
+  {
+	  foreach ($child->children() as $child1)
+	  {
+		switch($child1->getName())
+		{
+			case "name":
+				$name= $child1;
+				break;
+			case "x":
+				$x= $child1*2;
+				break;
+			case "y":
+				$y= $child1*2;
+				break;
+			case "map":
+				$map=$child1;
+				break;
+			default:
+				echo "ololooo error";
+		}
+	   }
+	if($map=="Tokuno")
+	{
+	 echo "<div class=\"player\" title=\"".$name."\" style=\"position:absolute;top:".$y."px;left:".$x."px\"></div>";
+	}
+  }
+ 
+?>
+	</div>
+</body>
+</html>
