@@ -276,10 +276,17 @@ namespace Server.Items
                     pet.SummonMaster = null;
 
                     pet.IsStabled = true;
-
-                    if (Core.SE)
-                        //pet.Loyalty = BaseCreature.MaxLoyalty; // Wonderfully happy
+                    if (Core.SA)
+                    {
                         pet.Loyalty = PetLoyalty.WonderfullyHappy; // Wonderfully happy
+                    }
+                    else
+                    {
+                        if (Core.SE)
+                        {
+                            pet.OldLoyalty = BaseCreature.OldMaxLoyalty; // Wonderfully happy
+                        }
+                    }
 
                     from.Stabled.Add(pet);
 
@@ -328,9 +335,17 @@ namespace Server.Items
 
                     pet.IsStabled = false;
 
-                    if (Core.SE)
-                        //pet.Loyalty = BaseCreature.MaxLoyalty; // Wonderfully Happy
+                    if (Core.SA)
+                    {
                         pet.Loyalty = PetLoyalty.WonderfullyHappy; // Wonderfully happy
+                    }
+                    else
+                    {
+                        if (Core.SE)
+                        {
+                            pet.OldLoyalty = BaseCreature.OldMaxLoyalty; // Wonderfully happy
+                        }
+                    }
 
                     from.Stabled.RemoveAt(i);
                     --i;
