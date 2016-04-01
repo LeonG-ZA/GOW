@@ -101,7 +101,9 @@ namespace Server.Mobiles
                     BaseCreature pet = list[i];
 
                     if (pet == null || pet.Deleted)
+                    {
                         continue;
+                    }
 
                     this.AddButton(15, 39 + (i * 20), 10006, 10006, i + 1, GumpButtonType.Reply, 0);
                     this.AddHtml(32, 35 + (i * 20), 275, 18, String.Format("<BASEFONT COLOR=#C0C0EE>{0}</BASEFONT>", pet.Name), false, false);
@@ -113,7 +115,9 @@ namespace Server.Mobiles
                 int index = info.ButtonID - 1;
 
                 if (index >= 0 && index < this.m_List.Count)
+                {
                     this.m_Trainer.EndClaimList(this.m_From, this.m_List[index]);
+                }
             }
         }
 
@@ -142,7 +146,9 @@ namespace Server.Mobiles
                 list.Add(new StableEntry(this, from));
 
                 if (from.Stabled.Count > 0)
+                {
                     list.Add(new ClaimAllEntry(this, from));
+                }
             }
 
             base.AddCustomContextEntries(from, list);
@@ -158,22 +164,36 @@ namespace Server.Mobiles
             int max;
 
             if (sklsum >= 240.0)
+            {
                 max = 5;
+            }
             else if (sklsum >= 200.0)
+            {
                 max = 4;
+            }
             else if (sklsum >= 160.0)
+            {
                 max = 3;
+            }
             else
+            {
                 max = 2;
+            }
 
             if (taming >= 100.0)
+            {
                 max += (int)((taming - 90.0) / 10);
+            }
 
             if (anlore >= 100.0)
+            {
                 max += (int)((anlore - 90.0) / 10);
+            }
 
             if (vetern >= 100.0)
+            {
                 max += (int)((vetern - 90.0) / 10);
+            }
 
             if (Core.SA)
             {
@@ -201,11 +221,17 @@ namespace Server.Mobiles
             protected override void OnTarget(Mobile from, object targeted)
             {
                 if (targeted is BaseCreature)
+                {
                     this.m_Trainer.EndStable(from, (BaseCreature)targeted);
+                }
                 else if (targeted == from)
+                {
                     this.m_Trainer.SayTo(from, 502672); // HA HA HA! Sorry, I am not an inn.
+                }
                 else
+                {
                     this.m_Trainer.SayTo(from, 1048053); // You can't stable that!
+                }
             }
         }
 
@@ -217,7 +243,9 @@ namespace Server.Mobiles
         public void BeginClaimList(Mobile from)
         {
             if (this.Deleted || !from.CheckAlive())
+            {
                 return;
+            }
 
             List<BaseCreature> list = new List<BaseCreature>();
 
@@ -238,15 +266,21 @@ namespace Server.Mobiles
             }
 
             if (list.Count > 0)
+            {
                 from.SendGump(new ClaimListGump(this, from, list));
+            }
             else
+            {
                 this.SayTo(from, 502671); // But I have no animals stabled with me at the moment!
+            }
         }
 
         public void EndClaimList(Mobile from, BaseCreature pet)
         {
             if (pet == null || pet.Deleted || from.Map != this.Map || !from.Stabled.Contains(pet) || !from.CheckAlive())
+            {
                 return;
+            }
 
             if (!from.InRange(this, 14))
             {
@@ -261,7 +295,9 @@ namespace Server.Mobiles
                 from.Stabled.Remove(pet);
 
                 if (from is PlayerMobile)
+                {
                     ((PlayerMobile)from).AutoStabled.Remove(pet);
+                }
             }
             else
             {
@@ -376,8 +412,7 @@ namespace Server.Mobiles
                     Account acnt = (Account)from.Account;
                     int balance = acnt.TotalGold;
 
-                    if ((from.Backpack != null && from.Backpack.ConsumeTotal(typeof(Gold), 30)) ||
-                        (bank != null && Banker.Withdraw(from, 30)))
+                    if ((from.Backpack != null && from.Backpack.ConsumeTotal(typeof(Gold), 30)) || (bank != null && Banker.Withdraw(from, 30)))
                     {
                         pet.ControlTarget = null;
                         pet.ControlOrder = OrderType.Stay;
@@ -389,14 +424,19 @@ namespace Server.Mobiles
                         pet.IsStabled = true;
                         pet.StabledBy = from;
 
-                        if (Core.SE)
-                            //pet.Loyalty = BaseCreature.MaxLoyalty; // Wonderfully happy 
+                        if (Core.SA)
+                        {
                             pet.Loyalty = PetLoyalty.WonderfullyHappy; // Wonderfully happy
+                        }
+                        else
+                        {
+                            if (Core.SE)
+                                pet.OldLoyalty = BaseCreature.OldMaxLoyalty; // Wonderfully happy 
+                        }
 
                         from.Stabled.Add(pet);
 
-                        this.SayTo(from, Core.AOS ? 1049677 : 502679);
-                        // [AOS: Your pet has been stabled.] Very well, thy pet is stabled. Thou mayst recover it by saying 'claim' to me. In one real world week, I shall sell it off if it is not claimed!  
+                        this.SayTo(from, Core.AOS ? 1049677 : 502679);// [AOS: Your pet has been stabled.] Very well, thy pet is stabled. Thou mayst recover it by saying 'claim' to me. In one real world week, I shall sell it off if it is not claimed!  
                     }
                     else
                     {
@@ -417,9 +457,15 @@ namespace Server.Mobiles
                         pet.IsStabled = true;
                         pet.StabledBy = from;
 
-                        if (Core.SE)
-                            //pet.Loyalty = BaseCreature.MaxLoyalty; // Wonderfully happy 
+                        if (Core.SA)
+                        {
                             pet.Loyalty = PetLoyalty.WonderfullyHappy; // Wonderfully happy
+                        }
+                        else
+                        {
+                            if (Core.SE)
+                                pet.OldLoyalty = BaseCreature.OldMaxLoyalty; // Wonderfully happy 
+                        }
 
                         from.Stabled.Add(pet);
 
@@ -442,7 +488,9 @@ namespace Server.Mobiles
         public void Claim(Mobile from, string petName)
         {
             if (this.Deleted || !from.CheckAlive())
+            {
                 return;
+            }
 
             bool claimed = false;
             int stabled = 0;
@@ -465,7 +513,9 @@ namespace Server.Mobiles
                 ++stabled;
 
                 if (claimByName && !Insensitive.Equals(pet.Name, petName))
+                {
                     continue;
+                }
 
                 if (this.CanClaim(from, pet))
                 {
@@ -474,7 +524,9 @@ namespace Server.Mobiles
                     from.Stabled.RemoveAt(i);
 
                     if (from is PlayerMobile)
+                    {
                         ((PlayerMobile)from).AutoStabled.Remove(pet);
+                    }
 
                     --i;
 
@@ -487,11 +539,17 @@ namespace Server.Mobiles
             }
 
             if (claimed)
+            {
                 this.SayTo(from, 1042559); // Here you go... and good day to you!
+            }
             else if (stabled == 0)
+            {
                 this.SayTo(from, 502671); // But I have no animals stabled with me at the moment!
+            }
             else if (claimByName)
+            {
                 this.BeginClaimList(from);
+            }
         }
 
         public bool CanClaim(Mobile from, BaseCreature pet)
@@ -504,7 +562,9 @@ namespace Server.Mobiles
             pet.SetControlMaster(from);
 
             if (pet.Summoned)
+            {
                 pet.SummonMaster = from;
+            }
 
             pet.ControlTarget = from;
             pet.ControlOrder = OrderType.Follow;
@@ -514,9 +574,15 @@ namespace Server.Mobiles
             pet.IsStabled = false;
             pet.StabledBy = null;
 
-            if (Core.SE)
-                //pet.Loyalty = BaseCreature.MaxLoyalty; // Wonderfully Happy
+            if (Core.SA)
+            {
                 pet.Loyalty = PetLoyalty.WonderfullyHappy; // Wonderfully happy
+            }
+            else
+            {
+                if (Core.SE)
+                    pet.OldLoyalty = BaseCreature.OldMaxLoyalty; // Wonderfully happy 
+            }
         }
 
         public override bool HandlesOnSpeech(Mobile from)
@@ -542,9 +608,13 @@ namespace Server.Mobiles
                 int index = e.Speech.IndexOf(' ');
 
                 if (index != -1)
+                {
                     this.Claim(e.Mobile, e.Speech.Substring(index).Trim());
+                }
                 else
+                {
                     this.Claim(e.Mobile);
+                }
             }
             else if (!e.Handled && e.Speech.Contains("stablecount") == true)
             {

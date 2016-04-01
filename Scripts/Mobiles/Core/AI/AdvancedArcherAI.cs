@@ -9,11 +9,10 @@ namespace Server.Mobiles
 {
     public class AdvancedArcherAI : BaseAI
     {
-        //GS
         private bool WasTooNear;
         private bool WasHiding;
         private bool IsSetUp;
-        //GS//
+
         public AdvancedArcherAI(BaseCreature m)
             : base(m)
         {
@@ -39,7 +38,6 @@ namespace Server.Mobiles
             return true;
         }
 
-        //GS
         public override bool DoActionCombat()
         {
             if (m_Mobile.Combatant == null || m_Mobile.Combatant.Deleted || !m_Mobile.Combatant.Alive || m_Mobile.Combatant.IsDeadBondedPet)
@@ -178,7 +176,6 @@ namespace Server.Mobiles
                 }
                 //STOP ACTION
             }
-            //GS//
 
             // When we have no ammo, we flee
             Container pack = m_Mobile.Backpack;
