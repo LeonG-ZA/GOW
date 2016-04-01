@@ -84,6 +84,7 @@ namespace Server.Items
         #endregion
 
         private int m_TimesImbued;
+        private bool m_IsImbued;
         private int m_PhysImbuing;
         private int m_FireImbuing;
         private int m_ColdImbuing;
@@ -126,7 +127,8 @@ namespace Server.Items
         public virtual int OldIntReq { get { return 0; } }
 
         //public virtual bool CanFortify { get { return m_TimesImbued == 0; } }
-        public virtual bool CanFortify { get { return m_TimesImbued == 0 && NegativeAttributes.Antique < 3; } }
+        //public virtual bool CanFortify { get { return m_TimesImbued == 0 && NegativeAttributes.Antique < 3; } }
+        public virtual bool CanFortify { get { return m_IsImbued == false && NegativeAttributes.Antique < 3; } }
         public virtual bool UseIntOrDexProperty { get { return false; } }
         public virtual int IntOrDexPropertyValue { get { return 0; } }
         public virtual bool CanRepair { get { return m_NegativeAttributes.NoRepair == 0; } }
@@ -259,6 +261,30 @@ namespace Server.Items
         {
             get { return m_TimesImbued; }
             set { m_TimesImbued = value; InvalidateProperties(); }
+        }
+
+        [CommandProperty(AccessLevel.GameMaster)]
+        public bool IsImbued
+        {
+            get
+            {
+                if (this.TimesImbued >= 1)
+                {
+                    m_IsImbued = true;
+                }
+                return m_IsImbued;
+            }
+            set
+            {
+                if (this.TimesImbued >= 1)
+                {
+                    m_IsImbued = true;
+                }
+                else
+                {
+                    m_IsImbued = value; InvalidateProperties();
+                }
+            }
         }
 
         [CommandProperty(AccessLevel.GameMaster)]
@@ -1158,7 +1184,10 @@ namespace Server.Items
         {
             base.Serialize(writer);
 
-            writer.Write((int)10); // version
+            writer.Write((int)11); // version
+
+            // Version 11
+            writer.Write((bool)this.m_IsImbued); 
 
             // Version 10
             writer.Write(m_EngravedText);
@@ -1362,6 +1391,11 @@ namespace Server.Items
 
             switch ( version )
             {
+                case 11:
+                    {
+                        this.m_IsImbued = reader.ReadBool();
+                        goto case 10;
+                    }
                 case 10:
                     {
                         m_EngravedText = reader.ReadString();
@@ -2411,7 +2445,8 @@ namespace Server.Items
                         list.Add(1050043, m_Crafter.TitleName); // crafted by ~1_NAME~ 
                     }
 
-                    if (m_TimesImbued > 0)
+                    //if (m_TimesImbued > 0)
+                    if (this.m_IsImbued == true)
                     {
                         list.Add(1080418); // (Imbued)
                     }
@@ -2537,7 +2572,8 @@ namespace Server.Items
                     //list.Add(1050043, m_Crafter.Name); // crafted by ~1_NAME~
                     list.Add(1050043, m_Crafter.TitleName); // crafted by ~1_NAME~ 
 
-                if (m_TimesImbued > 0)
+                //if (m_TimesImbued > 0)
+                if (this.m_IsImbued == true)
                     list.Add(1080418); // (Imbued)
 
                 if ( m_Altered )

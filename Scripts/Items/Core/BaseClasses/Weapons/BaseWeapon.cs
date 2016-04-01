@@ -124,6 +124,7 @@ namespace Server.Items
 		private WeaponAnimation m_Animation;
 
         private int m_TimesImbued;
+        private bool m_IsImbued;
         private bool m_DImodded;
 
         private bool m_SearingWeapon;
@@ -180,7 +181,8 @@ namespace Server.Items
 
 		//public virtual bool CanFortify { get { return true; } }
         //public virtual bool CanFortify { get { return m_TimesImbued == 0; } }
-        public virtual bool CanFortify { get { return m_TimesImbued == 0 && NegativeAttributes.Antique < 3; } }  
+        //public virtual bool CanFortify { get { return m_TimesImbued == 0 && NegativeAttributes.Antique < 3; } } 
+        public virtual bool CanFortify { get { return m_IsImbued == false && NegativeAttributes.Antique < 3; } }
         public virtual bool CanRepair { get { return m_NegativeAttributes.NoRepair == 0; } }
         //public virtual bool CanImbue { get { return true; } }
         public virtual bool CanImbue { get { return ArtifactRarity == 0; } }
@@ -603,6 +605,30 @@ namespace Server.Items
         {
             get { return m_TimesImbued; }
             set { m_TimesImbued = value; }
+        }
+
+        [CommandProperty(AccessLevel.GameMaster)]
+        public bool IsImbued
+        {
+            get
+            {
+                if (this.TimesImbued >= 1)
+                {
+                    m_IsImbued = true;
+                }
+                return m_IsImbued;
+            }
+            set
+            {
+                if (this.TimesImbued >= 1)
+                {
+                    m_IsImbued = true;
+                }
+                else
+                {
+                    m_IsImbued = value; InvalidateProperties();
+                }
+            }
         }
 
         [CommandProperty(AccessLevel.GameMaster)]
@@ -3872,8 +3898,11 @@ if (DefenseMastery.GetMalus(attacker, ref defenseMasteryMalus))
 		{
 			base.Serialize(writer);
 
-			writer.Write(15); // version old 13
-            //version 15, converted SaveFlags to long, added negative attributes 
+			writer.Write(16); // version old 13
+            //version 15, converted SaveFlags to long, added negative attributes
+
+            // Version 16
+            writer.Write(m_IsImbued);
 
             writer.Write((int)m_GorgonCharges);
 
@@ -4220,6 +4249,11 @@ if (DefenseMastery.GetMalus(attacker, ref defenseMasteryMalus))
 
 			switch (version)
 			{
+                case 16:
+                    {
+                        m_IsImbued = reader.ReadBool();
+                        goto case 15;
+                    }
                 case 15:
                 case 14:
                     {
@@ -5135,7 +5169,8 @@ if (DefenseMastery.GetMalus(attacker, ref defenseMasteryMalus))
                         list.Add(1111709); // Gargoyles Only
                     }
 
-                    if (m_TimesImbued > 0)
+                    //if (m_TimesImbued > 0)
+                    if (m_IsImbued == true)
                     {
                         list.Add(1080418); // (Imbued)
                     }
@@ -5766,7 +5801,8 @@ if (DefenseMastery.GetMalus(attacker, ref defenseMasteryMalus))
                     }
                 }
 
-                if (m_TimesImbued > 0)
+                //if (m_TimesImbued > 0)
+                if (m_IsImbued == true)
                 {
                     list.Add(1080418); // (Imbued)
                 }

@@ -57,6 +57,7 @@ namespace Server.Items
         private GemType m_GemType;
 
         private int m_TimesImbued;
+        private bool m_IsImbued;
         private bool m_BlockRepair;
         private ItemPower m_ItemPower;
         private ReforgedPrefix m_ReforgedPrefix;
@@ -244,6 +245,30 @@ namespace Server.Items
         {
             get { return this.m_TimesImbued; }
             set { m_TimesImbued = value; InvalidateProperties(); }
+        }
+
+        [CommandProperty(AccessLevel.GameMaster)]
+        public bool IsImbued
+        {
+            get
+            {
+                if (this.TimesImbued >= 1)
+                {
+                    m_IsImbued = true;
+                }
+                return m_IsImbued;
+            }
+            set
+            {
+                if (this.TimesImbued >= 1)
+                {
+                    m_IsImbued = true;
+                }
+                else
+                {
+                    m_IsImbued = value; InvalidateProperties();
+                }
+            }
         }
 
         [CommandProperty(AccessLevel.GameMaster)]
@@ -524,7 +549,8 @@ namespace Server.Items
         }
 
         //public virtual bool CanFortify { get { return false; } }
-        public virtual bool CanFortify { get { return m_TimesImbued == 0 && NegativeAttributes.Antique < 3; } }  
+        //public virtual bool CanFortify { get { return m_TimesImbued == 0 && NegativeAttributes.Antique < 3; } }
+        public virtual bool CanFortify { get { return m_IsImbued == false && NegativeAttributes.Antique < 3; } }
         public virtual bool CanRepair { get { return m_NegativeAttributes.NoRepair == 0; } }
 
         public override void OnAdded(IEntity parent)
@@ -658,7 +684,8 @@ namespace Server.Items
             {
                 if (m_Identified)
                 {
-                    if (this.m_TimesImbued > 0)
+                    //if (this.m_TimesImbued > 0)
+                    if (this.m_IsImbued == true)
                         list.Add(1080418); // (Imbued)
 
                     if (m_AosAttributes.Brittle > 0 || Brittle)
@@ -834,7 +861,8 @@ namespace Server.Items
             }
             else
             {
-                if (this.m_TimesImbued > 0)
+                //if (this.m_TimesImbued > 0)
+                if (this.m_IsImbued == true) 
                     list.Add(1080418); // (Imbued)
 
                 if (m_AosAttributes.Brittle > 0 || Brittle)
@@ -1021,7 +1049,10 @@ namespace Server.Items
         {
             base.Serialize(writer);
 
-            writer.Write(9); // version
+            writer.Write(10); // version
+
+            // Version 10
+            writer.Write((bool)this.m_IsImbued); 
 
             // Version 9
             m_NegativeAttributes.Serialize(writer);
@@ -1087,6 +1118,11 @@ namespace Server.Items
 
             switch (version)
             {
+                case 10:
+                    {
+                        m_IsImbued = reader.ReadBool();
+                        goto case 9;
+                    }
                 case 9:
                     {
                         m_NegativeAttributes = new NegativeAttributes(this, reader);

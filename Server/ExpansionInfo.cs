@@ -176,37 +176,25 @@ namespace Server
         public CustomHousingFlags CustomHousingFlags { get { return m_CustomHousingFlag; } }
 		public ClientVersion RequiredClient { get { return m_RequiredClient; } }
 
-		public ExpansionInfo(
-			int id,
-			string name,
-			ClientFlags clientFlags,
-			FeatureFlags supportedFeatures,
-			CharacterListFlags charListFlags,
-			CustomHousingFlags CustomHousingFlags)
-		{
-			m_Name = name;
-			m_ID = id;
-			m_ClientFlags = clientFlags;
-			m_SupportedFeatures = supportedFeatures;
-			m_CharListFlags = charListFlags;
-			m_CustomHousingFlag = CustomHousingFlags;
-		}
+        public ExpansionInfo(int id, string name, ClientFlags clientFlags, FeatureFlags supportedFeatures, CharacterListFlags charListFlags, CustomHousingFlags CustomHousingFlags)
+        {
+            m_Name = name;
+            m_ID = id;
+            m_ClientFlags = clientFlags;
+            m_SupportedFeatures = supportedFeatures;
+            m_CharListFlags = charListFlags;
+            m_CustomHousingFlag = CustomHousingFlags;
+        }
 
-		public ExpansionInfo(
-			int id,
-			string name,
-			ClientVersion requiredClient,
-			FeatureFlags supportedFeatures,
-			CharacterListFlags charListFlags,
-            CustomHousingFlags CustomHousingFlags)
-		{
-			m_Name = name;
-			m_ID = id;
-			m_SupportedFeatures = supportedFeatures;
-			m_CharListFlags = charListFlags;
-			m_CustomHousingFlag = CustomHousingFlags;
-			m_RequiredClient = requiredClient;
-		}
+        public ExpansionInfo(int id, string name, ClientVersion requiredClient, FeatureFlags supportedFeatures, CharacterListFlags charListFlags, CustomHousingFlags CustomHousingFlags)
+        {
+            m_Name = name;
+            m_ID = id;
+            m_SupportedFeatures = supportedFeatures;
+            m_CharListFlags = charListFlags;
+            m_CustomHousingFlag = CustomHousingFlags;
+            m_RequiredClient = requiredClient;
+        }
 
 		public static ExpansionInfo GetInfo(Expansion ex)
 		{

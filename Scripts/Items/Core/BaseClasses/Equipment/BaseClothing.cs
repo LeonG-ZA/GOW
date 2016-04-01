@@ -52,7 +52,8 @@ namespace Server.Items
             set { m_Identified = value; InvalidateProperties(); }
         }
 
-        public virtual bool CanFortify { get { return m_TimesImbued == 0 && NegativeAttributes.Antique < 3; } }
+        //public virtual bool CanFortify { get { return m_TimesImbued == 0 && NegativeAttributes.Antique < 3; } }
+        public virtual bool CanFortify { get { return m_IsImbued == false && NegativeAttributes.Antique < 3; } }
         public virtual bool CanRepair { get { return m_NegativeAttributes.NoRepair == 0; } }
         public virtual bool CanImbue { get { return ArtifactRarity == 0; } }
 
@@ -72,6 +73,7 @@ namespace Server.Items
         private NegativeAttributes m_NegativeAttributes;
 
         private int m_TimesImbued;
+        private bool m_IsImbued;
         private int m_PhysImbuing;
         private int m_FireImbuing;
         private int m_ColdImbuing;
@@ -198,6 +200,30 @@ namespace Server.Items
         {
             get { return m_TimesImbued; }
             set { m_TimesImbued = value; InvalidateProperties(); }
+        }
+
+        [CommandProperty(AccessLevel.GameMaster)]
+        public bool IsImbued
+        {
+            get
+            {
+                if (this.TimesImbued >= 1)
+                {
+                    m_IsImbued = true;
+                }
+                return m_IsImbued;
+            }
+            set
+            {
+                if (this.TimesImbued >= 1)
+                {
+                    m_IsImbued = true;
+                }
+                else
+                {
+                    m_IsImbued = value; InvalidateProperties();
+                }
+            }
         }
 
         public int PhysImbuing
@@ -1200,7 +1226,8 @@ namespace Server.Items
             {
                 if (m_Identified)
                 {
-                    if (this.m_TimesImbued > 0)
+                    //if (this.m_TimesImbued > 0)
+                    if (m_IsImbued == true)
                         list.Add(1080418); // (Imbued)
 
                     if (m_AosAttributes.Brittle > 0 || Brittle)
@@ -1424,7 +1451,8 @@ namespace Server.Items
             }
             else
             {
-                if (this.m_TimesImbued > 0)
+                //if (this.m_TimesImbued > 0)
+                if (m_IsImbued == true)
                     list.Add(1080418); // (Imbued)
 
                 if (m_AosAttributes.Brittle > 0 || Brittle)
@@ -1693,7 +1721,6 @@ namespace Server.Items
                 attrs.Add(new EquipInfoAttribute(1018305 - (int)m_Quality));
         }
 
-        #region Serialization
         private static void SetSaveFlag(ref SaveFlag flags, SaveFlag toSet, bool setIf)
         {
             if (setIf)
@@ -1727,7 +1754,6 @@ namespace Server.Items
             Altered = 0x00004000
         }
 
-        #region Mondain's Legacy Sets
         private static void SetSaveFlag(ref SetFlag flags, SetFlag toSet, bool setIf)
         {
             if (setIf)
@@ -1756,25 +1782,21 @@ namespace Server.Items
             SetEquipped = 0x00000400,
             SetSelfRepair = 0x00000800,
         }
-        #endregion
 
         public override void Serialize(GenericWriter writer)
         {
             base.Serialize(writer);
 
-            writer.Write(7); // version
+            writer.Write(8); // version
+
+            // Version 8
+            writer.Write((bool)m_IsImbued);
 
             //Version 7
-            #region Runic Reforging
             writer.Write((int)m_ReforgedPrefix);
             writer.Write((int)m_ReforgedSuffix);
             writer.Write((int)m_ItemPower);
             writer.Write(m_BlockRepair);
-            #endregion
-
-            #region Stygian Abyss
-            //writer.Write(m_GorgonLenseCharges);
-            //writer.Write((int)m_GorgonLenseType);
 
             writer.Write(m_PhysImbuing);
             writer.Write(m_FireImbuing);
@@ -1784,23 +1806,10 @@ namespace Server.Items
 
             // Version 6
             writer.Write((int)this.m_TimesImbued);
-            #endregion
 
             // Version 6
-            /*
-            #region SF Imbuing
-            writer.Write((int)m_TimesImbued); // Imbuing
-
-            writer.Write((bool)Physical_Modded);
-            writer.Write((bool)Fire_Modded);
-            writer.Write((bool)Cold_Modded);
-            writer.Write((bool)Poison_Modded);
-            writer.Write((bool)Energy_Modded);
-            #endregion
-             */
             writer.Write(m_BlessedBy);
 
-            #region Mondain's Legacy Sets
             SetFlag sflags = SetFlag.None;
 
             SetSaveFlag(ref sflags, SetFlag.Attributes, !m_SetAttributes.IsEmpty);
@@ -1849,7 +1858,6 @@ namespace Server.Items
 
             if (GetSaveFlag(sflags, SetFlag.SetSelfRepair))
                 writer.WriteEncodedInt((int)m_SetSelfRepair);
-            #endregion
 
             // Version 5
             SaveFlag flags = SaveFlag.None;
@@ -1918,20 +1926,19 @@ namespace Server.Items
 
             switch ( version )
             {
+                case 8:
+                    {
+                        m_IsImbued = reader.ReadBool();
+                        goto case 7;
+                    }
                 case 7:
                     {
                         //m_SAAbsorptionAttributes = new SAAbsorptionAttributes(this, reader);
 
-                        #region Runic Reforging
                         m_ReforgedPrefix = (ReforgedPrefix)reader.ReadInt();
                         m_ReforgedSuffix = (ReforgedSuffix)reader.ReadInt();
                         m_ItemPower = (ItemPower)reader.ReadInt();
                         m_BlockRepair = reader.ReadBool();
-                        #endregion
-
-                        #region Stygian Abyss
-                        //m_GorgonLenseCharges = reader.ReadInt();
-                        //m_GorgonLenseType = (LenseType)reader.ReadInt();
 
                         m_PhysImbuing = reader.ReadInt();
                         m_FireImbuing = reader.ReadInt();
@@ -1946,16 +1953,6 @@ namespace Server.Items
                            // m_SAAbsorptionAttributes = new SAAbsorptionAttributes(this);
 
                         this.m_TimesImbued = reader.ReadInt();
-                        #endregion
-                        /*
-                        m_TimesImbued = reader.ReadInt();
-
-                        Physical_Modded = reader.ReadBool();
-                        Fire_Modded = reader.ReadBool();
-                        Cold_Modded = reader.ReadBool();
-                        Poison_Modded = reader.ReadBool();
-                        Energy_Modded = reader.ReadBool();
-                         */
                         m_BlessedBy = reader.ReadMobile();
 
                         SetFlag sflags = (SetFlag)reader.ReadEncodedInt();
@@ -2143,8 +2140,6 @@ namespace Server.Items
             }
         }
 
-        #endregion
-
         public virtual bool Dye(Mobile from, IDyeTub sender)
         {
             if (Deleted)
@@ -2230,13 +2225,11 @@ namespace Server.Items
                 }
             }
 
-            #region Stygian Abyss
             m_PhysImbuing = m_AosResistances.Physical;
             m_FireImbuing = m_AosResistances.Fire;
             m_ColdImbuing = m_AosResistances.Cold;
             m_PoisonImbuing = m_AosResistances.Poison;
             m_EnergyImbuing = m_AosResistances.Energy;
-            #endregion
 
             InvalidateProperties();
         }
@@ -2282,7 +2275,6 @@ namespace Server.Items
 
         #endregion
 
-        #region Alter
         [CommandProperty(AccessLevel.GameMaster)]
         public bool Altered
         {
@@ -2323,9 +2315,7 @@ namespace Server.Items
             Crafter = orig.Crafter;
             Quality = orig.Quality;
         }
-        #endregion
 
-        #region Mondain's Legacy Sets
         public override bool OnDragLift(Mobile from)
         {
             if (Parent is Mobile && from == Parent)
@@ -2550,6 +2540,5 @@ namespace Server.Items
 
             SetHelper.GetSetProperties(list, this);
         }
-        #endregion
     }
 }

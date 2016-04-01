@@ -317,9 +317,9 @@ namespace Server.SkillHandlers
             int primResAmount = GetPrimaryAmount(i, mod, value);
             int specResAmount = GetSpecialAmount(i, mod, value);
 
-            if (from.AccessLevel == AccessLevel.Player && 
-                (from.Backpack == null || from.Backpack.GetAmount(gem) < gemAmount || 
-                from.Backpack.GetAmount(primary) < primResAmount || 
+            if (from.AccessLevel == AccessLevel.Player &&
+                (from.Backpack == null || from.Backpack.GetAmount(gem) < gemAmount ||
+                from.Backpack.GetAmount(primary) < primResAmount ||
                 from.Backpack.GetAmount(special) < specResAmount))
                 from.SendLocalizedMessage(1079773); //You do not have enough resources to imbue this item.     
             else
@@ -357,13 +357,18 @@ namespace Server.SkillHandlers
 
                 if (success >= Utility.RandomDouble() || mod < 0 || mod > 180)
                 {
-                    if(from.AccessLevel == AccessLevel.Player)
+                    if (from.AccessLevel == AccessLevel.Player)
                         from.Backpack.ConsumeTotal(gem, gemAmount);
 
-                    if(specResAmount > 0)
+                    if (specResAmount > 0)
                         from.Backpack.ConsumeTotal(special, specResAmount);
 
                     from.SendLocalizedMessage(1079775); // You successfully imbue the item!
+
+                    if (i is BaseWeapon) ((BaseWeapon)i).IsImbued = true;
+                    if (i is BaseArmor) ((BaseArmor)i).IsImbued = true;
+                    if (i is BaseJewel) ((BaseJewel)i).IsImbued = true;
+                    if (i is BaseClothing) ((BaseClothing)i).IsImbued = true;
 
                     from.PlaySound(0x5D1);
                     Effects.SendLocationParticles(
@@ -385,7 +390,7 @@ namespace Server.SkillHandlers
                             {
                                 wep.Attributes.SpellChanneling = value;
 
-                                if (wep.Attributes.CastSpeed >= 0) 
+                                if (wep.Attributes.CastSpeed >= 0)
                                     wep.Attributes.CastSpeed -= 1;
                             }
                             else if (attr == AosAttribute.WeaponDamage)
@@ -424,7 +429,7 @@ namespace Server.SkillHandlers
                         if (prop is SlayerName)
                             wep.Slayer = (SlayerName)prop;
 
-                        if(prop is SAAbsorptionAttribute)
+                        if (prop is SAAbsorptionAttribute)
                             wep.AbsorptionAttributes[(SAAbsorptionAttribute)prop] = value;
 
                         if (prop is AosElementAttribute)
@@ -795,6 +800,7 @@ namespace Server.SkillHandlers
 
             if (itw is BaseWeapon)
             {
+                /*
                 BaseWeapon tit = itw as BaseWeapon;
                 if (tit.Quality == WeaponQuality.Exceptional)
                     //MaxW = tit.Layer == Layer.TwoHanded ? 550 : 500;
@@ -803,26 +809,48 @@ namespace Server.SkillHandlers
                     MaxW = 450;
                 //else
                     //MaxW = 400;
+                 */
+                BaseWeapon itemToImbue = itw as BaseWeapon;
+                if (itemToImbue.Quality == WeaponQuality.Exceptional)
+                {
+                    if (itemToImbue is BaseRanged)
+                        return 550;
+                    else if (itemToImbue.Layer == Layer.TwoHanded)
+                        return 600;
+                    else
+                        return 500;
+                }
+                else if (itemToImbue.Quality == WeaponQuality.Regular)
+                {
+                    if (itemToImbue is BaseRanged)
+                        return 500;
+                    else if (itemToImbue.Layer == Layer.TwoHanded)
+                        return 550;
+                    else
+                        return 450;
+                }
+                else
+                    return 450;
             }
             else if (itw is BaseArmor)
             {
-                BaseArmor tit = itw as BaseArmor;
-                if (tit.Quality == ArmorQuality.Exceptional)
+                BaseArmor itemToImbue = itw as BaseArmor;  
+                if (itemToImbue.Quality == ArmorQuality.Exceptional) 
                     MaxW = 500;
-                else if (tit.Quality == ArmorQuality.Regular)
+                else if (itemToImbue.Quality == ArmorQuality.Regular) 
                     MaxW = 450;
                 //else
-                    //MaxW = 400;
+                //MaxW = 400;
             }
             else if (itw is BaseHat)
             {
-                BaseHat tit = itw as BaseHat;
-                if (tit.Quality == ClothingQuality.Exceptional)
+                BaseHat itemToImbue = itw as BaseHat;
+                if (itemToImbue.Quality == ClothingQuality.Exceptional)
                     MaxW = 500;
-                else if (tit.Quality == ClothingQuality.Regular)
+                else if (itemToImbue.Quality == ClothingQuality.Regular)
                     MaxW = 450;
                 //else
-                    //MaxW = 400;
+                //MaxW = 400;
             }
             else if (itw is BaseJewel)
             {
@@ -846,7 +874,8 @@ namespace Server.SkillHandlers
                 return 10;
 
             double v = value / ((double)Max / 10);
-            double newV = Math.Round(v);
+            //double newV = Math.Round(v);
+            double newV = Math.Floor(v);
 
             if (newV > 10) newV = 10;
             if (newV < 1) newV = 1;
@@ -868,7 +897,8 @@ namespace Server.SkillHandlers
                 return 5;
 
             double v = value / ((double)Max / 5.0);
-            double newV = Math.Round(v);
+            //double newV = Math.Round(v);
+            double newV = Math.Floor(v);
 
             if (newV > 5) newV = 5;
             if (newV < 1) newV = 1;
@@ -882,18 +912,34 @@ namespace Server.SkillHandlers
 
             int Max = def.MaxIntensity;
             int Inc = def.IncAmount;
+            int MWeight = def.Weight;
 
-            if (item is BaseJewel && mod == 12)
-                Max /= 2;
+            //if (item is BaseJewel && mod == 12)
+            // Max /= 2;
+            double currentIntensity = ((double)MWeight / (double)Max * value);
+            currentIntensity = Math.Floor(currentIntensity);
 
-            if (Max == 1 && Inc == 0)
+            //if (Max == 1 && Inc == 0)
+            if (currentIntensity == MWeight)
                 return 10;
 
-            double perc = (double)value / (double)Max;
+            //double perc = (double)value / (double)Max;
 
-            if (perc < .9)
+            //if (perc < .9)
+            else if (MWeight - currentIntensity >= 1 && currentIntensity > 90)
+            {
+                if (Max < 10)
+                    return 0;
+                else if (Max >= 16 && Max <= 89)
+                    return 5;
+                else if (Max > 90 && Max <= 100)
+                    return (int)currentIntensity - 90;
+                else
+                    return 3;
+            }
+            else
                 return 0;
-
+            /*
             perc = (double)Max / 10;
             double v = value / perc;
             double newV = Math.Round(v);
@@ -902,6 +948,7 @@ namespace Server.SkillHandlers
             if (newV < 1) newV = 1;
 
             return (int)newV;
+             */
         }
 
         [Usage("GetTotalMods")]
