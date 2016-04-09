@@ -1,22 +1,4 @@
-using System;
-using System.Text;
-using System.IO;
-using System.Collections;
-using System.Collections.Generic;
-using Server;
-using Server.Targeting;
-using Server.Items;
-using Server.ContextMenus;
-using Server.Multis;
-using Server.Regions;
-using Server.Engines.ChampionSpawns;
-using Server.Spells;
-using Server.Commands;
 using Server.Gumps;
-using Server.Mobiles;
-using Server.Accounting;
-using Server.Prompts;
-using Server.Misc;
 using Server.Network;
 
 namespace Server.Items
@@ -37,26 +19,28 @@ namespace Server.Items
             Item pgd = from.Backpack.FindItemByType(typeof(PromotionalDeed_PR));
             if (pgd != null)
             {
-                if (this.ItemID == 0x14EE)
+                if (ItemID == 0x14EE)
                 {
-                    this.ItemID = 0x14F0;
+                    ItemID = 0x14F0;
                 }
-                else if (this.ItemID == 0x14F0)
+                else if (ItemID == 0x14F0)
                 {
-                    this.ItemID = 0x14EE;
+                    ItemID = 0x14EE;
                 }
 
                 from.SendGump(new PromotionalGift_PR(from, this));
 
-                if (this.ItemID == 0x14EE)
+                if (ItemID == 0x14EE)
+                {
                     from.CloseGump(typeof(PromotionalGift_PR));
+                }
             }
             else
             {
                 if (!IsChildOf(from.Backpack))
                 {
                     from.SendMessage("The Deed's Owner Shouldn't Have Dropped This!");
-                    this.Delete();
+                    Delete();
                 }
             }
         }
@@ -75,7 +59,9 @@ namespace Server.Items
             }
 
             if (m != null)
+            {
                 m.CloseGump(typeof(PromotionalGift_PR));
+            }
         }
 
         public PromotionalDeed_PR(Serial serial): base(serial)
@@ -107,10 +93,10 @@ namespace Server.Items
             m_Mobile = from;
             m_Deed = deed;
             {
-                this.Closable = true;
-                this.Disposable = true;
-                this.Dragable = true;
-                this.Resizable = false;
+                Closable = true;
+                Disposable = true;
+                Dragable = true;
+                Resizable = false;
 
                 AddPage(0);
 
@@ -149,7 +135,7 @@ namespace Server.Items
             }
         }
 
-        #endregion Edited By: A.A.R
+        #endregion
 
         public enum Buttons
         {

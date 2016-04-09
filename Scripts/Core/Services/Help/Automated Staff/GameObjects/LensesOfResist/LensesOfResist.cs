@@ -1,23 +1,10 @@
-using System;
-using System.Text;
-using System.Collections;
 using System.Collections.Generic;
-using Server;
-using Server.Mobiles;
-using Server.Network;
 using Server.ContextMenus;
-using Server.Gumps;
-using Server.Engines.Quests;
-using Server.Engines.Quests.Necro;
-using Server.Items;
-using Server.Spells;
-using Server.Spells.Fourth;
-using Server.Targeting;
 
 namespace Server.Items.Staff
 {
     public class LensesOfResist : BaseGlasses
-	{
+    {
         private Mobile m_Owner;
         public Point3D m_HomeLocation;
         public Map m_HomeMap;
@@ -29,7 +16,7 @@ namespace Server.Items.Staff
         public override int BaseEnergyResistance { get { return 75; } }
 
         [Constructable]
-        public LensesOfResist(): base()
+        public LensesOfResist() : base()
         {
             LootType = LootType.Blessed;
             Weight = 1.0;
@@ -38,10 +25,10 @@ namespace Server.Items.Staff
 
             Attributes.NightSight = 1;
         }
-   
-        public LensesOfResist(Serial serial): base(serial)
-		{
-		}
+
+        public LensesOfResist(Serial serial) : base(serial)
+        {
+        }
 
         [CommandProperty(AccessLevel.GameMaster)]
         public Point3D HomeLocation
@@ -62,7 +49,7 @@ namespace Server.Items.Staff
             private LensesOfResist m_Item;
             private Mobile m_Mobile;
 
-            public GoHomeEntry(Mobile from, Item item): base(5134) // uses "Goto Loc" entry
+            public GoHomeEntry(Mobile from, Item item) : base(5134) // uses "Goto Loc" entry
             {
                 m_Item = (LensesOfResist)item;
                 m_Mobile = from;
@@ -81,7 +68,7 @@ namespace Server.Items.Staff
             private LensesOfResist m_Item;
             private Mobile m_Mobile;
 
-            public SetHomeEntry(Mobile from, Item item): base(2055) // uses "Mark" entry
+            public SetHomeEntry(Mobile from, Item item) : base(2055) // uses "Mark" entry
             {
                 m_Item = (LensesOfResist)item;
                 m_Mobile = from;
@@ -126,7 +113,7 @@ namespace Server.Items.Staff
         {
             if (from.AccessLevel > AccessLevel.Player)
             {
-                if (from != null)             
+                if (from != null)
                 {
                     from.SendMessage("");
                 }
@@ -147,9 +134,9 @@ namespace Server.Items.Staff
             else if (m_Owner == null)
             {
                 m_Owner = from;
-                this.Name = m_Owner.Name.ToString() + "'s Lenses of Resist";
-                this.HomeLocation = from.Location;
-                this.HomeMap = from.Map;
+                Name = m_Owner.Name.ToString() + "'s Lenses of Resist";
+                HomeLocation = from.Location;
+                HomeMap = from.Map;
                 from.SendMessage("These lenses have been assigned to you.");
             }
             else
@@ -171,33 +158,34 @@ namespace Server.Items.Staff
             }
             return true;
         }
-	
-		public override void Serialize( GenericWriter writer )
-		{
-			base.Serialize( writer );		
-			writer.Write( (int) 1 ); // version
+
+        public override void Serialize(GenericWriter writer)
+        {
+            base.Serialize(writer);
+            writer.Write((int)1); // version
 
             writer.Write(m_HomeLocation);
             writer.Write(m_HomeMap);
             writer.Write(m_Owner);
-		}
-		
-		public override void Deserialize(GenericReader reader)
-		{
-			base.Deserialize( reader );			
-			int version = reader.ReadInt();
+        }
+
+        public override void Deserialize(GenericReader reader)
+        {
+            base.Deserialize(reader);
+            int version = reader.ReadInt();
             switch (version)
             {
                 case 1:
-                {
-                    m_HomeLocation = reader.ReadPoint3D();
-                    m_HomeMap = reader.ReadMap();
-                    m_Owner = reader.ReadMobile();
-                } goto case 0;
+                    {
+                        m_HomeLocation = reader.ReadPoint3D();
+                        m_HomeMap = reader.ReadMap();
+                        m_Owner = reader.ReadMobile();
+                    }
+                    goto case 0;
                 case 0:
-                {
-                    break;
-                }
+                    {
+                        break;
+                    }
             }
         }
     }

@@ -3,6 +3,7 @@ using Server.Gumps;
 using Server.Mobiles;
 using Server.Network;
 using Server.Regions;
+using System.Linq;
 
 namespace Server.Menus.Questions
 {
@@ -12,22 +13,22 @@ namespace Server.Menus.Questions
         private readonly Point3D[] m_Locations;
         public StuckMenuEntry(int name, Point3D[] locations)
         {
-            this.m_Name = name;
-            this.m_Locations = locations;
+            m_Name = name;
+            m_Locations = locations;
         }
 
         public int Name
         {
             get
             {
-                return this.m_Name;
+                return m_Name;
             }
         }
         public Point3D[] Locations
         {
             get
             {
-                return this.m_Locations;
+                return m_Locations;
             }
         }
     }
@@ -138,21 +139,33 @@ namespace Server.Menus.Questions
             if (m.Region.IsPartOf(typeof(DungeonRegion)) && m.Map == Map.TerMur)
             {
                 if (m.Race == Race.Gargoyle)
+                {
                     return m_TerMurEntries;
+                }
                 else
+                {
                     return m_Entries;
+                }
             }
             else if (m.Map == Map.TerMur)
+            {
                 return m_TerMurEntries;
+            }
             else if (IsInSecondAgeArea(m))
+            {
                 return m_T2AEntries;
+            }
             else
+            {
                 return m_Entries;
+            }
         }
+
         private readonly Mobile m_Mobile;
         private readonly Mobile m_Sender;
         private readonly bool m_MarkUse;
         private Timer m_Timer;
+
         public StuckMenu(Mobile beholder, Mobile beheld, bool markUse)
             : base(150, 50)
         {
@@ -184,20 +197,22 @@ namespace Server.Menus.Questions
 
         public void BeginClose()
         {
-            this.StopClose();
+            StopClose();
 
-            this.m_Timer = new CloseTimer(this.m_Mobile);
-            this.m_Timer.Start();
+            m_Timer = new CloseTimer(m_Mobile);
+            m_Timer.Start();
 
-            this.m_Mobile.Frozen = true;
+            m_Mobile.Frozen = true;
         }
 
         public void StopClose()
         {
-            if (this.m_Timer != null)
-                this.m_Timer.Stop();
+            if (m_Timer != null)
+            {
+                m_Timer.Stop();
+            }
 
-            this.m_Mobile.Frozen = false;
+            m_Mobile.Frozen = false;
         }
 
         public override void OnResponse(NetState state, RelayInfo info)
@@ -211,7 +226,9 @@ namespace Server.Menus.Questions
             else if (info.ButtonID == 0)
             {
                 if (m_Mobile == m_Sender)
+                {
                     m_Mobile.SendLocalizedMessage(1010588); // You choose not to go to any city.
+                }
             }
             else
             {
@@ -219,20 +236,28 @@ namespace Server.Menus.Questions
                 StuckMenuEntry[] entries = GetEntriesFor(m_Mobile);
 
                 if (index >= 0 && index < entries.Length)
+                {
                     Teleport(entries[index]);
+                }
             }
         }
 
         private static bool IsInSecondAgeArea(Mobile m)
         {
             if (m.Map != Map.Trammel && m.Map != Map.Felucca)
+            {
                 return false;
+            }
 
             if (m.X >= 5120 && m.Y >= 2304)
+            {
                 return true;
+            }
 
             if (m.Region.IsPartOf("Terathan Keep"))
+            {
                 return true;
+            }
 
             return false;
         }
@@ -246,7 +271,9 @@ namespace Server.Menus.Questions
                 new TeleportTimer(m_Mobile, entry, TimeSpan.FromSeconds(10.0 + (Utility.RandomDouble() * 110.0))).Start();
 
                 if (m_Mobile is PlayerMobile)
-                    ((PlayerMobile)m_Mobile).UsedStuckMenu();  
+                {
+                    ((PlayerMobile)m_Mobile).UsedStuckMenu();
+                }
             }
             else
             {
@@ -261,22 +288,22 @@ namespace Server.Menus.Questions
             public CloseTimer(Mobile m)
                 : base(TimeSpan.Zero, TimeSpan.FromSeconds(1.0))
             {
-                this.m_Mobile = m;
-                this.m_End = DateTime.UtcNow + TimeSpan.FromMinutes(3.0);
+                m_Mobile = m;
+                m_End = DateTime.UtcNow + TimeSpan.FromMinutes(3.0);
             }
 
             protected override void OnTick()
             {
-                if (this.m_Mobile.NetState == null || DateTime.UtcNow > this.m_End)
+                if (m_Mobile.NetState == null || DateTime.UtcNow > m_End)
                 {
-                    this.m_Mobile.Frozen = false;
-                    this.m_Mobile.CloseGump(typeof(StuckMenu));
+                    m_Mobile.Frozen = false;
+                    m_Mobile.CloseGump(typeof(StuckMenu));
 
-                    this.Stop();
+                    Stop();
                 }
                 else
                 {
-                    this.m_Mobile.Frozen = true;
+                    m_Mobile.Frozen = true;
                 }
             }
         }
@@ -291,13 +318,24 @@ namespace Server.Menus.Questions
             public TeleportTimer(Mobile mobile, StuckMenuEntry destination, TimeSpan delay)
                 : base(TimeSpan.Zero, TimeSpan.FromSeconds(1.0))
             {
-                this.Priority = TimerPriority.TwoFiftyMS;
+                Priority = TimerPriority.TwoFiftyMS;
 
                 m_Mobile = mobile;
                 m_Map = mobile.Map;
                 m_Region = mobile.Region;
                 m_Destination = destination;
                 m_End = DateTime.UtcNow + delay;
+            }
+
+            private void MovePetsOfLoggedCharacter(Point3D dest, Map destMap)
+            {
+                Map fromMap = m_Mobile.LogoutMap;
+                Point3D fromLoc = m_Mobile.LogoutLocation;
+                fromMap.GetMobilesInRange(fromLoc, 3);
+                var move = fromMap.GetMobilesInRange(fromLoc, 3).Where(m => m is BaseCreature).Cast<BaseCreature>()
+                    .Where(pet => pet.Controlled && pet.ControlMaster == m_Mobile && pet.ControlOrder == OrderType.Guard || pet.ControlOrder == OrderType.Follow || pet.ControlOrder == OrderType.Come).ToList();
+
+                move.ForEach(x => x.MoveToWorld(dest, destMap));
             }
 
             protected override void OnTick()
@@ -322,23 +360,53 @@ namespace Server.Menus.Questions
 
                     Map destMap;
                     if (m_Map == Map.Felucca)
+                    {
                         destMap = Map.Felucca;
+                    }
                     else if (m_Map == Map.Trammel)
+                    {
                         destMap = Map.Trammel;
+                    }
+                    else if (m_Mobile.Map == Map.Internal)
+                    {
+                        destMap = m_Mobile.LogoutMap == Map.Felucca ? Map.Felucca : Map.Trammel;
+                    }
                     else if (m_Map == Map.TerMur && m_Region.IsPartOf(typeof(DungeonRegion)))
                     {
                         if (m_Mobile.Race == Race.Gargoyle)
+                        {
                             destMap = Map.TerMur;
+                        }
                         else
+                        {
                             destMap = Map.Trammel;
+                        }
                     }
                     else if (m_Map == Map.TerMur)
+                    {
                         destMap = Map.TerMur;
+                    }
                     else
+                    {
                         destMap = m_Mobile.Kills >= 5 ? Map.Felucca : Map.Trammel;
+                    }
 
-                    Mobiles.BaseCreature.TeleportPets(m_Mobile, dest, destMap);
-                    m_Mobile.MoveToWorld(dest, destMap);
+                    if (m_Mobile.Map != Map.Internal)
+                    {
+                        Mobiles.BaseCreature.TeleportPets(this.m_Mobile, dest, destMap);
+                        m_Mobile.MoveToWorld(dest, destMap);
+                    }
+                    else
+                    {
+                        // for shards without auto stabling  
+                        MovePetsOfLoggedCharacter(dest, destMap);
+
+                        m_Mobile.LogoutLocation = dest;
+                        m_Mobile.LogoutMap = destMap;
+                    }
+
+                    //Mobiles.BaseCreature.TeleportPets(m_Mobile, dest, destMap);
+                    //m_Mobile.MoveToWorld(dest, destMap);
                 }
             }
         }

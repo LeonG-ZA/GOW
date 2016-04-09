@@ -1,19 +1,7 @@
 using System;
-using System.Text;
 using System.IO;
-using System.Collections;
-using System.Collections.Generic;
-using Server;
-using Server.Targeting;
-using Server.Items;
-using Server.ContextMenus;
-using Server.Multis;
-using Server.Spells;
-using Server.Commands;
 using Server.Gumps;
-using Server.Mobiles;
 using Server.Accounting;
-using Server.Misc;
 using Server.Network;
 
 namespace Server.Engines.Help
@@ -23,10 +11,10 @@ namespace Server.Engines.Help
 
         public QualityAssurance(Mobile from) : base( 0, 0 )
         {
-            this.Closable=true;
-			this.Disposable=true;
-			this.Dragable=true;
-			this.Resizable=false;
+            Closable=true;
+			Disposable=true;
+			Dragable=true;
+			Resizable=false;
 
 			AddPage(0);
 			AddBackground(161, 139, 473, 343, 9200);
@@ -78,7 +66,9 @@ namespace Server.Engines.Help
                         Console.WriteLine("");
 
                         if (!Directory.Exists("Export/Reports/")) //create directory
+                        {
                             Directory.CreateDirectory("Export/Reports/");
+                        }
 
                         using (StreamWriter op = new StreamWriter("Export/Reports/Feedback.txt", true))
                         {

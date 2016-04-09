@@ -1,20 +1,4 @@
 using System;
-using System.Text;
-using System.IO;
-using System.Collections;
-using System.Collections.Generic;
-using Server;
-using Server.Targeting;
-using Server.Items;
-using Server.ContextMenus;
-using Server.Multis;
-using Server.Spells;
-using Server.Commands;
-using Server.Gumps;
-using Server.Mobiles;
-using Server.Accounting;
-using Server.Misc;
-using Server.Network;
 
 
 #region Moonglow Gate
@@ -28,19 +12,19 @@ namespace Server.Items
         private Timer m_Timer;
 
         [Constructable]
-        public MoonglowGate(): this(true)
+        public MoonglowGate() : this(true)
         {
         }
 
         [Constructable]
-        public MoonglowGate(bool decays, Point3D loc, Map map): this(decays)
+        public MoonglowGate(bool decays, Point3D loc, Map map) : this(decays)
         {
             MoveToWorld(loc, map);
             Effects.PlaySound(loc, map, 0x20E);
         }
 
         [Constructable]
-        public MoonglowGate(bool decays): base(new Point3D(4467, 1283, 5), Map.Trammel)
+        public MoonglowGate(bool decays) : base(new Point3D(4467, 1283, 5), Map.Trammel)
         {
             Dispellable = false;
             ItemID = 0x1FD4;
@@ -57,14 +41,16 @@ namespace Server.Items
             }
         }
 
-        public MoonglowGate(Serial serial): base(serial)
+        public MoonglowGate(Serial serial) : base(serial)
         {
         }
 
         public override void OnAfterDelete()
         {
             if (m_Timer != null)
+            {
                 m_Timer.Stop();
+            }
 
             base.OnAfterDelete();
         }
@@ -110,7 +96,7 @@ namespace Server.Items
         {
             private Item m_Item;
 
-            public InternalTimer(Item item, DateTime end): base(end - DateTime.UtcNow)
+            public InternalTimer(Item item, DateTime end) : base(end - DateTime.UtcNow)
             {
                 m_Item = item;
             }
@@ -123,115 +109,119 @@ namespace Server.Items
     }
 }
 
-#endregion Edited By: A.A.R
+#endregion
 
 #region Britain Gate
 
 namespace Server.Items
 {
-	public class BritainGate : Moongate
-	{
-		private bool m_Decays;
-		private DateTime m_DecayTime;
-		private Timer m_Timer;
+    public class BritainGate : Moongate
+    {
+        private bool m_Decays;
+        private DateTime m_DecayTime;
+        private Timer m_Timer;
 
-		[Constructable]
-		public BritainGate() : this( true )
-		{
-		}
+        [Constructable]
+        public BritainGate() : this(true)
+        {
+        }
 
-		[Constructable]
-		public BritainGate( bool decays, Point3D loc, Map map ) : this( decays )
-		{
-			MoveToWorld( loc, map );
-			Effects.PlaySound( loc, map, 0x20E );
-		}
+        [Constructable]
+        public BritainGate(bool decays, Point3D loc, Map map) : this(decays)
+        {
+            MoveToWorld(loc, map);
+            Effects.PlaySound(loc, map, 0x20E);
+        }
 
-		[Constructable]
-		public BritainGate( bool decays ) : base( new Point3D( 1336, 1997, 5 ), Map.Trammel)
-		{
-			Dispellable = false;
-			ItemID = 0x1FD4;
+        [Constructable]
+        public BritainGate(bool decays) : base(new Point3D(1336, 1997, 5), Map.Trammel)
+        {
+            Dispellable = false;
+            ItemID = 0x1FD4;
             Name = "Gate To Britain";
             Hue = 0x26;  //It's Red.
 
-			if ( decays )
-			{
-				m_Decays = true;
-				m_DecayTime = DateTime.UtcNow + TimeSpan.FromSeconds( 30 );
+            if (decays)
+            {
+                m_Decays = true;
+                m_DecayTime = DateTime.UtcNow + TimeSpan.FromSeconds(30);
 
-				m_Timer = new InternalTimer( this, m_DecayTime );
-				m_Timer.Start();
-			}
-		}
+                m_Timer = new InternalTimer(this, m_DecayTime);
+                m_Timer.Start();
+            }
+        }
 
         public BritainGate(Serial serial) : base(serial)
-		{
-		}
+        {
+        }
 
-		public override void OnAfterDelete()
-		{
-			if ( m_Timer != null )
-				m_Timer.Stop();
+        public override void OnAfterDelete()
+        {
+            if (m_Timer != null)
+            {
+                m_Timer.Stop();
+            }
 
-			base.OnAfterDelete();
-		}
+            base.OnAfterDelete();
+        }
 
-		public override void Serialize( GenericWriter writer )
-		{
-			base.Serialize( writer );
+        public override void Serialize(GenericWriter writer)
+        {
+            base.Serialize(writer);
 
-			writer.Write( (int) 0 ); 
+            writer.Write((int)0);
 
-			writer.Write( m_Decays );
+            writer.Write(m_Decays);
 
-			if ( m_Decays )
-				writer.WriteDeltaTime( m_DecayTime );
-		}
+            if (m_Decays)
+            {
+                writer.WriteDeltaTime(m_DecayTime);
+            }
+        }
 
-		public override void Deserialize( GenericReader reader )
-		{
-			base.Deserialize( reader );
+        public override void Deserialize(GenericReader reader)
+        {
+            base.Deserialize(reader);
 
-			int version = reader.ReadInt();
+            int version = reader.ReadInt();
 
-			switch ( version )
-			{
-				case 0:
-				{
-					m_Decays = reader.ReadBool();
+            switch (version)
+            {
+                case 0:
+                    {
+                        m_Decays = reader.ReadBool();
 
-					if ( m_Decays )
-					{
-						m_DecayTime = reader.ReadDeltaTime();
+                        if (m_Decays)
+                        {
+                            m_DecayTime = reader.ReadDeltaTime();
 
-						m_Timer = new InternalTimer( this, m_DecayTime );
-						m_Timer.Start();
-					}
+                            m_Timer = new InternalTimer(this, m_DecayTime);
+                            m_Timer.Start();
+                        }
 
-					break;
-				}
-			}
-		}
+                        break;
+                    }
+            }
+        }
 
-		private class InternalTimer : Timer
-		{
-			private Item m_Item;
+        private class InternalTimer : Timer
+        {
+            private Item m_Item;
 
-			public InternalTimer( Item item, DateTime end ) : base( end - DateTime.UtcNow )
-			{
-				m_Item = item;
-			}
+            public InternalTimer(Item item, DateTime end) : base(end - DateTime.UtcNow)
+            {
+                m_Item = item;
+            }
 
-			protected override void OnTick()
-			{
-				m_Item.Delete();
-			}
-		}
-	}
+            protected override void OnTick()
+            {
+                m_Item.Delete();
+            }
+        }
+    }
 }
 
-#endregion Edited By: A.A.R
+#endregion
 
 #region Jhelom Gate
 
@@ -244,19 +234,19 @@ namespace Server.Items
         private Timer m_Timer;
 
         [Constructable]
-        public JhelomGate(): this(true)
+        public JhelomGate() : this(true)
         {
         }
 
         [Constructable]
-        public JhelomGate(bool decays, Point3D loc, Map map): this(decays)
+        public JhelomGate(bool decays, Point3D loc, Map map) : this(decays)
         {
             MoveToWorld(loc, map);
             Effects.PlaySound(loc, map, 0x20E);
         }
 
         [Constructable]
-        public JhelomGate(bool decays): base(new Point3D(1499, 3771, 5), Map.Trammel)
+        public JhelomGate(bool decays) : base(new Point3D(1499, 3771, 5), Map.Trammel)
         {
             Dispellable = false;
             ItemID = 0x1FD4;
@@ -273,14 +263,16 @@ namespace Server.Items
             }
         }
 
-        public JhelomGate(Serial serial): base(serial)
+        public JhelomGate(Serial serial) : base(serial)
         {
         }
 
         public override void OnAfterDelete()
         {
             if (m_Timer != null)
+            {
                 m_Timer.Stop();
+            }
 
             base.OnAfterDelete();
         }
@@ -294,7 +286,9 @@ namespace Server.Items
             writer.Write(m_Decays);
 
             if (m_Decays)
+            {
                 writer.WriteDeltaTime(m_DecayTime);
+            }
         }
 
         public override void Deserialize(GenericReader reader)
@@ -326,7 +320,7 @@ namespace Server.Items
         {
             private Item m_Item;
 
-            public InternalTimer(Item item, DateTime end): base(end - DateTime.UtcNow)
+            public InternalTimer(Item item, DateTime end) : base(end - DateTime.UtcNow)
             {
                 m_Item = item;
             }
@@ -339,7 +333,7 @@ namespace Server.Items
     }
 }
 
-#endregion Edited By: A.A.R
+#endregion
 
 #region Yew Gate
 
@@ -352,19 +346,19 @@ namespace Server.Items
         private Timer m_Timer;
 
         [Constructable]
-        public YewGate(): this(true)
+        public YewGate() : this(true)
         {
         }
 
         [Constructable]
-        public YewGate(bool decays, Point3D loc, Map map): this(decays)
+        public YewGate(bool decays, Point3D loc, Map map) : this(decays)
         {
             MoveToWorld(loc, map);
             Effects.PlaySound(loc, map, 0x20E);
         }
 
         [Constructable]
-        public YewGate(bool decays): base(new Point3D(771,  752, 5), Map.Trammel)
+        public YewGate(bool decays) : base(new Point3D(771, 752, 5), Map.Trammel)
         {
             Dispellable = false;
             ItemID = 0x1FD4;
@@ -381,14 +375,16 @@ namespace Server.Items
             }
         }
 
-        public YewGate(Serial serial): base(serial)
+        public YewGate(Serial serial) : base(serial)
         {
         }
 
         public override void OnAfterDelete()
         {
             if (m_Timer != null)
+            {
                 m_Timer.Stop();
+            }
 
             base.OnAfterDelete();
         }
@@ -402,7 +398,9 @@ namespace Server.Items
             writer.Write(m_Decays);
 
             if (m_Decays)
+            {
                 writer.WriteDeltaTime(m_DecayTime);
+            }
         }
 
         public override void Deserialize(GenericReader reader)
@@ -434,7 +432,7 @@ namespace Server.Items
         {
             private Item m_Item;
 
-            public InternalTimer(Item item, DateTime end): base(end - DateTime.UtcNow)
+            public InternalTimer(Item item, DateTime end) : base(end - DateTime.UtcNow)
             {
                 m_Item = item;
             }
@@ -447,7 +445,7 @@ namespace Server.Items
     }
 }
 
-#endregion Edited By: A.A.R
+#endregion
 
 #region Minoc Gate
 
@@ -460,19 +458,19 @@ namespace Server.Items
         private Timer m_Timer;
 
         [Constructable]
-        public MinocGate(): this(true)
+        public MinocGate() : this(true)
         {
         }
 
         [Constructable]
-        public MinocGate(bool decays, Point3D loc, Map map): this(decays)
+        public MinocGate(bool decays, Point3D loc, Map map) : this(decays)
         {
             MoveToWorld(loc, map);
             Effects.PlaySound(loc, map, 0x20E);
         }
 
         [Constructable]
-        public MinocGate(bool decays): base(new Point3D(2701,  692, 5), Map.Trammel)
+        public MinocGate(bool decays) : base(new Point3D(2701, 692, 5), Map.Trammel)
         {
             Dispellable = false;
             ItemID = 0x1FD4;
@@ -489,14 +487,16 @@ namespace Server.Items
             }
         }
 
-        public MinocGate(Serial serial): base(serial)
+        public MinocGate(Serial serial) : base(serial)
         {
         }
 
         public override void OnAfterDelete()
         {
             if (m_Timer != null)
+            {
                 m_Timer.Stop();
+            }
 
             base.OnAfterDelete();
         }
@@ -510,7 +510,9 @@ namespace Server.Items
             writer.Write(m_Decays);
 
             if (m_Decays)
+            {
                 writer.WriteDeltaTime(m_DecayTime);
+            }
         }
 
         public override void Deserialize(GenericReader reader)
@@ -542,7 +544,7 @@ namespace Server.Items
         {
             private Item m_Item;
 
-            public InternalTimer(Item item, DateTime end): base(end - DateTime.UtcNow)
+            public InternalTimer(Item item, DateTime end) : base(end - DateTime.UtcNow)
             {
                 m_Item = item;
             }
@@ -555,7 +557,7 @@ namespace Server.Items
     }
 }
 
-#endregion Edited By: A.A.R
+#endregion
 
 #region Trinsic Gate
 
@@ -568,19 +570,19 @@ namespace Server.Items
         private Timer m_Timer;
 
         [Constructable]
-        public TrinsicGate(): this(true)
+        public TrinsicGate() : this(true)
         {
         }
 
         [Constructable]
-        public TrinsicGate(bool decays, Point3D loc, Map map): this(decays)
+        public TrinsicGate(bool decays, Point3D loc, Map map) : this(decays)
         {
             MoveToWorld(loc, map);
             Effects.PlaySound(loc, map, 0x20E);
         }
 
         [Constructable]
-        public TrinsicGate(bool decays): base(new Point3D(1828, 2948,-20), Map.Trammel)
+        public TrinsicGate(bool decays) : base(new Point3D(1828, 2948, -20), Map.Trammel)
         {
             Dispellable = false;
             ItemID = 0x1FD4;
@@ -597,14 +599,16 @@ namespace Server.Items
             }
         }
 
-        public TrinsicGate(Serial serial): base(serial)
+        public TrinsicGate(Serial serial) : base(serial)
         {
         }
 
         public override void OnAfterDelete()
         {
             if (m_Timer != null)
+            {
                 m_Timer.Stop();
+            }
 
             base.OnAfterDelete();
         }
@@ -618,7 +622,9 @@ namespace Server.Items
             writer.Write(m_Decays);
 
             if (m_Decays)
+            {
                 writer.WriteDeltaTime(m_DecayTime);
+            }
         }
 
         public override void Deserialize(GenericReader reader)
@@ -650,7 +656,7 @@ namespace Server.Items
         {
             private Item m_Item;
 
-            public InternalTimer(Item item, DateTime end): base(end - DateTime.UtcNow)
+            public InternalTimer(Item item, DateTime end) : base(end - DateTime.UtcNow)
             {
                 m_Item = item;
             }
@@ -663,7 +669,7 @@ namespace Server.Items
     }
 }
 
-#endregion Edited By: A.A.R
+#endregion
 
 #region SkaraBrae Gate
 
@@ -676,19 +682,19 @@ namespace Server.Items
         private Timer m_Timer;
 
         [Constructable]
-        public SkaraBraeGate(): this(true)
+        public SkaraBraeGate() : this(true)
         {
         }
 
         [Constructable]
-        public SkaraBraeGate(bool decays, Point3D loc, Map map): this(decays)
+        public SkaraBraeGate(bool decays, Point3D loc, Map map) : this(decays)
         {
             MoveToWorld(loc, map);
             Effects.PlaySound(loc, map, 0x20E);
         }
 
         [Constructable]
-        public SkaraBraeGate(bool decays): base(new Point3D(643, 2067, 5), Map.Trammel)
+        public SkaraBraeGate(bool decays) : base(new Point3D(643, 2067, 5), Map.Trammel)
         {
             Dispellable = false;
             ItemID = 0x1FD4;
@@ -705,14 +711,16 @@ namespace Server.Items
             }
         }
 
-        public SkaraBraeGate(Serial serial): base(serial)
+        public SkaraBraeGate(Serial serial) : base(serial)
         {
         }
 
         public override void OnAfterDelete()
         {
             if (m_Timer != null)
+            {
                 m_Timer.Stop();
+            }
 
             base.OnAfterDelete();
         }
@@ -726,7 +734,9 @@ namespace Server.Items
             writer.Write(m_Decays);
 
             if (m_Decays)
+            {
                 writer.WriteDeltaTime(m_DecayTime);
+            }
         }
 
         public override void Deserialize(GenericReader reader)
@@ -758,7 +768,7 @@ namespace Server.Items
         {
             private Item m_Item;
 
-            public InternalTimer(Item item, DateTime end): base(end - DateTime.UtcNow)
+            public InternalTimer(Item item, DateTime end) : base(end - DateTime.UtcNow)
             {
                 m_Item = item;
             }
@@ -771,7 +781,7 @@ namespace Server.Items
     }
 }
 
-#endregion Edited By: A.A.R
+#endregion
 
 #region Magincia Gate
 
@@ -784,19 +794,19 @@ namespace Server.Items
         private Timer m_Timer;
 
         [Constructable]
-        public MaginciaGate(): this(true)
+        public MaginciaGate() : this(true)
         {
         }
 
         [Constructable]
-        public MaginciaGate(bool decays, Point3D loc, Map map): this(decays)
+        public MaginciaGate(bool decays, Point3D loc, Map map) : this(decays)
         {
             MoveToWorld(loc, map);
             Effects.PlaySound(loc, map, 0x20E);
         }
 
         [Constructable]
-        public MaginciaGate(bool decays): base(new Point3D(3563, 2139, 34), Map.Trammel)
+        public MaginciaGate(bool decays) : base(new Point3D(3563, 2139, 34), Map.Trammel)
         {
             Dispellable = false;
             ItemID = 0x1FD4;
@@ -813,14 +823,16 @@ namespace Server.Items
             }
         }
 
-        public MaginciaGate(Serial serial): base(serial)
+        public MaginciaGate(Serial serial) : base(serial)
         {
         }
 
         public override void OnAfterDelete()
         {
             if (m_Timer != null)
+            {
                 m_Timer.Stop();
+            }
 
             base.OnAfterDelete();
         }
@@ -834,7 +846,9 @@ namespace Server.Items
             writer.Write(m_Decays);
 
             if (m_Decays)
+            {
                 writer.WriteDeltaTime(m_DecayTime);
+            }
         }
 
         public override void Deserialize(GenericReader reader)
@@ -866,7 +880,7 @@ namespace Server.Items
         {
             private Item m_Item;
 
-            public InternalTimer(Item item, DateTime end): base(end - DateTime.UtcNow)
+            public InternalTimer(Item item, DateTime end) : base(end - DateTime.UtcNow)
             {
                 m_Item = item;
             }
@@ -879,7 +893,7 @@ namespace Server.Items
     }
 }
 
-#endregion Edited By: A.A.R
+#endregion
 
 #region NewHaven Gate
 
@@ -892,19 +906,19 @@ namespace Server.Items
         private Timer m_Timer;
 
         [Constructable]
-        public NewHavenGate(): this(true)
+        public NewHavenGate() : this(true)
         {
         }
 
         [Constructable]
-        public NewHavenGate(bool decays, Point3D loc, Map map): this(decays)
+        public NewHavenGate(bool decays, Point3D loc, Map map) : this(decays)
         {
             MoveToWorld(loc, map);
             Effects.PlaySound(loc, map, 0x20E);
         }
 
         [Constructable]
-        public NewHavenGate(bool decays): base(new Point3D(3450, 2677, 25), Map.Trammel)
+        public NewHavenGate(bool decays) : base(new Point3D(3450, 2677, 25), Map.Trammel)
         {
             Dispellable = false;
             ItemID = 0x1FD4;
@@ -921,14 +935,16 @@ namespace Server.Items
             }
         }
 
-        public NewHavenGate(Serial serial): base(serial)
+        public NewHavenGate(Serial serial) : base(serial)
         {
         }
 
         public override void OnAfterDelete()
         {
             if (m_Timer != null)
+            {
                 m_Timer.Stop();
+            }
 
             base.OnAfterDelete();
         }
@@ -942,7 +958,9 @@ namespace Server.Items
             writer.Write(m_Decays);
 
             if (m_Decays)
+            {
                 writer.WriteDeltaTime(m_DecayTime);
+            }
         }
 
         public override void Deserialize(GenericReader reader)
@@ -974,7 +992,7 @@ namespace Server.Items
         {
             private Item m_Item;
 
-            public InternalTimer(Item item, DateTime end): base(end - DateTime.UtcNow)
+            public InternalTimer(Item item, DateTime end) : base(end - DateTime.UtcNow)
             {
                 m_Item = item;
             }
@@ -987,7 +1005,7 @@ namespace Server.Items
     }
 }
 
-#endregion Edited By: A.A.R
+#endregion
 
 #region BucsDen Gate
 
@@ -1000,19 +1018,19 @@ namespace Server.Items
         private Timer m_Timer;
 
         [Constructable]
-        public BucsDenGate(): this(true)
+        public BucsDenGate() : this(true)
         {
         }
 
         [Constructable]
-        public BucsDenGate(bool decays, Point3D loc, Map map): this(decays)
+        public BucsDenGate(bool decays, Point3D loc, Map map) : this(decays)
         {
             MoveToWorld(loc, map);
             Effects.PlaySound(loc, map, 0x20E);
         }
 
         [Constructable]
-        public BucsDenGate(bool decays): base(new Point3D(2711, 2234, 0), Map.Trammel)
+        public BucsDenGate(bool decays) : base(new Point3D(2711, 2234, 0), Map.Trammel)
         {
             Dispellable = false;
             ItemID = 0x1FD4;
@@ -1029,14 +1047,16 @@ namespace Server.Items
             }
         }
 
-        public BucsDenGate(Serial serial): base(serial)
+        public BucsDenGate(Serial serial) : base(serial)
         {
         }
 
         public override void OnAfterDelete()
         {
             if (m_Timer != null)
+            {
                 m_Timer.Stop();
+            }
 
             base.OnAfterDelete();
         }
@@ -1050,7 +1070,9 @@ namespace Server.Items
             writer.Write(m_Decays);
 
             if (m_Decays)
+            {
                 writer.WriteDeltaTime(m_DecayTime);
+            }
         }
 
         public override void Deserialize(GenericReader reader)
@@ -1082,7 +1104,7 @@ namespace Server.Items
         {
             private Item m_Item;
 
-            public InternalTimer(Item item, DateTime end): base(end - DateTime.UtcNow)
+            public InternalTimer(Item item, DateTime end) : base(end - DateTime.UtcNow)
             {
                 m_Item = item;
             }
@@ -1095,4 +1117,4 @@ namespace Server.Items
     }
 }
 
-#endregion Edited By: A.A.R
+#endregion

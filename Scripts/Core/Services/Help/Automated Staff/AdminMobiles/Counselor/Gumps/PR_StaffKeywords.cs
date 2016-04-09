@@ -1,19 +1,4 @@
-using System;
-using System.Text;
-using System.IO;
-using System.Collections;
-using System.Collections.Generic;
-using Server;
-using Server.Targeting;
-using Server.Items;
-using Server.ContextMenus;
-using Server.Multis;
-using Server.Spells;
 using Server.Commands;
-using Server.Gumps;
-using Server.Mobiles;
-using Server.Accounting;
-using Server.Misc;
 using Server.Network;
 
 namespace Server.Gumps
@@ -32,14 +17,12 @@ namespace Server.Gumps
             e.Mobile.SendGump(new PR_StaffKeywords());
         }
 
-        #region StaffKeywords Gump Configuration
-
         public PR_StaffKeywords() : base( 0, 0 )
         {
-            this.Closable=true;
-			this.Disposable=true;
-			this.Dragable=true;
-			this.Resizable=false;
+            Closable=true;
+			Disposable=true;
+			Dragable=true;
+			Resizable=false;
 
 			AddPage(0);
 			AddBackground(279, 111, 231, 377, 9200);
@@ -75,8 +58,6 @@ namespace Server.Gumps
 			AddLabel(347, 454, 0, @"SHADOWS EDGE");
 			AddImage(478, 232, 10411);     
         }
-
-        #endregion Edited By: A.A.R
 
         public override void OnResponse(NetState sender, RelayInfo info)
         {

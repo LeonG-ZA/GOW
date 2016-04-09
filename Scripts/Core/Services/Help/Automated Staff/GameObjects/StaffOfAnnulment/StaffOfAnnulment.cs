@@ -1,18 +1,6 @@
-using System;
-using System.Text;
-using System.Collections;
 using System.Collections.Generic;
-using Server;
 using Server.Mobiles;
-using Server.Misc;
-using Server.Network;
 using Server.ContextMenus;
-using Server.Gumps;
-using Server.Engines.Quests;
-using Server.Engines.Quests.Necro;
-using Server.Items;
-using Server.Spells;
-using Server.Spells.Fourth;
 using Server.Targeting;
 
 namespace Server.Items.Staff
@@ -42,7 +30,7 @@ namespace Server.Items.Staff
         public bool RemoveMobileThanKill { get { return RemoveMobile; } set { RemoveMobile = value; } }
 
         [Constructable]
-        public StaffOfAnnulment(): base(0x13F8)
+        public StaffOfAnnulment() : base(0x13F8)
         {
             LootType = LootType.Blessed;
             Weight = 5.0;
@@ -57,7 +45,7 @@ namespace Server.Items.Staff
             phys = 0; fire = 0; cold = 0; nrgy = 100; chaos = 0; direct = 0;
             pois = 0;
         }
-       
+
         public override void OnDoubleClick(Mobile m)
         {
             if (m_Owner == null && m.AccessLevel == AccessLevel.Player)
@@ -75,9 +63,9 @@ namespace Server.Items.Staff
             else if (m_Owner == null && m.AccessLevel >= AccessLevel.Seer)
             {
                 m_Owner = m;
-                this.Name = m_Owner.Name.ToString() + "'s Staff of Annulment";
-                this.HomeLocation = m.Location;
-                this.HomeMap = m.Map;
+                Name = m_Owner.Name.ToString() + "'s Staff of Annulment";
+                HomeLocation = m.Location;
+                HomeMap = m.Map;
                 m.SendMessage("This staff have been assigned to you.");
             }
             else
@@ -95,7 +83,7 @@ namespace Server.Items.Staff
 
         private class InternalTarget : Target
         {
-            public InternalTarget(): base(50, false, TargetFlags.None)
+            public InternalTarget() : base(50, false, TargetFlags.None)
             {
             }
             protected override void OnTarget(Mobile mo, object tar)
@@ -202,7 +190,7 @@ namespace Server.Items.Staff
                     {
                         pm.BoltEffect(0);
                         pm.Kill();
-                        mo.SendMessage("The targeted mobile has been killed!");                
+                        mo.SendMessage("The targeted mobile has been killed!");
                     }
                     else
                     {
@@ -253,7 +241,7 @@ namespace Server.Items.Staff
             }
         }
 
-        public StaffOfAnnulment(Serial serial): base(serial)
+        public StaffOfAnnulment(Serial serial) : base(serial)
         {
         }
 
@@ -276,7 +264,7 @@ namespace Server.Items.Staff
             private StaffOfAnnulment m_Item;
             private Mobile m_Mobile;
 
-            public GoHomeEntry(Mobile from, Item item): base(5134) // uses "Goto Loc" entry
+            public GoHomeEntry(Mobile from, Item item) : base(5134) // uses "Goto Loc" entry
             {
                 m_Item = (StaffOfAnnulment)item;
                 m_Mobile = from;
@@ -286,7 +274,9 @@ namespace Server.Items.Staff
             {
                 m_Mobile.Location = m_Item.HomeLocation;
                 if (m_Item.HomeMap != null)
+                {
                     m_Mobile.Map = m_Item.HomeMap;
+                }
             }
         }
 
@@ -295,7 +285,7 @@ namespace Server.Items.Staff
             private StaffOfAnnulment m_Item;
             private Mobile m_Mobile;
 
-            public SetHomeEntry(Mobile from, Item item): base(2055) // uses "Mark" entry
+            public SetHomeEntry(Mobile from, Item item) : base(2055) // uses "Mark" entry
             {
                 m_Item = (StaffOfAnnulment)item;
                 m_Mobile = from;
@@ -371,21 +361,23 @@ namespace Server.Items.Staff
             switch (version)
             {
                 case 1:
-                {
-                    m_HomeLocation = reader.ReadPoint3D();
-                    m_HomeMap = reader.ReadMap();
-                    m_Owner = reader.ReadMobile();
-                } goto case 0;
+                    {
+                        m_HomeLocation = reader.ReadPoint3D();
+                        m_HomeMap = reader.ReadMap();
+                        m_Owner = reader.ReadMobile();
+                    }
+                    goto case 0;
                 case 0:
-                {
-                    if (ItemID == 0x13F8)
-                        ItemID = 0x13F9;
+                    {
+                        if (ItemID == 0x13F8)
+                            ItemID = 0x13F9;
 
-                    DeleteCorpse = reader.ReadBool();
-                    DeleteItems = reader.ReadBool();
-                    KillInvul = reader.ReadBool();
-                    RemoveMobile = reader.ReadBool();
-                } break;
+                        DeleteCorpse = reader.ReadBool();
+                        DeleteItems = reader.ReadBool();
+                        KillInvul = reader.ReadBool();
+                        RemoveMobile = reader.ReadBool();
+                    }
+                    break;
             }
         }
     }

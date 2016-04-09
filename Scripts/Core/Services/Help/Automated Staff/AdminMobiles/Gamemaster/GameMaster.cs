@@ -1,22 +1,9 @@
 using System;
-using System.Text;
-using System.IO;
-using System.Collections;
 using System.Collections.Generic;
-using Server;
-using Server.Targeting;
 using Server.Items;
 using Server.ContextMenus;
-using Server.Multis;
-using Server.Regions;
 using Server.Engines.ChampionSpawns;
-using Server.Spells;
-using Server.Commands;
 using Server.Gumps;
-using Server.Mobiles;
-using Server.Accounting;
-using Server.Misc;
-using Server.Network;
 
 namespace Server.Mobiles
 {
@@ -24,22 +11,9 @@ namespace Server.Mobiles
     {
         private List<SBInfo> m_SBInfos = new List<SBInfo>();
         protected override List<SBInfo> SBInfos { get { return m_SBInfos; } }
-
         public override NpcGuild NpcGuild { get { return NpcGuild.MerchantsGuild; } }
-
-        #region Interactions: Based On Keywords
-
         private bool m_Gated;
-
-        #endregion Edited By: A.A.R
-
-        #region NPC Auto-Deletion Timer
-
         private DateTime m_npcAutoDelete;
-
-        #endregion Edited By: A.A.R
-
-        #region Automated Greetings For Players
 
         private static bool m_Talked;
 
@@ -48,15 +22,10 @@ namespace Server.Mobiles
             "Welcome traveller! how may I assist thee?",
         };
 
-        #endregion Edited By: A.A.R
-
         [Constructable]
         public GameMaster_GM()
             : base("merchant")
         {
-
-//----------This Randomizes The Sex Of The NPC--------------------//
-
             if (this.Female = Utility.RandomBool())
             {
                 Body = 0x191;
@@ -67,8 +36,6 @@ namespace Server.Mobiles
                 Body = 0x190;
                 Name = NameList.RandomName("male");
             }
-
-//----------This Creates A Random Look To The NPC-----------------//
 
             Title = "[GM]";
             NameHue = 11;
@@ -96,11 +63,7 @@ namespace Server.Mobiles
                 AddItem(beard);
             }
 
-//----------This Toggles The NPC Movement: On Or Off--------------//
-
             CantWalk = true;
-
-//----------This Makes The NPC Equip HandHeld Items---------------//
 
             switch (Utility.Random(3))
             {
@@ -109,16 +72,12 @@ namespace Server.Mobiles
                 case 2: AddItem(new BookOfChivalry()); break;
             }
 
-//----------This Sets What Cloth The NPC Will Wear----------------//
-
             StaffRobe robe = new StaffRobe();
             robe.AccessLevel = AccessLevel.GameMaster;
             robe.Movable = false;
             robe.Hue = 0x26;
             robe.LootType = LootType.Blessed;
             AddItem(robe);
-
-//----------NPC Auto-Deletion Timer (Timer Set At 5min)----------//
 
             m_npcAutoDelete = DateTime.UtcNow + TimeSpan.FromSeconds(180);
         }
@@ -131,8 +90,6 @@ namespace Server.Mobiles
                 this.Delete();
             }
         }
-
-//----------This Gives Your Staff A Monthly Gift-----------------//
 
         public class GameMaster_Entry : ContextMenuEntry
         {
@@ -161,30 +118,27 @@ namespace Server.Mobiles
             }
         }
 
-
-//------This Code Makes This NPC Behave As An NPC Vendor----------//
-
         public override void InitSBInfo()
         {
             m_SBInfos.Add(new SBGameMaster());
         }
-
-//----------------------------------------------------------------//
-
-        #region Automated Greetings For Players
 
         public override void OnMovement(Mobile m, Point3D oldLocation)
         {
             if (m.InRange(this, 3) && m is PlayerMobile)
             {
                 if (!m.HasGump(typeof(GM_StaffKeywords)))
+                {
                     m.SendGump(new GM_StaffKeywords());
+                }
             }
 
             if (!m.InRange(this, 3) && m is PlayerMobile)
             {
                 if (m.HasGump(typeof(GM_StaffKeywords)))
+                {
                     m.CloseGump(typeof(GM_StaffKeywords));
+                }
             }
 
             if (m_Talked == false)
@@ -221,8 +175,6 @@ namespace Server.Mobiles
         {
             m.Say(say[Utility.Random(say.Length)]);
         }
-
-        #endregion Edited By: A.A.R
 
         #region Interactions: Based On Keywords
 
@@ -625,15 +577,11 @@ namespace Server.Mobiles
 
         #endregion Edited By: A.A.R
 
-        #region Click The NPC To Open Up A Gump
-
         public override void GetContextMenuEntries(Mobile from, List<ContextMenuEntry> list)
         {
             base.GetContextMenuEntries(from, list);
             list.Add(new GameMaster_Entry(from, this));
         }
-
-        #endregion Edited By: A.A.R
 
         public override bool ClickTitle { get { return false; } }
         public override bool IsActiveVendor { get { return true; } }
@@ -656,13 +604,7 @@ namespace Server.Mobiles
         {
             base.Serialize(writer);
             writer.Write((int)1); // version
-
-            #region NPC Auto-Deletion Timer
-
-            writer.Write((DateTime)m_npcAutoDelete);
-
-            #endregion Edited By: A.A.R
-        }
+            writer.Write((DateTime)m_npcAutoDelete);        }
 
         public override void Deserialize(GenericReader reader)
         {
@@ -673,11 +615,7 @@ namespace Server.Mobiles
             {
                 case 1:
                     {
-                        #region NPC Auto-Deletion Timer
-
                         m_npcAutoDelete = reader.ReadDateTime();
-
-                        #endregion Edited By: A.A.R
                     }
                     break;
 

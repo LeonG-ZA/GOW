@@ -1,8 +1,4 @@
-﻿#region References
-
-using System.IO;
-
-#endregion
+﻿using System.IO;
 
 namespace Server.Engines.Help
 {

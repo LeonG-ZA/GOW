@@ -1,22 +1,4 @@
-using System;
-using System.Text;
-using System.IO;
-using System.Collections;
-using System.Collections.Generic;
-using Server;
-using Server.Targeting;
-using Server.Items;
-using Server.ContextMenus;
-using Server.Multis;
-using Server.Regions;
-using Server.Engines.ChampionSpawns;
-using Server.Spells;
-using Server.Commands;
 using Server.Gumps;
-using Server.Mobiles;
-using Server.Accounting;
-using Server.Prompts;
-using Server.Misc;
 using Server.Network;
 
 namespace Server.Items
@@ -24,7 +6,7 @@ namespace Server.Items
     public class PromotionalDeed_GM : Item
     {
         [Constructable]
-        public PromotionalDeed_GM(): base(0x14EE)
+        public PromotionalDeed_GM() : base(0x14EE)
         {
             Name = "A Gift Deed";
             Weight = 1.0;
@@ -37,20 +19,28 @@ namespace Server.Items
             Item pgd = from.Backpack.FindItemByType(typeof(PromotionalDeed_GM));
             if (pgd != null)
             {
-                if (this.ItemID == 0x14EE) this.ItemID = 0x14F0;
-                else if (this.ItemID == 0x14F0) this.ItemID = 0x14EE;
+                if (ItemID == 0x14EE)
+                {
+                    ItemID = 0x14F0;
+                }
+                else if (ItemID == 0x14F0)
+                {
+                    ItemID = 0x14EE;
+                }
 
                 from.SendGump(new PromotionalGift_GM(from, this));
 
-                if (this.ItemID == 0x14EE)
+                if (ItemID == 0x14EE)
+                {
                     from.CloseGump(typeof(PromotionalGift_GM));
+                }
             }
             else
             {
                 if (!IsChildOf(from.Backpack))
                 {
                     from.SendMessage("The Deed's Owner Shouldn't Have Dropped This!");
-                    this.Delete();
+                    Delete();
                 }
             }
         }
@@ -60,15 +50,21 @@ namespace Server.Items
             Mobile m = null;
 
             if (parent is Item)
+            {
                 m = ((Item)parent).RootParent as Mobile;
+            }
             else if (parent is Mobile)
+            {
                 m = (Mobile)parent;
+            }
 
             if (m != null)
+            {
                 m.CloseGump(typeof(PromotionalGift_GM));
+            }
         }
 
-        public PromotionalDeed_GM(Serial serial): base(serial)
+        public PromotionalDeed_GM(Serial serial) : base(serial)
         {
         }
         public override void Serialize(GenericWriter writer)
@@ -86,13 +82,13 @@ namespace Server.Items
     }
 
     public class PromotionalGift_GM : Gump
-    {     
+    {
         private Item m_Deed;
         private Mobile m_Mobile;
 
         #region Promotional Gift Gump Configuration
 
-        public PromotionalGift_GM(Mobile from, Item deed): base(0, 0)
+        public PromotionalGift_GM(Mobile from, Item deed) : base(0, 0)
         {
             m_Mobile = from;
             m_Deed = deed;
@@ -100,16 +96,16 @@ namespace Server.Items
             Aegis Aegis = new Aegis();
 
             {
-                this.Closable = true;
-                this.Disposable = true;
-                this.Dragable = true;
-                this.Resizable = false;
+                Closable = true;
+                Disposable = true;
+                Dragable = true;
+                Resizable = false;
 
                 AddPage(0);
 
                 AddBackground(188, 91, 417, 430, 9390);
                 AddAlphaRegion(218, 129, 356, 319);
-                AddButton(227, 141, 2328, 2329, (int)Buttons.Button1, GumpButtonType.Reply, 1);              
+                AddButton(227, 141, 2328, 2329, (int)Buttons.Button1, GumpButtonType.Reply, 1);
                 AddButton(356, 141, 2328, 2329, (int)Buttons.Button2, GumpButtonType.Reply, 2);
                 AddButton(484, 141, 2328, 2329, (int)Buttons.Button3, GumpButtonType.Reply, 3);
                 AddButton(227, 219, 2328, 2329, (int)Buttons.Button4, GumpButtonType.Reply, 4);
@@ -138,11 +134,11 @@ namespace Server.Items
                 AddLabel(422, 471, 695, @"SHADOWS EDGE");
                 AddItem(261, 452, 9002);
                 AddLabel(326, 95, 190, @"PLEASE SELECT A GIFT");
-                AddButton(528, 455, 9005, 9004, (int)Buttons.Button0, GumpButtonType.Reply, 0);               
+                AddButton(528, 455, 9005, 9004, (int)Buttons.Button0, GumpButtonType.Reply, 0);
             }
         }
 
-        #endregion Edited By: A.A.R
+        #endregion
 
         public enum Buttons
         {
@@ -158,7 +154,7 @@ namespace Server.Items
             Button9,
             Button10,
             Button11,
-            Button12,            
+            Button12,
         }
 
         public override void OnResponse(NetState sender, RelayInfo info)

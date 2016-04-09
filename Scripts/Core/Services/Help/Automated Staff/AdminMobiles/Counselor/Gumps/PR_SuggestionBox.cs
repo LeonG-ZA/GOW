@@ -1,19 +1,7 @@
 using System;
-using System.Text;
 using System.IO;
-using System.Collections;
-using System.Collections.Generic;
-using Server;
-using Server.Targeting;
-using Server.Items;
-using Server.ContextMenus;
-using Server.Multis;
-using Server.Spells;
 using Server.Commands;
-using Server.Gumps;
-using Server.Mobiles;
 using Server.Accounting;
-using Server.Misc;
 using Server.Network;
 
 namespace Server.Gumps
@@ -32,14 +20,12 @@ namespace Server.Gumps
             e.Mobile.SendGump(new SuggestionBox());
         }
 
-        #region Suggestion Box Gump Configuration
-
         public SuggestionBox() : base( 0, 0 )
         {
-            this.Closable=true;
-			this.Disposable=true;
-			this.Dragable=true;
-			this.Resizable=false;
+            Closable=true;
+			Disposable=true;
+			Dragable=true;
+			Resizable=false;
 
 			AddPage(0);
 			AddBackground(161, 139, 473, 343, 9200);
@@ -60,8 +46,6 @@ namespace Server.Gumps
 			AddLabel(183, 441, 930, @"This Is Your Server And We Want To  Hear What You Have To Say!");
 			AddLabel(228, 458, 930, @"Your Feedback Is Extremely Important To Us! Thank You.");
         }
-
-        #endregion Edited By: A.A.R
 
         public enum Buttons
         {

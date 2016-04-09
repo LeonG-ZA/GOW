@@ -1,18 +1,7 @@
-using System;
-using System.Text;
-using System.Collections;
 using System.Collections.Generic;
-using Server;
-using Server.Mobiles;
 using Server.Network;
 using Server.ContextMenus;
 using Server.Gumps;
-using Server.Engines.Quests;
-using Server.Engines.Quests.Necro;
-using Server.Items;
-using Server.Spells;
-using Server.Spells.Fourth;
-using Server.Targeting;
 
 namespace Server.Items.Staff
 {
@@ -37,7 +26,7 @@ namespace Server.Items.Staff
         }
 
         [Constructable]
-        public BraceletOfEthics(): base(0x1086)
+        public BraceletOfEthics() : base(0x1086)
         {
             LootType = LootType.Blessed;
             Weight = 1.0;
@@ -45,9 +34,9 @@ namespace Server.Items.Staff
             Name = "An Unassigned Bracelet";
 
             Attributes.BonusStr = 100;
-            Attributes.BonusDex = 100;         
+            Attributes.BonusDex = 100;
             Attributes.BonusInt = 100;
-            
+
             Attributes.BonusHits = 100;
             Attributes.BonusMana = 100;
             Attributes.BonusStam = 100;
@@ -70,7 +59,7 @@ namespace Server.Items.Staff
             }
         }
 
-        public BraceletOfEthics(Serial serial): base(serial)
+        public BraceletOfEthics(Serial serial) : base(serial)
         {
         }
 
@@ -93,7 +82,7 @@ namespace Server.Items.Staff
             private BraceletOfEthics m_Item;
             private Mobile m_Mobile;
 
-            public GoHomeEntry(Mobile from, Item item): base(5134) // uses "Goto Loc" entry
+            public GoHomeEntry(Mobile from, Item item) : base(5134) // uses "Goto Loc" entry
             {
                 m_Item = (BraceletOfEthics)item;
                 m_Mobile = from;
@@ -103,7 +92,9 @@ namespace Server.Items.Staff
             {
                 m_Mobile.Location = m_Item.HomeLocation;
                 if (m_Item.HomeMap != null)
+                {
                     m_Mobile.Map = m_Item.HomeMap;
+                }
             }
         }
 
@@ -112,7 +103,7 @@ namespace Server.Items.Staff
             private BraceletOfEthics m_Item;
             private Mobile m_Mobile;
 
-            public SetHomeEntry(Mobile from, Item item): base(2055) // uses "Mark" entry
+            public SetHomeEntry(Mobile from, Item item) : base(2055) // uses "Mark" entry
             {
                 m_Item = (BraceletOfEthics)item;
                 m_Mobile = from;
@@ -182,9 +173,9 @@ namespace Server.Items.Staff
             else if (m_Owner == null)
             {
                 m_Owner = from;
-                this.Name = m_Owner.Name.ToString() + "'s Bracelet of Ethics";
-                this.HomeLocation = from.Location;
-                this.HomeMap = from.Map;
+                Name = m_Owner.Name.ToString() + "'s Bracelet of Ethics";
+                HomeLocation = from.Location;
+                HomeMap = from.Map;
                 from.SendMessage("This bracelet has been assigned to you.");
             }
             else
@@ -193,7 +184,7 @@ namespace Server.Items.Staff
                 {
                     from.SendMessage("This item has not been assigned to you!");
                     return;
-                }             
+                }
             }
         }
 
@@ -210,8 +201,8 @@ namespace Server.Items.Staff
         public override void Serialize(GenericWriter writer)
         {
             base.Serialize(writer);
-            writer.Write((int) 1 ); // version
-       
+            writer.Write((int)1); // version
+
             writer.Write(m_HomeLocation);
             writer.Write(m_HomeMap);
             writer.Write(m_Owner);
@@ -226,122 +217,51 @@ namespace Server.Items.Staff
             switch (version)
             {
                 case 1:
-                {
-                    m_HomeLocation = reader.ReadPoint3D();
-                    m_HomeMap = reader.ReadMap();
-                    m_Owner = reader.ReadMobile();              
-                }   goto case 0;    
+                    {
+                        m_HomeLocation = reader.ReadPoint3D();
+                        m_HomeMap = reader.ReadMap();
+                        m_Owner = reader.ReadMobile();
+                    }
+                    goto case 0;
                 case 0:
-                {
-                    mStaffRules = (BraceletEffect)reader.ReadInt();
-                    break;
-                }
+                    {
+                        mStaffRules = (BraceletEffect)reader.ReadInt();
+                        break;
+                    }
             }
         }
     }
 }
 
-//---------------------------------------------------------------------------------------------------------------//
-
 namespace Server.Gumps
 {
     public class EthicsGump01 : Gump
     {
-         public EthicsGump01() : base( 0, 0 )
+        public EthicsGump01() : base(0, 0)
         {
-            this.Closable=true;
-			this.Disposable=true;
-			this.Dragable=true;
-			this.Resizable=false;
+            Closable = true;
+            Disposable = true;
+            Dragable = true;
+            Resizable = false;
 
-			AddPage(0);
-			AddBackground(84, 27, 636, 511, 3600);
-			AddAlphaRegion(110, 54, 582, 433);
-			AddBackground(122, 127, 32, 350, 9200);
-			AddBackground(122, 67, 560, 41, 9200);
-			AddLabel(133, 78, 95, @"ADMINISTRATIVE GUIDELINES");
-			AddLabel(528, 78, 95, @"REVISION: 11-04-2012");
-			AddImage(128, 139, 9905);
-			AddHtml( 167, 128, 512, 76, @"Staff members may not interfere with the general gameplay of the players, in the game world, unless there is an issue which has come up that must be handled; meaning you were paged to a location to handle a player dispute or player issue in which only live, in-game support personnel can handle. ", (bool)true, (bool)true);
-			AddImage(129, 229, 9905);
-			AddHtml( 168, 218, 512, 76, @"Staff members may not uberfy players in the game world, nor are  they allowed to modify the stats of any creature, mobile, and/or player in an effort to create an unbalanced gaming environment. Staff is also prohibited from giving their own player characters advancements which would otherwise cause an unbalanced gaming environment.", (bool)true, (bool)true);
-			AddImage(129, 320, 9905);
-			AddHtml( 168, 309, 512, 76, @"Staff members may not use their administrative account while playing any character off of their player account(s). Doing so would cause players to accuse us of using our powers unfairly to better advance our own characters for whatever reasons; it's better to avoid such accusations. ", (bool)true, (bool)true);
-			AddImage(128, 410, 5541);
-			AddHtml( 168, 400, 512, 76, @"Disciplinary Action: (1st) First Offense: 5 day suspension from your rank and duties; (2nd) Second Offense: 10 day suspension from your rank and duties; (3rd) Third Offense: Indefinate suspension from your rank and duties. Any drama resulting after the third offense will result in the deletion of your accounts and termination of your ability to play on our server(s).", (bool)true, (bool)true);
-			AddButton(650, 495, 4005, 4006, (int)Buttons.Button1, GumpButtonType.Reply, 0);
-			AddLabel(574, 498, 95, @"NEXT PAGE");
-			AddLabel(133, 498, 95, @"01 - 02");
-            AddButton(540, 497, 1150, 1151, (int)Buttons.Button2, GumpButtonType.Reply, 2);      
-        }
-
-         public enum Buttons
-         {
-             Button1,
-             Button2
-         }
-
-         public override void OnResponse(NetState sender, RelayInfo info)
-         {
-             Mobile from = sender.Mobile;
-
-             switch (info.ButtonID)
-             {
-                 case (int)Buttons.Button1:
-                     {
-                         if (from.HasGump(typeof(EthicsGump01)))
-                             from.CloseGump(typeof(EthicsGump01));
-                            from.SendGump(new EthicsGump02());
-                         break;
-                     }
-                 case (int)Buttons.Button2:
-                     {
-                         from.CloseGump(typeof(EthicsGump01));
-                         break;
-                     }
-             }
-         }
-    }
-}
-
-namespace Server.Gumps
-{
-    public class EthicsGump02 : Gump
-    {
-         public EthicsGump02() : base( 0, 0 )
-         {
-            this.Closable=true;
-			this.Disposable=true;
-			this.Dragable=true;
-			this.Resizable=false;
-
-			AddPage(0);
-			AddBackground(84, 27, 636, 511, 3600);
-			AddAlphaRegion(110, 54, 582, 433);
-			AddBackground(122, 127, 32, 350, 9200);
-			AddBackground(122, 67, 560, 41, 9200);
-			AddLabel(133, 78, 95, @"ADMINISTRATIVE GUIDELINES");
-			AddLabel(528, 78, 95, @"REVISION: 11-04-2012");
-			AddImage(128, 139, 9905);
-			AddHtml( 167, 128, 512, 76, @"Staff members are not to get involved with the following player issues under any circumstance: 
-(Luring Creatures): moving creatures from one location to another location is part of the game's mechanics and therefore does not fall under harrassment.
-(Lost or Stolen Items): players who lose items due to game mechanics are not entitled to get anything returned back to them; there is no way to prove who had which item and therefore this is an issue we simply cannot help with. 
-(Spawn Camping): every player has an equal right to camp any spawn they favor for as long as they wish; this is part of the game's mechanics and therefore fair game.
-(Spawn Blocking): players have different strategies and techniques they use while hunting and adventuring in the game world, spawn blocking is just one such strategy and is part of the game's mechanics.
-(Player Stalking): players are expected to role-play and therefore stalking could be part of a player characters role-play personality. It's part of game mechanics so staff is to let this type of harassment go. This is a pvp server afterall so players should get used to being hunted!", (bool)true, (bool)true);
-			AddImage(129, 229, 9905);
-			AddHtml( 168, 218, 512, 76, @"Staff members are required to answer any and all pages from players requesting assistance. If the pages fall under incidents that staff has been told not to get involved in then players must be notified that staff is unable to assist them in the manner they're expecting; get creative and make up an excuse! If players are paging because of harrassment issues, staff members are required to assist!
-(Harrassment): is defined as any behavior which interferes with the game dynamics on the basis of sexuality. race, religion, and any out of character conversations which may be threatening, insulting, and violate a persons real world emotional state of being. 
-(Disciplinary Action): on any harrassment call  is at the discretion of the staff member(s) involved. This includes, but is not limited to terminating a player account for such behavior; particularly in regards to sexual harrassment!
-(On A Side Note): cyber sex is allowed among consenting players, if it is done in the privacy of their player homes or
-in seclusion from the rest of the game world. Relationships are to be expected in every game such as this one.", (bool)true, (bool)true);
-			AddImage(129, 320, 9905);
-			AddHtml( 168, 309, 512, 76, @"Staff members should not get too involved in guild war or player government disputes. This is a player-run server so please use discretion when handling issues regarding player behavior. If players are rude and disrespect staff members then staff can discipline them at their own discretion. For most page requests staff can simply redirect players to use the automated staff system.", (bool)true, (bool)true);
-			AddImage(128, 410, 5541);
-			AddHtml( 168, 400, 512, 76, @"Disciplinary Action: (1st) First Offense: 24 hour suspension from the server; (2nd) Second Offense: 48 hour suspension from the server; (3rd) Third Offense: 72 hour suspension from the server. Any drama resulting after the third offense will result in the deletion of player accounts and termination of their ability to play on our server(s).", (bool)true, (bool)true);
-			AddButton(650, 495, 4014, 4015, (int)Buttons.Button1, GumpButtonType.Reply, 0);
-			AddLabel(573, 498, 95, @"PREV PAGE");
-			AddLabel(133, 498, 95, @"02 - 02");
+            AddPage(0);
+            AddBackground(84, 27, 636, 511, 3600);
+            AddAlphaRegion(110, 54, 582, 433);
+            AddBackground(122, 127, 32, 350, 9200);
+            AddBackground(122, 67, 560, 41, 9200);
+            AddLabel(133, 78, 95, @"ADMINISTRATIVE GUIDELINES");
+            AddLabel(528, 78, 95, @"REVISION: 11-04-2012");
+            AddImage(128, 139, 9905);
+            AddHtml(167, 128, 512, 76, @"Staff members may not interfere with the general gameplay of the players, in the game world, unless there is an issue which has come up that must be handled; meaning you were paged to a location to handle a player dispute or player issue in which only live, in-game support personnel can handle. ", (bool)true, (bool)true);
+            AddImage(129, 229, 9905);
+            AddHtml(168, 218, 512, 76, @"Staff members may not uberfy players in the game world, nor are  they allowed to modify the stats of any creature, mobile, and/or player in an effort to create an unbalanced gaming environment. Staff is also prohibited from giving their own player characters advancements which would otherwise cause an unbalanced gaming environment.", (bool)true, (bool)true);
+            AddImage(129, 320, 9905);
+            AddHtml(168, 309, 512, 76, @"Staff members may not use their administrative account while playing any character off of their player account(s). Doing so would cause players to accuse us of using our powers unfairly to better advance our own characters for whatever reasons; it's better to avoid such accusations. ", (bool)true, (bool)true);
+            AddImage(128, 410, 5541);
+            AddHtml(168, 400, 512, 76, @"Disciplinary Action: (1st) First Offense: 5 day suspension from your rank and duties; (2nd) Second Offense: 10 day suspension from your rank and duties; (3rd) Third Offense: Indefinate suspension from your rank and duties. Any drama resulting after the third offense will result in the deletion of your accounts and termination of your ability to play on our server(s).", (bool)true, (bool)true);
+            AddButton(650, 495, 4005, 4006, (int)Buttons.Button1, GumpButtonType.Reply, 0);
+            AddLabel(574, 498, 95, @"NEXT PAGE");
+            AddLabel(133, 498, 95, @"01 - 02");
             AddButton(540, 497, 1150, 1151, (int)Buttons.Button2, GumpButtonType.Reply, 2);
         }
 
@@ -352,25 +272,99 @@ in seclusion from the rest of the game world. Relationships are to be expected i
         }
 
         public override void OnResponse(NetState sender, RelayInfo info)
-         {
-             Mobile from = sender.Mobile;
+        {
+            Mobile from = sender.Mobile;
 
-             switch (info.ButtonID)
-             {
-                 case (int)Buttons.Button1:
-                     {
-                         if (from.HasGump(typeof(EthicsGump02)))
-                             from.CloseGump(typeof(EthicsGump02));
-                             from.SendGump(new EthicsGump01());
-                         break;
-                     }
-                  case (int)Buttons.Button2:
-                     {
-                             from.CloseGump(typeof(EthicsGump02));
-                         break;
-                     }
+            switch (info.ButtonID)
+            {
+                case (int)Buttons.Button1:
+                    {
+                        if (from.HasGump(typeof(EthicsGump01)))
+                        {
+                            from.CloseGump(typeof(EthicsGump01));
+                        }
+                        from.SendGump(new EthicsGump02());
+                        break;
+                    }
+                case (int)Buttons.Button2:
+                    {
+                        from.CloseGump(typeof(EthicsGump01));
+                        break;
+                    }
+            }
+        }
+    }
+}
 
-             }
-         }
+namespace Server.Gumps
+{
+    public class EthicsGump02 : Gump
+    {
+        public EthicsGump02() : base(0, 0)
+        {
+            Closable = true;
+            Disposable = true;
+            Dragable = true;
+            Resizable = false;
+
+            AddPage(0);
+            AddBackground(84, 27, 636, 511, 3600);
+            AddAlphaRegion(110, 54, 582, 433);
+            AddBackground(122, 127, 32, 350, 9200);
+            AddBackground(122, 67, 560, 41, 9200);
+            AddLabel(133, 78, 95, @"ADMINISTRATIVE GUIDELINES");
+            AddLabel(528, 78, 95, @"REVISION: 11-04-2012");
+            AddImage(128, 139, 9905);
+            AddHtml(167, 128, 512, 76, @"Staff members are not to get involved with the following player issues under any circumstance: 
+(Luring Creatures): moving creatures from one location to another location is part of the game's mechanics and therefore does not fall under harrassment.
+(Lost or Stolen Items): players who lose items due to game mechanics are not entitled to get anything returned back to them; there is no way to prove who had which item and therefore this is an issue we simply cannot help with. 
+(Spawn Camping): every player has an equal right to camp any spawn they favor for as long as they wish; this is part of the game's mechanics and therefore fair game.
+(Spawn Blocking): players have different strategies and techniques they use while hunting and adventuring in the game world, spawn blocking is just one such strategy and is part of the game's mechanics.
+(Player Stalking): players are expected to role-play and therefore stalking could be part of a player characters role-play personality. It's part of game mechanics so staff is to let this type of harassment go. This is a pvp server afterall so players should get used to being hunted!", (bool)true, (bool)true);
+            AddImage(129, 229, 9905);
+            AddHtml(168, 218, 512, 76, @"Staff members are required to answer any and all pages from players requesting assistance. If the pages fall under incidents that staff has been told not to get involved in then players must be notified that staff is unable to assist them in the manner they're expecting; get creative and make up an excuse! If players are paging because of harrassment issues, staff members are required to assist!
+(Harrassment): is defined as any behavior which interferes with the game dynamics on the basis of sexuality. race, religion, and any out of character conversations which may be threatening, insulting, and violate a persons real world emotional state of being. 
+(Disciplinary Action): on any harrassment call  is at the discretion of the staff member(s) involved. This includes, but is not limited to terminating a player account for such behavior; particularly in regards to sexual harrassment!
+(On A Side Note): cyber sex is allowed among consenting players, if it is done in the privacy of their player homes or
+in seclusion from the rest of the game world. Relationships are to be expected in every game such as this one.", (bool)true, (bool)true);
+            AddImage(129, 320, 9905);
+            AddHtml(168, 309, 512, 76, @"Staff members should not get too involved in guild war or player government disputes. This is a player-run server so please use discretion when handling issues regarding player behavior. If players are rude and disrespect staff members then staff can discipline them at their own discretion. For most page requests staff can simply redirect players to use the automated staff system.", (bool)true, (bool)true);
+            AddImage(128, 410, 5541);
+            AddHtml(168, 400, 512, 76, @"Disciplinary Action: (1st) First Offense: 24 hour suspension from the server; (2nd) Second Offense: 48 hour suspension from the server; (3rd) Third Offense: 72 hour suspension from the server. Any drama resulting after the third offense will result in the deletion of player accounts and termination of their ability to play on our server(s).", (bool)true, (bool)true);
+            AddButton(650, 495, 4014, 4015, (int)Buttons.Button1, GumpButtonType.Reply, 0);
+            AddLabel(573, 498, 95, @"PREV PAGE");
+            AddLabel(133, 498, 95, @"02 - 02");
+            AddButton(540, 497, 1150, 1151, (int)Buttons.Button2, GumpButtonType.Reply, 2);
+        }
+
+        public enum Buttons
+        {
+            Button1,
+            Button2
+        }
+
+        public override void OnResponse(NetState sender, RelayInfo info)
+        {
+            Mobile from = sender.Mobile;
+
+            switch (info.ButtonID)
+            {
+                case (int)Buttons.Button1:
+                    {
+                        if (from.HasGump(typeof(EthicsGump02)))
+                        {
+                            from.CloseGump(typeof(EthicsGump02));
+                        }
+                        from.SendGump(new EthicsGump01());
+                        break;
+                    }
+                case (int)Buttons.Button2:
+                    {
+                        from.CloseGump(typeof(EthicsGump02));
+                        break;
+                    }
+
+            }
+        }
     }
 }

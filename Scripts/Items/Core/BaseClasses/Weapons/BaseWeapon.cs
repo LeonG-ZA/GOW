@@ -2505,7 +2505,12 @@ namespace Server.Items
             if (m_SAAbsorptionAttributes.SplinteringWeapon > 0 && m_SAAbsorptionAttributes.SplinteringWeapon > Utility.Random(100))
             {
                 if (SplinteringWeaponContext.CheckHit(attacker, defender, this))
-                    splintering = true;
+                {
+                    if (splintering == false)
+                    {
+                        splintering = true;
+                    }
+                }
             }
 
 			AddBlood(attacker, defender, damage);

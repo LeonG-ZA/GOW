@@ -1,19 +1,5 @@
-using System;
-using System.Text;
-using System.Collections;
 using System.Collections.Generic;
-using Server;
-using Server.Mobiles;
-using Server.Commands;
-using Server.Network;
 using Server.ContextMenus;
-using Server.Gumps;
-using Server.Engines.Quests;
-using Server.Engines.Quests.Necro;
-using Server.Items;
-using Server.Spells;
-using Server.Spells.Fourth;
-using Server.Targeting;
 
 namespace Server.Items.Staff
 {
@@ -24,7 +10,7 @@ namespace Server.Items.Staff
         public Map m_HomeMap;
 
         [Constructable]
-        public RobeOfEntitlement(): base(0x2683)
+        public RobeOfEntitlement() : base(0x2683)
         {
             LootType = LootType.Blessed;
             Layer = Layer.OuterTorso;
@@ -68,8 +54,8 @@ namespace Server.Items.Staff
 
             if (m.AccessLevel > AccessLevel.Player)
             {
-                this.HomeLocation = m.Location;
-                this.HomeMap = m.Map;
+                HomeLocation = m.Location;
+                HomeMap = m.Map;
                 return;
             }
         }
@@ -80,36 +66,36 @@ namespace Server.Items.Staff
             {
                 from.NameMod = null; //Change Your Character Name To Reflect The Server
                 from.Title = "[SO]"; //Change Your Character Title To Fit Your Job Title
-                this.Name = "Server Owner";
-                this.Hue = 2406;
+                Name = "Server Owner";
+                Hue = 2406;
             }
             else if (from.AccessLevel == AccessLevel.Developer && ItemID == 0x2683)
             {
                 from.NameMod = null; //Change Your Character Name To Reflect The Server
                 from.Title = "[DE]"; //Change Your Character Title To Fit Your Job Title
-                this.Name = "Developer";
-                this.Hue = 798;
+                Name = "Developer";
+                Hue = 798;
             }
             else if (from.AccessLevel == AccessLevel.Administrator && ItemID == 0x2683)
             {
                 from.NameMod = null; //Change Your Character Name To Reflect The Server
                 from.Title = "[AD]"; //Change Your Character Title To Fit Your Job Title
-                this.Name = "Administrator";
-                this.Hue = 687;
+                Name = "Administrator";
+                Hue = 687;
             }
             else if (from.AccessLevel == AccessLevel.Seer && ItemID == 0x2683)
             {
                 from.NameMod = null; //Change Your Character Name To Reflect The Server
                 from.Title = "[EM]"; //Change Your Character Title To Fit Your Job Title
-                this.Name = "Event Moderator";
-                this.Hue = 399;
+                Name = "Event Moderator";
+                Hue = 399;
             }
             else if (from.AccessLevel == AccessLevel.GameMaster && ItemID == 0x2683)
             {
                 from.NameMod = null; //Change Your Character Name To Reflect The Server
                 from.Title = "[GM]"; //Change Your Character Title To Fit Your Job Title
-                this.Name = "Gamemaster";
-                this.Hue = 1644;
+                Name = "Gamemaster";
+                Hue = 1644;
             }
             else
             {
@@ -139,7 +125,7 @@ namespace Server.Items.Staff
             base.OnRemoved(o);
         }
 
-        public RobeOfEntitlement(Serial serial): base(serial)
+        public RobeOfEntitlement(Serial serial) : base(serial)
         {
         }
 
@@ -162,7 +148,7 @@ namespace Server.Items.Staff
             private RobeOfEntitlement m_Item;
             private Mobile m_Mobile;
 
-            public GoHomeEntry(Mobile from, Item item): base(5134) // uses "Goto Loc" entry
+            public GoHomeEntry(Mobile from, Item item) : base(5134) // uses "Goto Loc" entry
             {
                 m_Item = (RobeOfEntitlement)item;
                 m_Mobile = from;
@@ -173,7 +159,9 @@ namespace Server.Items.Staff
                 m_Mobile.Location = m_Item.HomeLocation;
 
                 if (m_Item.HomeMap != null)
+                {
                     m_Mobile.Map = m_Item.HomeMap;
+                }
             }
         }
 
@@ -182,7 +170,7 @@ namespace Server.Items.Staff
             private RobeOfEntitlement m_Item;
             private Mobile m_Mobile;
 
-            public SetHomeEntry(Mobile from, Item item): base(2055) // uses "Mark" entry
+            public SetHomeEntry(Mobile from, Item item) : base(2055) // uses "Mark" entry
             {
                 m_Item = (RobeOfEntitlement)item;
                 m_Mobile = from;
@@ -227,7 +215,8 @@ namespace Server.Items.Staff
                     {
                         m_HomeLocation = reader.ReadPoint3D();
                         m_HomeMap = reader.ReadMap();
-                    } goto case 0;
+                    }
+                    goto case 0;
                 case 0:
                     {
                         break;

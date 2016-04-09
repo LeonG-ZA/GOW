@@ -19,7 +19,6 @@ namespace Server.Engines.Help
             : base(0, 0)
         {
             text = m_text;
-
             m_Type = type;
 
             AddBackground(50, 50, 400, 400, 0xA28);
@@ -51,25 +50,21 @@ namespace Server.Engines.Help
                 case 0:
                     {
                         from.SendLocalizedMessage(501235, "", 0x35); // Help request aborted.
-
                         break;
                     }
                 case 1:
                     {
                         from.SendGump(new TargetInvolvedPlayersGump(text, m_Type, "", "", ""));
-
                         break;
                     }
                 case 2:
                     {
                         from.SendGump(new TypeNamesOfInvolvedPlayersGump(text, m_Type, "", "", ""));
-
                         break;
                     }
                 case 3:
                     {
                         from.SendGump(new SelectNamesOfInvolvedPlayersFromListGump(text, m_Type));
-
                         break;
                     }
             }
@@ -89,13 +84,9 @@ namespace Server.Engines.Help
             : base(0, 0)
         {
             text = m_text;
-
             m_Type = type;
-
             first = m_first;
-
             second = m_second;
-
             third = m_third;
 
             AddBackground(50, 50, 400, 300, 0xA28);
@@ -135,40 +126,31 @@ namespace Server.Engines.Help
                 case 0:
                     {
                         from.SendLocalizedMessage(501235, "", 0x35); // Help request aborted.
-
                         break;
                     }
                 case 1:
                     {
                         from.SendLocalizedMessage(1070956); // Which player is this complaint about?
-
                         from.Target = new SelectTarget(text, m_Type, first, second, third, 1);
-
                         break;
                     }
                 case 2:
                     {
                         from.SendLocalizedMessage(1070956); // Which player is this complaint about?
-
                         from.Target = new SelectTarget(text, m_Type, first, second, third, 2);
-
                         break;
                     }
                 case 3:
                     {
                         from.SendLocalizedMessage(1070956); // Which player is this complaint about?
-
                         from.Target = new SelectTarget(text, m_Type, first, second, third, 3);
-
                         break;
                     }
                 case 4:
                     {
                         string information = String.Format(" Involved Players: \n {0} \n {1} \n {2}", first, second, third);
                         text += information;
-
                         PageQueue.Enqueue(new PageEntry(from, text, m_Type));
-
                         break;
                     }
             }
@@ -208,19 +190,16 @@ namespace Server.Engines.Help
                     case 1:
                         {
                             first = pm.Name;
-
                             break;
                         }
                     case 2:
                         {
                             second = pm.Name;
-
                             break;
                         }
                     case 3:
                         {
                             third = pm.Name;
-
                             break;
                         }
                 }
@@ -248,9 +227,7 @@ namespace Server.Engines.Help
             : base(0, 0)
         {
             text = m_text;
-
             m_Type = type;
-
             first = m_first;
             second = m_second;
             third = m_third;
@@ -286,7 +263,6 @@ namespace Server.Engines.Help
                 case 0:
                     {
                         from.SendLocalizedMessage(501235, "", 0x35); // Help request aborted.
-
                         break;
                     }
                 case 4:
@@ -304,7 +280,6 @@ namespace Server.Engines.Help
                         text += information;
 
                         PageQueue.Enqueue(new PageEntry(from, text, m_Type));
-
                         break;
                     }
             }
@@ -347,13 +322,11 @@ namespace Server.Engines.Help
                 case 0:
                     {
                         from.SendLocalizedMessage(501235, "", 0x35); // Help request aborted.
-
                         break;
                     }
                 case 1:
                     {
                         PageQueue.Enqueue(new PageEntry(from, text, m_Type));
-
                         break;
                     }
             }

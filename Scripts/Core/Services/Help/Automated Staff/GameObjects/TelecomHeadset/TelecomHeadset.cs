@@ -1,46 +1,33 @@
-using System;
-using System.Text;
-using System.Collections;
 using System.Collections.Generic;
-using Server;
-using Server.Items;
-using Server.Mobiles;
-using Server.Network;
 using Server.Prompts;
 using Server.ContextMenus;
-using Server.Gumps;
-using Server.Engines.Quests;
-using Server.Engines.Quests.Necro;
-using Server.Spells;
-using Server.Spells.Fourth;
-using Server.Targeting;
 
 namespace Server.Items
 {
-	public class CommUnit : SilverEarrings
-	{
+    public class CommUnit : SilverEarrings
+    {
         private Mobile m_Owner;
         public Point3D m_HomeLocation;
         public Map m_HomeMap;
 
-		private string m_Channel;
-		[CommandProperty( AccessLevel.GameMaster )]
-		public string Channel
-		{
-			get{ return m_Channel; }
-			set{ m_Channel = value; }
-		}
-		[Constructable]
-		public CommUnit()
-		{
+        private string m_Channel;
+        [CommandProperty(AccessLevel.GameMaster)]
+        public string Channel
+        {
+            get { return m_Channel; }
+            set { m_Channel = value; }
+        }
+        [Constructable]
+        public CommUnit()
+        {
             LootType = LootType.Blessed;
             Weight = 1.0;
             Hue = 2406;
-            Name = "An Unassigned Personal Communicator"; 
-		}
+            Name = "An Unassigned Personal Communicator";
+        }
 
-		public override void OnDoubleClick( Mobile m )
-		{
+        public override void OnDoubleClick(Mobile m)
+        {
             m.Prompt = new SelectChannelPrompt(this);
             m.SendMessage(0, "Please enter the channel you wish to use.");
 
@@ -59,9 +46,9 @@ namespace Server.Items
             else if (m_Owner == null)
             {
                 m_Owner = m;
-                this.Name = m_Owner.Name.ToString() + "'s Personal Communicator";
-                this.HomeLocation = m.Location;
-                this.HomeMap = m.Map;
+                Name = m_Owner.Name.ToString() + "'s Personal Communicator";
+                HomeLocation = m.Location;
+                HomeMap = m.Map;
                 m.SendMessage("This personal communicator has been assigned to you.");
             }
             else
@@ -72,11 +59,11 @@ namespace Server.Items
                     return;
                 }
             }
-		}
+        }
 
-		public CommUnit( Serial serial ) : base( serial )
-		{
-		}
+        public CommUnit(Serial serial) : base(serial)
+        {
+        }
 
         [CommandProperty(AccessLevel.GameMaster)]
         public Point3D HomeLocation
@@ -97,7 +84,7 @@ namespace Server.Items
             private CommUnit m_Item;
             private Mobile m_Mobile;
 
-            public GoHomeEntry(Mobile from, Item item): base(5134) // uses "Goto Loc" entry
+            public GoHomeEntry(Mobile from, Item item) : base(5134) // uses "Goto Loc" entry
             {
                 m_Item = (CommUnit)item;
                 m_Mobile = from;
@@ -107,7 +94,9 @@ namespace Server.Items
             {
                 m_Mobile.Location = m_Item.HomeLocation;
                 if (m_Item.HomeMap != null)
+                {
                     m_Mobile.Map = m_Item.HomeMap;
+                }
             }
         }
 
@@ -116,7 +105,7 @@ namespace Server.Items
             private CommUnit m_Item;
             private Mobile m_Mobile;
 
-            public SetHomeEntry(Mobile from, Item item): base(2055) // uses "Mark" entry
+            public SetHomeEntry(Mobile from, Item item) : base(2055) // uses "Mark" entry
             {
                 m_Item = (CommUnit)item;
                 m_Mobile = from;
@@ -167,18 +156,18 @@ namespace Server.Items
             return true;
         }
 
-    	public override void Serialize( GenericWriter writer )
-		{
-			base.Serialize( writer );
-			writer.Write( (int) 1 ); // version
+        public override void Serialize(GenericWriter writer)
+        {
+            base.Serialize(writer);
+            writer.Write((int)1); // version
 
             writer.Write(m_HomeLocation);
             writer.Write(m_HomeMap);
             writer.Write(m_Owner);
 
-			writer.Write( (string) m_Channel );
-		}
-		
+            writer.Write((string)m_Channel);
+        }
+
         public override void Deserialize(GenericReader reader)
         {
             base.Deserialize(reader);
@@ -186,31 +175,32 @@ namespace Server.Items
             switch (version)
             {
                 case 1:
-                {
-                    m_HomeLocation = reader.ReadPoint3D();
-                    m_HomeMap = reader.ReadMap();
-                    m_Owner = reader.ReadMobile(); 
-                }   goto case 0;            
+                    {
+                        m_HomeLocation = reader.ReadPoint3D();
+                        m_HomeMap = reader.ReadMap();
+                        m_Owner = reader.ReadMobile();
+                    }
+                    goto case 0;
                 case 0:
-                {
-                    m_Channel = reader.ReadString();
-                    break;
-                }  
+                    {
+                        m_Channel = reader.ReadString();
+                        break;
+                    }
             }
         }
-   
-		private class SelectChannelPrompt : Prompt
-		{
-			private CommUnit unit;
 
-			public SelectChannelPrompt( CommUnit comm )
-			{
-				unit = comm;
-			}
-			public override void OnResponse( Mobile from, string text )
-			{
-				unit.Channel = text;
-			}
-		}
-	}
+        private class SelectChannelPrompt : Prompt
+        {
+            private CommUnit unit;
+
+            public SelectChannelPrompt(CommUnit comm)
+            {
+                unit = comm;
+            }
+            public override void OnResponse(Mobile from, string text)
+            {
+                unit.Channel = text;
+            }
+        }
+    }
 }

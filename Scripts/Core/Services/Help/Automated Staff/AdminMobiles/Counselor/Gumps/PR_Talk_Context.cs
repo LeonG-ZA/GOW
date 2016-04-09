@@ -1,19 +1,8 @@
 using System;
-using System.Text;
-using System.IO;
-using System.Collections;
-using System.Collections.Generic;
-using Server;
-using Server.Targeting;
 using Server.Items;
-using Server.ContextMenus;
-using Server.Multis;
-using Server.Spells;
 using Server.Commands;
-using Server.Gumps;
 using Server.Mobiles;
 using Server.Accounting;
-using Server.Misc;
 using Server.Network;
 
 namespace Server.Gumps
@@ -32,14 +21,12 @@ namespace Server.Gumps
             e.Mobile.SendGump(new Counselor_Talk());
         }
 
-        #region PR_Talk_Context Gump Configuration
-
         public Counselor_Talk(): base(0, 0)
         {
-            this.Closable = false;
-            this.Disposable = true;
-            this.Dragable = true;
-            this.Resizable = false;
+            Closable = false;
+            Disposable = true;
+            Dragable = true;
+            Resizable = false;
 
             AddPage(0);
             AddBackground(161, 154, 473, 289, 9200);
@@ -63,8 +50,6 @@ namespace Server.Gumps
             AddItem(210, 339, 2567);
             AddItem(551, 339, 2573);
         }
-
-        #endregion Edited By: A.A.R
 
         public enum Buttons
         {

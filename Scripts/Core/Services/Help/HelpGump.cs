@@ -111,16 +111,24 @@ namespace Server.Engines.Help
             foreach (Gump g in gumps)
             {
                 if (g is HelpGump)
+                {
                     return;
+                }
             }
 
             if (!PageQueue.CheckAllowedToPage(e.Mobile))
+            {
                 return;
+            }
 
             if (PageQueue.Contains(e.Mobile))
+            {
                 e.Mobile.SendMenu(new ContainedMenu(e.Mobile));
+            }
             else
+            {
                 e.Mobile.SendGump(new HelpGump(e.Mobile));
+            }
         }
 
         private static bool IsYoung(Mobile m)
@@ -146,7 +154,9 @@ namespace Server.Engines.Help
                 AggressorInfo info = m.Aggressed[i];
 
                 if (DateTime.UtcNow - info.LastCombatTime < TimeSpan.FromSeconds(30.0))
+                {
                     return true;
+                }
             }
 
             return false;
@@ -365,9 +375,13 @@ namespace Server.Engines.Help
                             else
                             {
                                 if (from.Alive)
+                                {
                                     from.MoveToWorld(new Point3D(3503, 2574, 14), Map.Trammel);
+                                }
                                 else
+                                {
                                     from.MoveToWorld(new Point3D(3469, 2559, 36), Map.Trammel);
+                                }
                             }
                         }
 

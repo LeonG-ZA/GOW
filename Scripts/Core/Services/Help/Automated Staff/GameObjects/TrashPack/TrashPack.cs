@@ -1,7 +1,5 @@
 using System;
-using System.Collections;
 using System.Collections.Generic;
-using Server.Multis;
 
 namespace Server.Items
 {
@@ -59,7 +57,9 @@ namespace Server.Items
         public override bool OnDragDrop(Mobile from, Item dropped)
         {
             if (!base.OnDragDrop(from, dropped))
+            {
                 return false;
+            }
 
             if (TotalItems >= 10)
             {
@@ -70,9 +70,13 @@ namespace Server.Items
                 from.SendMessage("Items will delete in 30 seconds!"); // The item will be deleted in three minutes
 
                 if (m_Timer != null)
+                {
                     m_Timer.Stop();
+                }
                 else
+                {
                     m_Timer = new EmptyTimer(this);
+                }
 
                 m_Timer.Start();
             }
@@ -94,9 +98,13 @@ namespace Server.Items
                 from.SendMessage("Items will delete in 30 sconds!"); // The item will be deleted in three minutes
 
                 if (m_Timer != null)
+                {
                     m_Timer.Stop();
+                }
                 else
+                {
                     m_Timer = new EmptyTimer(this);
+                }
 
                 m_Timer.Start();
             }
@@ -116,14 +124,18 @@ namespace Server.Items
                 for (int i = items.Count - 1; i >= 0; --i)
                 {
                     if (i >= items.Count)
+                    {
                         continue;
+                    }
 
                     items[i].Delete();
                 }
             }
 
             if (m_Timer != null)
+            {
                 m_Timer.Stop();
+            }
 
             m_Timer = null;
         }

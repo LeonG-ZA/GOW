@@ -1,22 +1,8 @@
 using System;
-using System.Text;
-using System.IO;
-using System.Collections;
 using System.Collections.Generic;
-using Server;
-using Server.Targeting;
 using Server.Items;
 using Server.ContextMenus;
-using Server.Multis;
-using Server.Regions;
-using Server.Engines.ChampionSpawns;
-using Server.Spells;
-using Server.Commands;
 using Server.Gumps;
-using Server.Mobiles;
-using Server.Accounting;
-using Server.Misc;
-using Server.Network;
 
 namespace Server.Mobiles
 {
@@ -24,11 +10,7 @@ namespace Server.Mobiles
     {
         private List<SBInfo> m_SBInfos = new List<SBInfo>();
         protected override List<SBInfo> SBInfos { get { return m_SBInfos; } }
-
         public override NpcGuild NpcGuild { get { return NpcGuild.MerchantsGuild; } }
-
-        #region Automated Greetings For Players
-
         private static bool m_Talked;
 
         string[] npcSpeech = new string[]
@@ -36,15 +18,10 @@ namespace Server.Mobiles
             "Welcome traveller! how may I assist thee?",     
         };
 
-        #endregion Edited By: A.A.R
-
         [Constructable]
         public Counselor_PR()
             : base("merchant")
         {
-
-//----------This Randomizes The Sex Of The NPC--------------------//
-
             if (this.Female = Utility.RandomBool())
             {
                 Body = 0x191;
@@ -55,8 +32,6 @@ namespace Server.Mobiles
                 Body = 0x190;
                 Name = NameList.RandomName("male");
             }
-
-//----------This Creates A Random Look To The NPC-----------------//
 
             Title = "[PR]";
             NameHue = 11;
@@ -84,11 +59,7 @@ namespace Server.Mobiles
                 AddItem(beard);
             }
 
-//----------This Toggles The NPC Movement: On Or Off--------------//
-
             CantWalk = false;
-
-//----------This Makes The NPC Equip HandHeld Items---------------//
 
             switch (Utility.Random(3))
             {
@@ -97,8 +68,6 @@ namespace Server.Mobiles
                 case 2: AddItem(new BookOfChivalry()); break;
             }
 
-//----------This Sets What Cloth The NPC Will Wear----------------//
-
             StaffRobe robe = new StaffRobe();
             robe.AccessLevel = AccessLevel.Counselor;
             robe.Movable = false;
@@ -106,8 +75,6 @@ namespace Server.Mobiles
             robe.LootType = LootType.Blessed;
             AddItem(robe);
         }
-
-//----------This Gives Your Staff A Monthly Gift-----------------//
 
         public class Counselor_Entry : ContextMenuEntry
         {
@@ -124,7 +91,9 @@ namespace Server.Mobiles
             public override void OnClick()
             {
                 if (!(m_Mobile is PlayerMobile))
+                {
                     return;
+                }
 
                 PlayerMobile mobile = (PlayerMobile)m_Mobile;
                 {
@@ -136,28 +105,26 @@ namespace Server.Mobiles
             }
         }
 
-//-------This Code Makes This NPC Behave As An NPC Vendor---------//
-
         public override void InitSBInfo()
         {
             m_SBInfos.Add(new SBCounselor());
         }
-
-//----------------------------------------------------------------//
-
-        #region Automated Greetings For Players
 
         public override void OnMovement(Mobile m, Point3D oldLocation)
         {
             if (m.InRange(this, 3) && m is PlayerMobile)
             {
                 if (!m.HasGump(typeof(PR_StaffKeywords)))
+                {
                     m.SendGump(new PR_StaffKeywords());
+                }
             }
             if (!m.InRange(this, 3) && m is PlayerMobile)
             {
                 if (m.HasGump(typeof(PR_StaffKeywords)))
+                {
                     m.CloseGump(typeof(PR_StaffKeywords));
+                }
             }
 
             if (m_Talked == false)
@@ -195,8 +162,6 @@ namespace Server.Mobiles
             m.Say(say[Utility.Random(say.Length)]);
         }
 
-        #endregion Edited By: A.A.R
-
         #region Interactions: Based On Keywords
 
         #region Keyword Listing - A Quick Reference
@@ -221,7 +186,7 @@ namespace Server.Mobiles
             > suggestion....... //submition gump
             > donations........ //submition gump                          
         */
-        #endregion Edited By: A.A.R
+        #endregion
 
         #region NPC Counselors - Unacceptable Words
 
@@ -239,7 +204,7 @@ namespace Server.Mobiles
                 "klit","lezbo","lesbo","nigga","niggas","nigger","piss","penis","prick","pussy","retard","retarded","spic","shit","spunk","spunker","smeg","smegg","twat","tit","tits","titties", "tittys","titie","tities",
                 "tity","tard","vagina","wop","wigger","wiger"});
 
-        #endregion Edited By: A.A.R
+        #endregion
 
         private bool ContainsUnacceptableWords(string speech)
         {
@@ -268,7 +233,7 @@ namespace Server.Mobiles
                 return;
             }
 
-        #endregion Edited By: Morxeton
+        #endregion
 
             switch (said)
             {
@@ -903,17 +868,13 @@ namespace Server.Mobiles
             }
         }
 
-        #endregion Edited By: A.A.R
-
-        #region Click The NPC To Open Up A Gump
+        #endregion
 
         public override void GetContextMenuEntries(Mobile from, List<ContextMenuEntry> list)
         {
             base.GetContextMenuEntries(from, list);
             list.Add(new Counselor_Entry(from, this));
         }
-
-        #endregion Edited By: A.A.R
 
         public override bool ClickTitle { get { return false; } }
         public override bool IsActiveVendor { get { return true; } }

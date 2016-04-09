@@ -1,18 +1,5 @@
-using System;
-using System.Text;
-using System.Collections;
 using System.Collections.Generic;
-using Server;
-using Server.Mobiles;
-using Server.Network;
 using Server.ContextMenus;
-using Server.Gumps;
-using Server.Engines.Quests;
-using Server.Engines.Quests.Necro;
-using Server.Items;
-using Server.Spells;
-using Server.Spells.Fourth;
-using Server.Targeting;
 
 namespace Server.Items.Staff
 {
@@ -45,7 +32,7 @@ namespace Server.Items.Staff
         }
 
         [Constructable]
-        public CollarOfVisibility(): base(0x1F08)
+        public CollarOfVisibility() : base(0x1F08)
         {
             LootType = LootType.Blessed;
             Weight = 1.0;
@@ -73,22 +60,22 @@ namespace Server.Items.Staff
                 //this.Delete();
             }
 
-			else if ( m_Owner == null )
-			{
-				m_Owner = m;
-				this.Name = m_Owner.Name.ToString() + "'s Collar of Visibility";
-				this.HomeLocation = m.Location;
-				this.HomeMap = m.Map;
-				m.SendMessage( "This collar has been assigned to you." );
-			}
-			else
-			{
-				if ( m_Owner != m )
-				{
+            else if (m_Owner == null)
+            {
+                m_Owner = m;
+                this.Name = m_Owner.Name.ToString() + "'s Collar of Visibility";
+                this.HomeLocation = m.Location;
+                this.HomeMap = m.Map;
+                m.SendMessage("This collar has been assigned to you.");
+            }
+            else
+            {
+                if (m_Owner != m)
+                {
                     m.SendMessage("This item has not been assigned to you!");
-					return;
-				}						
-			}
+                    return;
+                }
+            }
 
             if (m.AccessLevel > AccessLevel.Player)
             {
@@ -169,7 +156,7 @@ namespace Server.Items.Staff
             }
         }
 
-        public CollarOfVisibility(Serial serial): base(serial)
+        public CollarOfVisibility(Serial serial) : base(serial)
         {
         }
 
@@ -193,7 +180,7 @@ namespace Server.Items.Staff
             private CollarOfVisibility m_Item;
             private Mobile m_Mobile;
 
-            public GoHomeEntry(Mobile from, Item item): base(5134) // uses "Goto Loc" entry
+            public GoHomeEntry(Mobile from, Item item) : base(5134) // uses "Goto Loc" entry
             {
                 m_Item = (CollarOfVisibility)item;
                 m_Mobile = from;
@@ -203,7 +190,9 @@ namespace Server.Items.Staff
             {
                 m_Mobile.Location = m_Item.HomeLocation;
                 if (m_Item.HomeMap != null)
+                {
                     m_Mobile.Map = m_Item.HomeMap;
+                }
             }
         }
 
@@ -212,7 +201,7 @@ namespace Server.Items.Staff
             private CollarOfVisibility m_Item;
             private Mobile m_Mobile;
 
-            public SetHomeEntry(Mobile from, Item item): base(2055) // uses "Mark" entry
+            public SetHomeEntry(Mobile from, Item item) : base(2055) // uses "Mark" entry
             {
                 m_Item = (CollarOfVisibility)item;
                 m_Mobile = from;
@@ -283,17 +272,18 @@ namespace Server.Items.Staff
             switch (version)
             {
                 case 1:
-                {
-                    m_HomeLocation = reader.ReadPoint3D();
-                    m_HomeMap = reader.ReadMap();
-                    m_Owner = reader.ReadMobile(); 
-                }   goto case 0;            
+                    {
+                        m_HomeLocation = reader.ReadPoint3D();
+                        m_HomeMap = reader.ReadMap();
+                        m_Owner = reader.ReadMobile();
+                    }
+                    goto case 0;
                 case 0:
-                {
-                    mAppearEffect = (CollarEffect)reader.ReadInt();
-                    mHideEffect = (CollarEffect)reader.ReadInt();
-                    break;
-                }  
+                    {
+                        mAppearEffect = (CollarEffect)reader.ReadInt();
+                        mHideEffect = (CollarEffect)reader.ReadInt();
+                        break;
+                    }
             }
         }
     }
