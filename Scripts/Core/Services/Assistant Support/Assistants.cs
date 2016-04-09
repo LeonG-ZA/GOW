@@ -1,10 +1,8 @@
-﻿#region References
-using System;
+﻿using System;
 using System.Collections.Generic;
 using Server.MainConfiguration;
 using Server.Gumps;
 using Server.Network;
-#endregion
 
 namespace Server.Misc
 {

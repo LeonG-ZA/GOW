@@ -8,8 +8,8 @@ namespace Server.Engines.ConPVP
         public EventController()
             : base(0x1B7A)
         {
-            this.Visible = false;
-            this.Movable = false;
+            Visible = false;
+            Movable = false;
         }
 
         public EventController(Serial serial)
@@ -39,7 +39,9 @@ namespace Server.Engines.ConPVP
         public override void OnDoubleClick(Mobile from)
         {
             if (from.AccessLevel >= AccessLevel.GameMaster)
+            {
                 from.SendGump(new Gumps.PropertiesGump(from, this));
+            }
         }
     }
 
@@ -48,14 +50,14 @@ namespace Server.Engines.ConPVP
         protected DuelContext m_Context;
         public EventGame(DuelContext context)
         {
-            this.m_Context = context;
+            m_Context = context;
         }
 
         public DuelContext Context
         {
             get
             {
-                return this.m_Context;
+                return m_Context;
             }
         }
         public virtual bool FreeConsume

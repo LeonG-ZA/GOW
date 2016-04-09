@@ -1,10 +1,8 @@
 using System;
 using System.Collections;
-using Server;
 using Server.Mobiles;
 using Server.Network;
 using Server.Items;
-using Server.MainConfiguration;
 using Server.TestCenterConfiguration;
 
 namespace Server.Engines.Collections
@@ -104,7 +102,9 @@ namespace Server.Engines.Collections
             get
             {
                 if (m_Tier == MaxTiers)
+                {
                     return 0;
+                }
 
                 return PointsPerTier - Points;
             }

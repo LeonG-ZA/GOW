@@ -10,13 +10,15 @@ namespace Server.Engines.ConPVP
         public LadderController()
             : base(0x1B7A)
         {
-            this.Visible = false;
-            this.Movable = false;
+            Visible = false;
+            Movable = false;
 
-            this.m_Ladder = new Ladder();
+            m_Ladder = new Ladder();
 
             if (Ladder.Instance == null)
-                Ladder.Instance = this.m_Ladder;
+            {
+                Ladder.Instance = m_Ladder;
+            }
         }
 
         public LadderController(Serial serial)
@@ -29,7 +31,7 @@ namespace Server.Engines.ConPVP
         {
             get
             {
-                return this.m_Ladder;
+                return m_Ladder;
             }
             set
             {
@@ -44,11 +46,15 @@ namespace Server.Engines.ConPVP
         }
         public override void Delete()
         {
-            if (Ladder.Instance != this.m_Ladder)
+            if (Ladder.Instance != m_Ladder)
+            {
                 base.Delete();
+            }
 
             if (Ladder.Instance == m_Ladder)
+            {
                 Ladder.Instance = null;
+            }
 
             base.Delete();
 
@@ -60,9 +66,9 @@ namespace Server.Engines.ConPVP
 
             writer.Write((int)1);
 
-            this.m_Ladder.Serialize(writer);
+            m_Ladder.Serialize(writer);
 
-            writer.Write((bool)(Server.Engines.ConPVP.Ladder.Instance == this.m_Ladder));
+            writer.Write((bool)(Server.Engines.ConPVP.Ladder.Instance == m_Ladder));
         }
 
         public override void Deserialize(GenericReader reader)
@@ -76,10 +82,12 @@ namespace Server.Engines.ConPVP
                 case 1:
                 case 0:
                     {
-                        this.m_Ladder = new Ladder(reader);
+                        m_Ladder = new Ladder(reader);
 
                         if (version < 1 || reader.ReadBool())
-                            Server.Engines.ConPVP.Ladder.Instance = this.m_Ladder;
+                        {
+                            Ladder.Instance = m_Ladder;
+                        }
 
                         break;
                     }
@@ -135,8 +143,8 @@ namespace Server.Engines.ConPVP
         private readonly ArrayList m_Entries;
         public Ladder()
         {
-            this.m_Table = new Hashtable();
-            this.m_Entries = new ArrayList();
+            m_Table = new Hashtable();
+            m_Entries = new ArrayList();
         }
 
         public Ladder(GenericReader reader)
@@ -150,8 +158,8 @@ namespace Server.Engines.ConPVP
                     {
                         int count = reader.ReadEncodedInt();
 
-                        this.m_Table = new Hashtable(count);
-                        this.m_Entries = new ArrayList(count);
+                        m_Table = new Hashtable(count);
+                        m_Entries = new ArrayList(count);
 
                         for (int i = 0; i < count; ++i)
                         {
@@ -159,19 +167,19 @@ namespace Server.Engines.ConPVP
 
                             if (entry.Mobile != null)
                             {
-                                this.m_Table[entry.Mobile] = entry;
-                                entry.Index = this.m_Entries.Count;
-                                this.m_Entries.Add(entry);
+                                m_Table[entry.Mobile] = entry;
+                                entry.Index = m_Entries.Count;
+                                m_Entries.Add(entry);
                             }
                         }
 
                         if (version == 0)
                         {
-                            this.m_Entries.Sort();
+                            m_Entries.Sort();
 
-                            for (int i = 0; i < this.m_Entries.Count; ++i)
+                            for (int i = 0; i < m_Entries.Count; ++i)
                             {
-                                LadderEntry entry = (LadderEntry)this.m_Entries[i];
+                                LadderEntry entry = (LadderEntry)m_Entries[i];
 
                                 entry.Index = i;
                             }
@@ -196,11 +204,17 @@ namespace Server.Engines.ConPVP
         public static int GetLevel(int xp)
         {
             if (xp >= 22500)
+            {
                 return 50;
+            }
             else if (xp >= 2500)
+            {
                 return (10 + ((xp - 2500) / 500));
+            }
             else if (xp < 0)
+            {
                 xp = 0;
+            }
 
             return m_ShortLevels[xp / 100];
         }
@@ -222,7 +236,9 @@ namespace Server.Engines.ConPVP
         public static int GetLossFactor(int level)
         {
             if (level >= 10)
+            {
                 return 100;
+            }
 
             return m_LossFactors[level - 1];
         }
@@ -232,7 +248,9 @@ namespace Server.Engines.ConPVP
             int x = ourLevel - theirLevel;
 
             if (x < -6 || x > +6)
+            {
                 return 0;
+            }
 
             int y = win ? 0 : 1;
 
@@ -242,7 +260,9 @@ namespace Server.Engines.ConPVP
         public static int GetExperienceGain(LadderEntry us, LadderEntry them, bool weWon)
         {
             if (us == null || them == null)
+            {
                 return 0;
+            }
 
             int ourLevel = GetLevel(us.Experience);
             int theirLevel = GetLevel(them.Experience);
@@ -250,52 +270,58 @@ namespace Server.Engines.ConPVP
             int scalar = GetOffsetScalar(ourLevel, theirLevel, weWon);
 
             if (scalar == 0)
+            {
                 return 0;
+            }
 
             int xp = 25 * scalar;
 
             if (!weWon)
+            {
                 xp = (xp * GetLossFactor(ourLevel)) / 100;
+            }
 
             xp /= 100;
 
             if (xp <= 0)
+            {
                 xp = 1;
+            }
 
             return xp * (weWon ? 1 : -1);
         }
 
         public ArrayList ToArrayList()
         {
-            return this.m_Entries;
+            return m_Entries;
         }
 
         public void UpdateEntry(LadderEntry entry)
         {
             int index = entry.Index;
 
-            if (index >= 0 && index < this.m_Entries.Count)
+            if (index >= 0 && index < m_Entries.Count)
             {
                 // sanity
                 int c;
 
-                while ((index - 1) >= 0 && (c = entry.CompareTo(this.m_Entries[index - 1])) < 0)
-                    index = this.Swap(index, index - 1);
+                while ((index - 1) >= 0 && (c = entry.CompareTo(m_Entries[index - 1])) < 0)
+                    index = Swap(index, index - 1);
 
-                while ((index + 1) < this.m_Entries.Count && (c = entry.CompareTo(this.m_Entries[index + 1])) > 0)
-                    index = this.Swap(index, index + 1);
+                while ((index + 1) < m_Entries.Count && (c = entry.CompareTo(m_Entries[index + 1])) > 0)
+                    index = Swap(index, index + 1);
             }
         }
 
         public LadderEntry Find(Mobile mob)
         {
-            LadderEntry entry = (LadderEntry)this.m_Table[mob];
+            LadderEntry entry = (LadderEntry)m_Table[mob];
 
             if (entry == null)
             {
-                this.m_Table[mob] = entry = new LadderEntry(mob, this);
-                entry.Index = this.m_Entries.Count;
-                this.m_Entries.Add(entry);
+                m_Table[mob] = entry = new LadderEntry(mob, this);
+                entry.Index = m_Entries.Count;
+                m_Entries.Add(entry);
             }
 
             return entry;
@@ -303,28 +329,30 @@ namespace Server.Engines.ConPVP
 
         public LadderEntry FindNoCreate(Mobile mob)
         {
-            return this.m_Table[mob] as LadderEntry;
+            return m_Table[mob] as LadderEntry;
         }
 
         public void Serialize(GenericWriter writer)
         {
             writer.WriteEncodedInt((int)1); // version;
 
-            writer.WriteEncodedInt((int)this.m_Entries.Count);
+            writer.WriteEncodedInt((int)m_Entries.Count);
 
-            for (int i = 0; i < this.m_Entries.Count; ++i)
-                ((LadderEntry)this.m_Entries[i]).Serialize(writer);
+            for (int i = 0; i < m_Entries.Count; ++i)
+            {
+                ((LadderEntry)m_Entries[i]).Serialize(writer);
+            }
         }
 
         private int Swap(int idx, int newIdx)
         {
-            object hold = this.m_Entries[idx];
+            object hold = m_Entries[idx];
 
-            this.m_Entries[idx] = this.m_Entries[newIdx];
-            this.m_Entries[newIdx] = hold;
+            m_Entries[idx] = m_Entries[newIdx];
+            m_Entries[newIdx] = hold;
 
-            ((LadderEntry)this.m_Entries[idx]).Index = idx;
-            ((LadderEntry)this.m_Entries[newIdx]).Index = newIdx;
+            ((LadderEntry)m_Entries[idx]).Index = idx;
+            ((LadderEntry)m_Entries[newIdx]).Index = newIdx;
 
             return newIdx;
         }
@@ -340,23 +368,23 @@ namespace Server.Engines.ConPVP
         private int m_Index;
         public LadderEntry(Mobile mob, Ladder ladder)
         {
-            this.m_Ladder = ladder;
-            this.m_Mobile = mob;
+            m_Ladder = ladder;
+            m_Mobile = mob;
         }
 
         public LadderEntry(GenericReader reader, Ladder ladder, int version)
         {
-            this.m_Ladder = ladder;
+            m_Ladder = ladder;
 
             switch ( version )
             {
                 case 1:
                 case 0:
                     {
-                        this.m_Mobile = reader.ReadMobile();
-                        this.m_Experience = reader.ReadEncodedInt();
-                        this.m_Wins = reader.ReadEncodedInt();
-                        this.m_Losses = reader.ReadEncodedInt();
+                        m_Mobile = reader.ReadMobile();
+                        m_Experience = reader.ReadEncodedInt();
+                        m_Wins = reader.ReadEncodedInt();
+                        m_Losses = reader.ReadEncodedInt();
 
                         break;
                     }
@@ -367,7 +395,7 @@ namespace Server.Engines.ConPVP
         {
             get
             {
-                return this.m_Mobile;
+                return m_Mobile;
             }
         }
         [CommandProperty(AccessLevel.GameMaster, AccessLevel.Administrator)]
@@ -375,12 +403,12 @@ namespace Server.Engines.ConPVP
         {
             get
             {
-                return this.m_Experience;
+                return m_Experience;
             }
             set
             {
-                this.m_Experience = value;
-                this.m_Ladder.UpdateEntry(this);
+                m_Experience = value;
+                m_Ladder.UpdateEntry(this);
             }
         }
         [CommandProperty(AccessLevel.GameMaster, AccessLevel.Administrator)]
@@ -388,11 +416,11 @@ namespace Server.Engines.ConPVP
         {
             get
             {
-                return this.m_Wins;
+                return m_Wins;
             }
             set
             {
-                this.m_Wins = value;
+                m_Wins = value;
             }
         }
         [CommandProperty(AccessLevel.GameMaster, AccessLevel.Administrator)]
@@ -400,22 +428,22 @@ namespace Server.Engines.ConPVP
         {
             get
             {
-                return this.m_Losses;
+                return m_Losses;
             }
             set
             {
-                this.m_Losses = value;
+                m_Losses = value;
             }
         }
         public int Index
         {
             get
             {
-                return this.m_Index;
+                return m_Index;
             }
             set
             {
-                this.m_Index = value;
+                m_Index = value;
             }
         }
         [CommandProperty(AccessLevel.GameMaster)]
@@ -423,20 +451,20 @@ namespace Server.Engines.ConPVP
         {
             get
             {
-                return this.m_Index;
+                return m_Index;
             }
         }
         public void Serialize(GenericWriter writer)
         {
-            writer.Write((Mobile)this.m_Mobile);
-            writer.WriteEncodedInt((int)this.m_Experience);
-            writer.WriteEncodedInt((int)this.m_Wins);
-            writer.WriteEncodedInt((int)this.m_Losses);
+            writer.Write((Mobile)m_Mobile);
+            writer.WriteEncodedInt((int)m_Experience);
+            writer.WriteEncodedInt((int)m_Wins);
+            writer.WriteEncodedInt((int)m_Losses);
         }
 
         public int CompareTo(object obj)
         {
-            return ((LadderEntry)obj).m_Experience - this.m_Experience;
+            return ((LadderEntry)obj).m_Experience - m_Experience;
         }
     }
 }

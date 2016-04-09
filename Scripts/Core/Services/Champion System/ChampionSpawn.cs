@@ -1,14 +1,11 @@
 using System;
-using System.Collections;
 using System.Collections.Generic;
-using Server;
 using Server.Gumps;
 using Server.Items;
 using Server.Mobiles;
 using Server.Regions;
 using Server.Spells;
 using Server.Spells.Necromancy;
-using Server.Events;
 
 namespace Server.Engines.ChampionSpawns
 {

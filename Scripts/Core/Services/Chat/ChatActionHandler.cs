@@ -1,5 +1,3 @@
-using System;
-
 namespace Server.Engines.Chat
 {
     public delegate void OnChatAction(ChatUser from, Channel channel, string param);
@@ -11,30 +9,30 @@ namespace Server.Engines.Chat
         private readonly OnChatAction m_Callback;
         public ChatActionHandler(bool requireModerator, bool requireConference, OnChatAction callback)
         {
-            this.m_RequireModerator = requireModerator;
-            this.m_RequireConference = requireConference;
-            this.m_Callback = callback;
+            m_RequireModerator = requireModerator;
+            m_RequireConference = requireConference;
+            m_Callback = callback;
         }
 
         public bool RequireModerator
         {
             get
             {
-                return this.m_RequireModerator;
+                return m_RequireModerator;
             }
         }
         public bool RequireConference
         {
             get
             {
-                return this.m_RequireConference;
+                return m_RequireConference;
             }
         }
         public OnChatAction Callback
         {
             get
             {
-                return this.m_Callback;
+                return m_Callback;
             }
         }
     }

@@ -1,33 +1,28 @@
-using Server;
 using Server.Items;
-using Server.Misc;
 using Server.Mobiles;
-using Server.Network;
 using Server.FeaturesConfiguration;
 using System;
-using System.Collections;
-using System.Collections.Generic;
 
 namespace Server.Misc
 {
-	public class VirtueArtifactsSystem
-	{
+    public class VirtueArtifactsSystem
+    {
         private static bool m_Enabled = (Core.Expansion == Expansion.ML);
         public static bool Enabled { get { return m_Enabled; } }
 
         public static Type[] VirtueArtifacts { get { return m_VirtueArtifacts; } }
 
-		private static Type[] m_VirtueArtifacts = new Type[]
-			{
-				typeof( KatrinasCrook ), typeof( JaanasStaff ), typeof( DragonsEnd ), typeof( AnkhPendant ),
-				typeof( SentinelsGuard ), typeof( LordBlackthornsExemplar ), typeof( MapOfTheKnownWorld ), typeof( TenthAnniversarySculpture ),
-				typeof( CompassionArms ), typeof( JusticeBreastplate ), typeof( ValorGauntlets ), typeof( HonestyGorget ),
-				typeof( SpiritualityHelm ), typeof( HonorLegs ), typeof( SacrificeSollerets )
-			};
+        private static Type[] m_VirtueArtifacts = new Type[]
+            {
+                typeof( KatrinasCrook ), typeof( JaanasStaff ), typeof( DragonsEnd ), typeof( AnkhPendant ),
+                typeof( SentinelsGuard ), typeof( LordBlackthornsExemplar ), typeof( MapOfTheKnownWorld ), typeof( TenthAnniversarySculpture ),
+                typeof( CompassionArms ), typeof( JusticeBreastplate ), typeof( ValorGauntlets ), typeof( HonestyGorget ),
+                typeof( SpiritualityHelm ), typeof( HonorLegs ), typeof( SacrificeSollerets )
+            };
 
-		private static bool CheckLocation( Mobile m )
-		{
-			Region r = m.Region;
+        private static bool CheckLocation(Mobile m)
+        {
+            Region r = m.Region;
 
             if (r.IsPartOf(typeof(Server.Regions.HouseRegion)) || Server.Multis.BaseBoat.FindBoatAt(m, m.Map) != null)
                 return false;
@@ -40,21 +35,25 @@ namespace Server.Misc
 
             return (r.IsPartOf("Covetous") || r.IsPartOf("Deceit") || r.IsPartOf("Despise") || r.IsPartOf("Destard") ||
                 r.IsPartOf("Hythloth") || r.IsPartOf("Shame") || r.IsPartOf("Wrong"));
-		}
+        }
 
-		public static void HandleKill( Mobile victim, Mobile killer )
-		{
-			PlayerMobile pm = killer as PlayerMobile;
-			BaseCreature bc = victim as BaseCreature;
+        public static void HandleKill(Mobile victim, Mobile killer)
+        {
+            PlayerMobile pm = killer as PlayerMobile;
+            BaseCreature bc = victim as BaseCreature;
 
             if (FeaturesConfig.FeatVirtueArtifactsEnabled)
             {
 
                 if (!Enabled || pm == null || bc == null || !CheckLocation(bc) || !CheckLocation(pm) || !killer.InRange(victim, 18))
+                {
                     return;
+                }
 
                 if (bc.Controlled || bc.Owners.Count > 0 || bc.Fame <= 0)
+                {
                     return;
+                }
 
                 //25000 for 1/100 chance, 10 hyrus
                 //1500, 1/1000 chance, 20 lizard men for that chance.
@@ -99,6 +98,6 @@ namespace Server.Misc
                     }
                 }
             }
-		}
-	}
+        }
+    }
 }

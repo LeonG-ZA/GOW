@@ -331,7 +331,7 @@ namespace Server.Engines.ConPVP
                                 "Bolas",
                                 "Mounts",
                                 "Orange Petals",
-							    "Fire Horns"
+                                "Fire Horns"
                             }));
                     }
 
@@ -664,21 +664,21 @@ namespace Server.Engines.ConPVP
         {
             get
             {
-                return this.m_Title;
+                return m_Title;
             }
         }
         public string Description
         {
             get
             {
-                return this.m_Description;
+                return m_Description;
             }
         }
         public string[] Options
         {
             get
             {
-                return this.m_Options;
+                return m_Options;
             }
         }
 
@@ -686,14 +686,14 @@ namespace Server.Engines.ConPVP
         {
             get
             {
-                return this.m_Offset;
+                return m_Offset;
             }
         }
         public int TotalLength
         {
             get
             {
-                return this.m_TotalLength;
+                return m_TotalLength;
             }
         }
 
@@ -701,14 +701,14 @@ namespace Server.Engines.ConPVP
         {
             get
             {
-                return this.m_Parent;
+                return m_Parent;
             }
         }
         public RulesetLayout[] Children
         {
             get
             {
-                return this.m_Children;
+                return m_Children;
             }
         }
 
@@ -716,36 +716,40 @@ namespace Server.Engines.ConPVP
         {
             get
             {
-                return this.m_Defaults;
+                return m_Defaults;
             }
             set
             {
-                this.m_Defaults = value;
+                m_Defaults = value;
             }
         }
         public Ruleset[] Flavors
         {
             get
             {
-                return this.m_Flavors;
+                return m_Flavors;
             }
             set
             {
-                this.m_Flavors = value;
+                m_Flavors = value;
             }
         }
 
         public RulesetLayout FindByTitle(string title)
         {
-            if (this.m_Title == title)
-                return this;
-
-            for (int i = 0; i < this.m_Children.Length; ++i)
+            if (m_Title == title)
             {
-                RulesetLayout layout = this.m_Children[i].FindByTitle(title);
+                return this;
+            }
+
+            for (int i = 0; i < m_Children.Length; ++i)
+            {
+                RulesetLayout layout = m_Children[i].FindByTitle(title);
 
                 if (layout != null)
+                {
                     return layout;
+                }
             }
 
             return null;
@@ -753,15 +757,19 @@ namespace Server.Engines.ConPVP
 
         public string FindByIndex(int index)
         {
-            if (index >= this.m_Offset && index < (this.m_Offset + this.m_Options.Length))
-                return this.m_Description + ": " + this.m_Options[index - this.m_Offset];
-
-            for (int i = 0; i < this.m_Children.Length; ++i)
+            if (index >= m_Offset && index < (m_Offset + m_Options.Length))
             {
-                string opt = this.m_Children[i].FindByIndex(index);
+                return m_Description + ": " + m_Options[index - m_Offset];
+            }
+
+            for (int i = 0; i < m_Children.Length; ++i)
+            {
+                string opt = m_Children[i].FindByIndex(index);
 
                 if (opt != null)
+                {
                     return opt;
+                }
             }
 
             return null;
@@ -769,22 +777,26 @@ namespace Server.Engines.ConPVP
 
         public RulesetLayout FindByOption(string title, string option, ref int index)
         {
-            if (title == null || this.m_Title == title)
+            if (title == null || m_Title == title)
             {
-                index = this.GetOptionIndex(option);
+                index = GetOptionIndex(option);
 
                 if (index >= 0)
+                {
                     return this;
+                }
 
                 title = null;
             }
 
-            for (int i = 0; i < this.m_Children.Length; ++i)
+            for (int i = 0; i < m_Children.Length; ++i)
             {
-                RulesetLayout layout = this.m_Children[i].FindByOption(title, option, ref index);
+                RulesetLayout layout = m_Children[i].FindByOption(title, option, ref index);
 
                 if (layout != null)
+                {
                     return layout;
+                }
             }
 
             return null;
@@ -792,27 +804,29 @@ namespace Server.Engines.ConPVP
 
         public int GetOptionIndex(string option)
         {
-            return Array.IndexOf(this.m_Options, option);
+            return Array.IndexOf(m_Options, option);
         }
 
         public void ComputeOffsets()
         {
             int offset = 0;
 
-            this.RecurseComputeOffsets(ref offset);
+            RecurseComputeOffsets(ref offset);
         }
 
         private int RecurseComputeOffsets(ref int offset)
         {
-            this.m_Offset = offset;
+            m_Offset = offset;
 
-            offset += this.m_Options.Length;
-            this.m_TotalLength += this.m_Options.Length;
+            offset += m_Options.Length;
+            m_TotalLength += m_Options.Length;
 
-            for (int i = 0; i < this.m_Children.Length; ++i)
-                this.m_TotalLength += this.m_Children[i].RecurseComputeOffsets(ref offset);
+            for (int i = 0; i < m_Children.Length; ++i)
+            {
+                m_TotalLength += m_Children[i].RecurseComputeOffsets(ref offset);
+            }
 
-            return this.m_TotalLength;
+            return m_TotalLength;
         }
 
         public RulesetLayout(string title, string[] options)
@@ -842,13 +856,15 @@ namespace Server.Engines.ConPVP
 
         public RulesetLayout(string title, string description, RulesetLayout[] children, string[] options)
         {
-            this.m_Title = title;
-            this.m_Description = description;
-            this.m_Children = children;
-            this.m_Options = options;
+            m_Title = title;
+            m_Description = description;
+            m_Children = children;
+            m_Options = options;
 
             for (int i = 0; i < children.Length; ++i)
+            {
                 children[i].m_Parent = this;
+            }
         }
     }
 }

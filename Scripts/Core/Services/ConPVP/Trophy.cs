@@ -103,7 +103,9 @@ namespace Server.Items
             m_Date = reader.ReadDateTime();
 
             if (version == 0)
+            {
                 LootType = LootType.Blessed;
+            }
         }
 
         public override void OnAdded(IEntity parent)
@@ -111,7 +113,9 @@ namespace Server.Items
             base.OnAdded(parent);
 
             if (m_Owner == null)
+            {
                 m_Owner = RootParent as Mobile;
+            }
         }
 
         public override void OnSingleClick(Mobile from)
@@ -119,19 +123,25 @@ namespace Server.Items
             base.OnSingleClick(from);
 
             if (m_Owner != null)
+            {
                 LabelTo(from, "{0} -- {1}", m_Title, m_Owner.RawName);
+            }
             else if (m_Title != null)
+            {
                 LabelTo(from, m_Title);
+            }
 
             if (m_Date != DateTime.MinValue)
+            {
                 LabelTo(from, m_Date.ToString("d"));
+            }
         }
 
         public void UpdateStyle()
         {
             Name = String.Format("{0} trophy", m_Rank.ToString().ToLower());
 
-            switch ( m_Rank )
+            switch (m_Rank)
             {
                 case TrophyRank.Gold:
                     Hue = 2213;

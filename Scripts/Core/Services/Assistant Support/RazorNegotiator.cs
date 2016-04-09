@@ -1,8 +1,6 @@
 using System;
-using Server;
 using System.Collections;
 using Server.Network;
-using Server.Gumps;
 using Server.MainConfiguration;
 
 namespace Server.Misc
@@ -62,9 +60,13 @@ namespace Server.Misc
         public static void SetDisallowed(RazorFeatures feature, bool value)
         {
             if (value)
+            {
                 m_DisallowedFeatures |= feature;
+            }
             else
+            {
                 m_DisallowedFeatures &= ~feature;
+            }
         }
 
         public static RazorFeatures DisallowedFeatures { get { return m_DisallowedFeatures; } }
@@ -101,7 +103,9 @@ namespace Server.Misc
                 {
                     t = m_Table[m] as Timer;
                     if (t != null && t.Running)
+                    {
                         t.Stop();
+                    }
                 }
 
                 m_Table[m] = t = Timer.DelayCall(RazorFeatureControl.HandshakeTimeout, OnHandshakeTimeout_Callback, m);
@@ -114,7 +118,9 @@ namespace Server.Misc
             pvSrc.Trace(state);
 
             if (state == null || state.Mobile == null || !state.Running)
+            {
                 return;
+            }
 
             Mobile m = state.Mobile;
             Timer t = null;
@@ -123,7 +129,9 @@ namespace Server.Misc
                 t = m_Table[m] as Timer;
 
                 if (t != null)
+                {
                     t.Stop();
+                }
 
                 m_Table.Remove(m);
             }
@@ -134,7 +142,9 @@ namespace Server.Misc
             Timer t = null;
             Mobile m = state as Mobile;
             if (m == null)
+            {
                 return;
+            }
 
             m_Table.Remove(m);
 
@@ -158,7 +168,9 @@ namespace Server.Misc
                 Mobile m = (Mobile)state;
 
                 if (m.NetState != null && m.NetState.Running)
+                {
                     m.NetState.Dispose();
+                }
                 m_Table.Remove(m);
 
                 Console.WriteLine("Player {0} kicked (Failed Razor handshake)", m);

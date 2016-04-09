@@ -14,58 +14,68 @@ namespace Server.Engines.ConPVP
         public PickRulesetGump(Mobile from, DuelContext context, Ruleset ruleset)
             : base(50, 50)
         {
-            this.m_From = from;
-            this.m_Context = context;
-            this.m_Ruleset = ruleset;
-            this.m_Defaults = ruleset.Layout.Defaults;
-            this.m_Flavors = ruleset.Layout.Flavors;
+            m_From = from;
+            m_Context = context;
+            m_Ruleset = ruleset;
+            m_Defaults = ruleset.Layout.Defaults;
+            m_Flavors = ruleset.Layout.Flavors;
 
-            int height = 25 + 20 + ((this.m_Defaults.Length + 1) * 22) + 6 + 20 + (this.m_Flavors.Length * 22) + 25;
+            int height = 25 + 20 + ((m_Defaults.Length + 1) * 22) + 6 + 20 + (m_Flavors.Length * 22) + 25;
 
-            this.AddPage(0);
+            AddPage(0);
 
-            this.AddBackground(0, 0, 260, height, 9250);
-            this.AddBackground(10, 10, 240, height - 20, 0xDAC);
+            AddBackground(0, 0, 260, height, 9250);
+            AddBackground(10, 10, 240, height - 20, 0xDAC);
 
-            this.AddHtml(35, 25, 190, 20, this.Center("Rules"), false, false);
+            AddHtml(35, 25, 190, 20, Center("Rules"), false, false);
 
             int y = 25 + 20;
 
-            for (int i = 0; i < this.m_Defaults.Length; ++i)
+            for (int i = 0; i < m_Defaults.Length; ++i)
             {
-                Ruleset cur = this.m_Defaults[i];
+                Ruleset cur = m_Defaults[i];
 
-                this.AddHtml(35 + 14, y, 176, 20, cur.Title, false, false);
+                AddHtml(35 + 14, y, 176, 20, cur.Title, false, false);
 
                 if (ruleset.Base == cur && !ruleset.Changed)
-                    this.AddImage(35, y + 4, 0x939);
+                {
+                    AddImage(35, y + 4, 0x939);
+                }
                 else if (ruleset.Base == cur)
-                    this.AddButton(35, y + 4, 0x93A, 0x939, 2 + i, GumpButtonType.Reply, 0);
+                {
+                    AddButton(35, y + 4, 0x93A, 0x939, 2 + i, GumpButtonType.Reply, 0);
+                }
                 else
-                    this.AddButton(35, y + 4, 0x938, 0x939, 2 + i, GumpButtonType.Reply, 0);
+                {
+                    AddButton(35, y + 4, 0x938, 0x939, 2 + i, GumpButtonType.Reply, 0);
+                }
 
                 y += 22;
             }
 
-            this.AddHtml(35 + 14, y, 176, 20, "Custom", false, false);
-            this.AddButton(35, y + 4, ruleset.Changed ? 0x939 : 0x938, 0x939, 1, GumpButtonType.Reply, 0);
+            AddHtml(35 + 14, y, 176, 20, "Custom", false, false);
+            AddButton(35, y + 4, ruleset.Changed ? 0x939 : 0x938, 0x939, 1, GumpButtonType.Reply, 0);
 
             y += 22;
             y += 6;
 
-            this.AddHtml(35, y, 190, 20, this.Center("Flavors"), false, false);
+            AddHtml(35, y, 190, 20, Center("Flavors"), false, false);
             y += 20;
 
-            for (int i = 0; i < this.m_Flavors.Length; ++i)
+            for (int i = 0; i < m_Flavors.Length; ++i)
             {
-                Ruleset cur = this.m_Flavors[i];
+                Ruleset cur = m_Flavors[i];
 
-                this.AddHtml(35 + 14, y, 176, 20, cur.Title, false, false);
+                AddHtml(35 + 14, y, 176, 20, cur.Title, false, false);
 
                 if (ruleset.Flavors.Contains(cur))
-                    this.AddButton(35, y + 4, 0x939, 0x938, 2 + this.m_Defaults.Length + i, GumpButtonType.Reply, 0);
+                {
+                    AddButton(35, y + 4, 0x939, 0x938, 2 + m_Defaults.Length + i, GumpButtonType.Reply, 0);
+                }
                 else
-                    this.AddButton(35, y + 4, 0x938, 0x939, 2 + this.m_Defaults.Length + i, GumpButtonType.Reply, 0);
+                {
+                    AddButton(35, y + 4, 0x938, 0x939, 2 + m_Defaults.Length + i, GumpButtonType.Reply, 0);
+                }
 
                 y += 22;
             }
@@ -78,44 +88,52 @@ namespace Server.Engines.ConPVP
 
         public override void OnResponse(NetState sender, RelayInfo info)
         {
-            if (this.m_Context != null && !this.m_Context.Registered)
+            if (m_Context != null && !m_Context.Registered)
+            {
                 return;
+            }
 
             switch ( info.ButtonID )
             {
                 case 0: // closed
                     {
-                        if (this.m_Context != null)
-                            this.m_From.SendGump(new DuelContextGump(this.m_From, this.m_Context));
+                        if (m_Context != null)
+                        {
+                            m_From.SendGump(new DuelContextGump(m_From, m_Context));
+                        }
 
                         break;
                     }
                 case 1: // customize
                     {
-                        this.m_From.SendGump(new RulesetGump(this.m_From, this.m_Ruleset, this.m_Ruleset.Layout, this.m_Context));
+                        m_From.SendGump(new RulesetGump(m_From, m_Ruleset, m_Ruleset.Layout, m_Context));
                         break;
                     }
                 default:
                     {
                         int idx = info.ButtonID - 2;
 
-                        if (idx >= 0 && idx < this.m_Defaults.Length)
+                        if (idx >= 0 && idx < m_Defaults.Length)
                         {
-                            this.m_Ruleset.ApplyDefault(this.m_Defaults[idx]);
-                            this.m_From.SendGump(new PickRulesetGump(this.m_From, this.m_Context, this.m_Ruleset));
+                            m_Ruleset.ApplyDefault(m_Defaults[idx]);
+                            m_From.SendGump(new PickRulesetGump(m_From, m_Context, m_Ruleset));
                         }
                         else
                         {
-                            idx -= this.m_Defaults.Length;
+                            idx -= m_Defaults.Length;
 
-                            if (idx >= 0 && idx < this.m_Flavors.Length)
+                            if (idx >= 0 && idx < m_Flavors.Length)
                             {
-                                if (this.m_Ruleset.Flavors.Contains(this.m_Flavors[idx]))
-                                    this.m_Ruleset.RemoveFlavor(this.m_Flavors[idx]);
+                                if (m_Ruleset.Flavors.Contains(m_Flavors[idx]))
+                                {
+                                    m_Ruleset.RemoveFlavor(m_Flavors[idx]);
+                                }
                                 else
-                                    this.m_Ruleset.AddFlavor(this.m_Flavors[idx]);
+                                {
+                                    m_Ruleset.AddFlavor(m_Flavors[idx]);
+                                }
 
-                                this.m_From.SendGump(new PickRulesetGump(this.m_From, this.m_Context, this.m_Ruleset));
+                                m_From.SendGump(new PickRulesetGump(m_From, m_Context, m_Ruleset));
                             }
                         }
 

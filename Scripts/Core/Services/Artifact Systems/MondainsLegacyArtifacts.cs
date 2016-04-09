@@ -1,12 +1,8 @@
 using System;
-using System.IO;
-using System.Xml;
 using Server.Commands;
 using Server.Engines.Quests;
-using Server.Gumps;
 using Server.Items;
 using Server.Mobiles;
-using Server.Network;
 using Server.Misc;
 
 namespace Server
@@ -48,7 +44,9 @@ namespace Server
         public static bool CheckArtifactChance(Mobile m, BaseCreature bc)
         {
             if (!Core.ML)
+            {
                 return false;
+            }
 
             return Paragon.CheckArtifactChance(m, bc);
         }
@@ -88,13 +86,19 @@ namespace Server
         public static bool CheckML(Mobile from, bool message)
         {
             if (from == null || from.NetState == null)
+            {
                 return false;
+            }
 
             if (from.NetState.SupportsExpansion(Expansion.ML))
+            {
                 return true;
+            }
 
             if (message)
+            {
                 from.SendLocalizedMessage(1072791); // You must upgrade to Mondain's Legacy in order to use that item.
+            }
 
             return false;
         }
@@ -125,12 +129,16 @@ namespace Server
             m.SendMessage("Target a player to view their quests.");
 
             m.BeginTarget(-1, false, Server.Targeting.TargetFlags.None, new TargetCallback(
-                delegate(Mobile from, object targeted)
+                delegate (Mobile from, object targeted)
                 {
                     if (targeted is PlayerMobile)
+                    {
                         m.SendGump(new MondainQuestGump((PlayerMobile)targeted));
+                    }
                     else
+                    {
                         m.SendMessage("That is not a player!");
+                    }
                 }));
         }
     }

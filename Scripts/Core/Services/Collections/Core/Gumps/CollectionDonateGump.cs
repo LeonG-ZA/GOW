@@ -1,14 +1,11 @@
 using System;
-using System.Collections;
 using System.Collections.Generic;
-using Server;
 using Server.Prompts;
 using Server.Gumps;
 using Server.Items;
 using Server.Mobiles;
 using Server.Network;
 using Server.Targeting;
-using Server.MainConfiguration;
 using Server.TestCenterConfiguration;
 
 namespace Server.Engines.Collections
@@ -29,8 +26,12 @@ namespace Server.Engines.Collections
             if (list != null)
             {
                 for (int i = 0; i < list.Length; i++)
+                {
                     if (m_Max < list[i].Width)
+                    {
                         m_Max = list[i].Width;
+                    }
+                }
             }
         }
 
@@ -89,8 +90,12 @@ namespace Server.Engines.Collections
                     List<TreasureMap> maps = from.Backpack.FindItemsByType<TreasureMap>();
 
                     for (int j = 0; j < maps.Count; j++)
+                    {
                         if (CollectionController.CheckTreasureMap(maps[j], entry.Award))
+                        {
                             amount++;
+                        }
+                    }
                 }
                 else
                 {
@@ -108,15 +113,23 @@ namespace Server.Engines.Collections
                 int y = offset - entry.Y;
 
                 if (entry.Height < 20)
+                {
                     y += (20 - entry.Height) / 2;
+                }
 
                 string award;
                 if (entry.Type == typeof(BankCheck))
+                {
                     award = "1";
+                }
                 else if (entry.Award > 0 && entry.Award < 1)
+                {
                     award = String.Format("1 per {0}", (int)(1 / entry.Award));
+                }
                 else
+                {
                     award = entry.Award.ToString();
+                }
 
                 if (entry.Name != null)
                 {
@@ -136,9 +149,13 @@ namespace Server.Engines.Collections
                 offset += 10 + height;
 
                 if (i < m_Collection.Donations.Length)
+                {
                     next = Math.Max(m_Collection.Donations[i].Height, 20);
+                }
                 else
+                {
                     next = 0;
+                }
             }
 
             EndPage(page, true);
@@ -209,14 +226,20 @@ namespace Server.Engines.Collections
                     Item item = packItems[i];
 
                     if (item is CommodityDeed)
+                    {
                         item = ((CommodityDeed)item).Commodity;
+                    }
 
                     if (item != null && item.GetType() == type)
                     {
                         if (item is BankCheck)
+                        {
                             sum += ((BankCheck)item).Worth;
+                        }
                         else
+                        {
                             sum += item.Amount;
+                        }
                     }
                 }
             }
@@ -229,14 +252,18 @@ namespace Server.Engines.Collections
             PlayerMobile pm = sender.Mobile as PlayerMobile;
 
             if (pm == null)
+            {
                 return;
+            }
 
             if (m_Collection is BritainLibraryCollection)
             {
                 BritainLibraryCollection col = m_Collection as BritainLibraryCollection;
 
                 if (col.Representative != null && pm.GetDistanceToSqrt(col.Representative.Location) > 10)
+                {
                     return;
+                }
             }
             else if (pm.GetDistanceToSqrt(m_Collection.Location) > 10)
             {
@@ -252,7 +279,9 @@ namespace Server.Engines.Collections
                 int i = info.ButtonID - 300;
 
                 if (i < 0 || i >= m_Collection.Donations.Length || pm.Backpack == null)
+                {
                     return;
+                }
 
                 if (m_Collection is BritainLibraryCollection && !pm.FriendOfTheLibrary)
                 {
@@ -325,10 +354,14 @@ namespace Server.Engines.Collections
                 Item item = list[i];
 
                 if (item is CommodityDeed)
+                {
                     item = ((CommodityDeed)item).Commodity;
+                }
 
                 if (item != null && type == item.GetType())
+                {
                     return item;
+                }
             }
 
             return null;
@@ -399,7 +432,9 @@ namespace Server.Engines.Collections
             public override void OnResponse(Mobile from, string text)
             {
                 if (from.Backpack == null)
+                {
                     return;
+                }
 
                 int amount = Utility.ToInt32(text);
 
@@ -464,7 +499,9 @@ namespace Server.Engines.Collections
                                 item.Delete();
 
                                 if (deed != null)
+                                {
                                     deed.Delete();
+                                }
                             }
                             else
                             {
@@ -472,7 +509,9 @@ namespace Server.Engines.Collections
                                 amount = 0;
 
                                 if (deed != null)
+                                {
                                     deed.InvalidateProperties();
+                                }
                             }
                         }
                     }

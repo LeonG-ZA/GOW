@@ -13,14 +13,18 @@ namespace Server.Engines.ConPVP
 		{
 			Mobile owner = (Mobile)m_Owners[item];
 			if ( owner != null && owner != from )
-				return false;
+			{
+  	          return false;
+            } 
 			return base.CheckItemUse( from, item );
 		}
 		public override bool CheckTarget( Mobile from, Server.Targeting.Target targ, object targeted )
 		{
 			Mobile owner = (Mobile)m_Owners[targeted];
 			if ( owner != null && owner != from )
-				return false;
+			{
+              return false;
+            }
 			return base.CheckTarget( from, targ, targeted );
 		}
 		public override bool CheckLift(Mobile from, Item item)

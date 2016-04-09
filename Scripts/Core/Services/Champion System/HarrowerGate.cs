@@ -1,5 +1,3 @@
-using System;
-
 namespace Server.Items
 {
     public class HarrowerGate : Moongate
@@ -39,7 +37,7 @@ namespace Server.Items
 
             int version = reader.ReadInt();
 
-            switch ( version )
+            switch (version)
             {
                 case 0:
                     {

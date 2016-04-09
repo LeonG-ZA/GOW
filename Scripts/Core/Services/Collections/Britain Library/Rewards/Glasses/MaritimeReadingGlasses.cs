@@ -1,33 +1,30 @@
-using System;
-using Server;
-
 namespace Server.Items
 {
-	public class MaritimeReadingGlasses : ElvenGlasses, ICollectionItem
-	{
-		public override int LabelNumber { get { return 1073364; } } // Maritime Reading Glasses
+    public class MaritimeReadingGlasses : ElvenGlasses, ICollectionItem
+    {
+        public override int LabelNumber { get { return 1073364; } } // Maritime Reading Glasses
 
         public override int BasePhysicalResistance { get { return 1; } }
         public override int BaseColdResistance { get { return 27; } }
         public override int BasePoisonResistance { get { return 2; } }
 
-		public override int InitMinHits { get { return 255; } }
-		public override int InitMaxHits { get { return 255; } }
+        public override int InitMinHits { get { return 255; } }
+        public override int InitMaxHits { get { return 255; } }
 
-		[Constructable]
-		public MaritimeReadingGlasses()
-		{
-			Hue = 1409;
+        [Constructable]
+        public MaritimeReadingGlasses()
+        {
+            Hue = 1409;
 
-			Attributes.Luck = 150;
-			Attributes.NightSight = 1;
-			Attributes.ReflectPhysical = 20;
-		}
+            Attributes.Luck = 150;
+            Attributes.NightSight = 1;
+            Attributes.ReflectPhysical = 20;
+        }
 
-		public MaritimeReadingGlasses( Serial serial )
-			: base( serial )
-		{
-		}
+        public MaritimeReadingGlasses(Serial serial)
+            : base(serial)
+        {
+        }
 
         public override void Serialize(GenericWriter writer)
         {
@@ -42,5 +39,5 @@ namespace Server.Items
 
             int version = reader.ReadInt();
         }
-	}
+    }
 }

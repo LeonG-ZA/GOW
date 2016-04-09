@@ -1,7 +1,4 @@
-using System;
-using Server.Engines.ChampionSpawns;
-
-namespace Server.Items
+namespace Server.Engines.ChampionSpawns
 {
     public class ChampionSkull : Item
     {
@@ -51,7 +48,7 @@ namespace Server.Items
 
             int version = reader.ReadInt();
 
-            switch ( version )
+            switch (version)
             {
                 case 1:
                 case 0:
@@ -61,7 +58,7 @@ namespace Server.Items
                         break;
                     }
             }
-			
+
             if (version == 0)
             {
                 if (LootType != LootType.Cursed)

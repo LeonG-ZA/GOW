@@ -1,4 +1,3 @@
-using System;
 using Server.Mobiles;
 using Server.Regions;
 
@@ -11,17 +10,19 @@ namespace Server.Engines.ConPVP
         public SafeZone(Rectangle2D area, Point3D goloc, Map map, bool isGuarded)
             : base(null, map, SafeZonePriority, area)
         {
-            this.GoLocation = goloc;
+            GoLocation = goloc;
 
-            this.Disabled = !isGuarded;
+            Disabled = !isGuarded;
 
-            this.Register();
+            Register();
         }
 
         public override bool AllowHousing(Mobile from, Point3D p)
         {
             if (from.AccessLevel < AccessLevel.GameMaster)
+            {
                 return false;
+            }
 
             return base.AllowHousing(from, p);
         }
@@ -41,11 +42,15 @@ namespace Server.Engines.ConPVP
                 BaseCreature bc = (BaseCreature)m;
 
                 if (bc.Summoned)
+                {
                     pm = bc.SummonMaster as PlayerMobile;
+                }
             }
 
             if (pm != null && pm.DuelContext != null && pm.DuelContext.StartedBeginCountdown)
+            {
                 return true;
+            }
 
             if (DuelContext.CheckCombat(m))
             {

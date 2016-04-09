@@ -12,7 +12,7 @@ namespace Server.Engines.ConPVP
         public LadderItem()
             : base(0x117F)
         {
-            this.Movable = false;
+            Movable = false;
         }
 
         public LadderItem(Serial serial)
@@ -25,11 +25,11 @@ namespace Server.Engines.ConPVP
         {
             get
             {
-                return this.m_Ladder;
+                return m_Ladder;
             }
             set
             {
-                this.m_Ladder = value;
+                m_Ladder = value;
             }
         }
         public override string DefaultName
@@ -45,7 +45,7 @@ namespace Server.Engines.ConPVP
 
             writer.Write((int)1);
 
-            writer.Write((Item)this.m_Ladder);
+            writer.Write((Item)m_Ladder);
         }
 
         public override void Deserialize(GenericReader reader)
@@ -58,7 +58,7 @@ namespace Server.Engines.ConPVP
             {
                 case 1:
                     {
-                        this.m_Ladder = reader.ReadItem() as LadderController;
+                        m_Ladder = reader.ReadItem() as LadderController;
                         break;
                     }
             }
@@ -66,12 +66,14 @@ namespace Server.Engines.ConPVP
 
         public override void OnDoubleClick(Mobile from)
         {
-            if (from.InRange(this.GetWorldLocation(), 2))
+            if (from.InRange(GetWorldLocation(), 2))
             {
                 Ladder ladder = Server.Engines.ConPVP.Ladder.Instance;
 
-                if (this.m_Ladder != null)
-                    ladder = this.m_Ladder.Ladder;
+                if (m_Ladder != null)
+                {
+                    ladder = m_Ladder.Ladder;
+                }
 
                 if (ladder != null)
                 {
@@ -80,7 +82,9 @@ namespace Server.Engines.ConPVP
                 }
             }
             else
+            {
                 from.LocalOverheadMessage(MessageType.Regular, 0x3B2, 1019045); // I can't reach that
+            }
         }
     }
 
@@ -98,13 +102,13 @@ namespace Server.Engines.ConPVP
         public LadderGump(Ladder ladder, int page)
             : base(50, 50)
         {
-            this.m_Ladder = ladder;
-            this.m_Page = page;
+            m_Ladder = ladder;
+            m_Page = page;
 
-            this.AddPage(0);
+            AddPage(0);
 
             ArrayList list = ladder.ToArrayList();
-            this.m_List = list;
+            m_List = list;
 
             int lc = Math.Min(list.Count, 150);
 
@@ -112,37 +116,49 @@ namespace Server.Engines.ConPVP
             int end = start + 15;
 
             if (end > lc)
+            {
                 end = lc;
+            }
 
             int ct = end - start;
 
             int height = 12 + 20 + (ct * 20) + 23 + 12;
 
-            this.AddBackground(0, 0, 499, height, 0x2436);
+            AddBackground(0, 0, 499, height, 0x2436);
 
             for (int i = start + 1; i < end; i += 2)
-                this.AddImageTiled(12, 32 + ((i - start) * 20), 475, 20, 0x2430);
+            {
+                AddImageTiled(12, 32 + ((i - start) * 20), 475, 20, 0x2430);
+            }
 
-            this.AddAlphaRegion(10, 10, 479, height - 20);
+            AddAlphaRegion(10, 10, 479, height - 20);
 
             if (page > 0)
-                this.AddButton(446, height - 12 - 2 - 16, 0x15E3, 0x15E7, 1, GumpButtonType.Reply, 0);
+            {
+                AddButton(446, height - 12 - 2 - 16, 0x15E3, 0x15E7, 1, GumpButtonType.Reply, 0);
+            }
             else
-                this.AddImage(446, height - 12 - 2 - 16, 0x2626);
+            {
+                AddImage(446, height - 12 - 2 - 16, 0x2626);
+            }
 
             if (((page + 1) * 15) < lc)
-                this.AddButton(466, height - 12 - 2 - 16, 0x15E1, 0x15E5, 2, GumpButtonType.Reply, 0);
+            {
+                AddButton(466, height - 12 - 2 - 16, 0x15E1, 0x15E5, 2, GumpButtonType.Reply, 0);
+            }
             else
-                this.AddImage(466, height - 12 - 2 - 16, 0x2622);
+            {
+                AddImage(466, height - 12 - 2 - 16, 0x2622);
+            }
 
-            this.AddHtml(16, height - 12 - 2 - 18, 400, 20, this.Color(String.Format("Top {3} of {0:N0} duelists, page {1} of {2}", list.Count, page + 1, (lc + 14) / 15, lc), 0xFFC000), false, false);
+            AddHtml(16, height - 12 - 2 - 18, 400, 20, Color(String.Format("Top {3} of {0:N0} duelists, page {1} of {2}", list.Count, page + 1, (lc + 14) / 15, lc), 0xFFC000), false, false);
 
-            this.AddColumnHeader(75, "Rank");
-            this.AddColumnHeader(115, "Level");
-            this.AddColumnHeader(50, "Guild");
-            this.AddColumnHeader(115, "Name");
-            this.AddColumnHeader(60, "Wins");
-            this.AddColumnHeader(60, "Losses");
+            AddColumnHeader(75, "Rank");
+            AddColumnHeader(115, "Level");
+            AddColumnHeader(50, "Guild");
+            AddColumnHeader(115, "Name");
+            AddColumnHeader(60, "Wins");
+            AddColumnHeader(60, "Losses");
 
             for (int i = start; i < end && i < lc; ++i)
             {
@@ -151,7 +167,7 @@ namespace Server.Engines.ConPVP
                 int y = 32 + ((i - start) * 20);
                 int x = 12;
 
-                this.AddBorderedText(x, y, 75, this.Center(Rank(i + 1)), 0xFFFFFF, 0);
+                AddBorderedText(x, y, 75, Center(Rank(i + 1)), 0xFFFFFF, 0);
                 x += 75;
 
                 /*AddImage( 20, y + 5, 0x2616, 0x96C );
@@ -161,7 +177,7 @@ namespace Server.Engines.ConPVP
 
                 AddImage( 21, y + 6, 0x2616, 0x454 );*/
 
-                this.AddImage(x + 3, y + 4, 0x805);
+                AddImage(x + 3, y + 4, 0x805);
 
                 int xp = entry.Experience;
                 int level = Ladder.GetLevel(xp);
@@ -174,29 +190,35 @@ namespace Server.Engines.ConPVP
                 int xpOffset = xp - xpBase;
 
                 if (xpOffset >= xpAdvance)
+                {
                     width = 109; // level 50
+                }
                 else
+                {
                     width = ((109 * xpOffset) + (xpAdvance / 2)) / (xpAdvance - 1);
+                }
 
                 //AddImageTiled( 21, y + 6, width, 8, 0x2617 );
-                this.AddImageTiled(x + 3, y + 4, width, 11, 0x806);
-                this.AddBorderedText(x, y, 115, this.Center(level.ToString()), 0xFFFFFF, 0);
+                AddImageTiled(x + 3, y + 4, width, 11, 0x806);
+                AddBorderedText(x, y, 115, Center(level.ToString()), 0xFFFFFF, 0);
                 x += 115;
 
                 Mobile mob = entry.Mobile;
 
                 if (mob.Guild != null)
-                    this.AddBorderedText(x, y, 50, this.Center(mob.Guild.Abbreviation), 0xFFFFFF, 0);
+                {
+                    AddBorderedText(x, y, 50, Center(mob.Guild.Abbreviation), 0xFFFFFF, 0);
+                }
 
                 x += 50;
 
-                this.AddBorderedText(x + 5, y, 115 - 5, (mob.Name), 0xFFFFFF, 0);
+                AddBorderedText(x + 5, y, 115 - 5, (mob.Name), 0xFFFFFF, 0);
                 x += 115;
 
-                this.AddBorderedText(x, y, 60, this.Center(entry.Wins.ToString()), 0xFFFFFF, 0);
+                AddBorderedText(x, y, 60, Center(entry.Wins.ToString()), 0xFFFFFF, 0);
                 x += 60;
 
-                this.AddBorderedText(x, y, 60, this.Center(entry.Losses.ToString()), 0xFFFFFF, 0);
+                AddBorderedText(x, y, 60, Center(entry.Losses.ToString()), 0xFFFFFF, 0);
                 x += 60;
                 //AddBorderedText( 292 + 15, y, 115 - 30, String.Format( "{0} <DIV ALIGN=CENTER>/</DIV> <DIV ALIGN=RIGHT>{1}</DIV>", entry.Wins, entry.Losses ), 0xFFC000, 0 );
             }
@@ -207,7 +229,9 @@ namespace Server.Engines.ConPVP
             string numStr = num.ToString("N0");
 
             if ((num % 100) > 10 && (num % 100) < 20)
+            {
                 return numStr + "th";
+            }
 
             switch ( num % 10 )
             {
@@ -226,10 +250,14 @@ namespace Server.Engines.ConPVP
         {
             Mobile from = sender.Mobile;
 
-            if (info.ButtonID == 1 && this.m_Page > 0)
-                from.SendGump(new LadderGump(this.m_Ladder, this.m_Page - 1));
-            else if (info.ButtonID == 2 && ((this.m_Page + 1) * 15) < Math.Min(this.m_List.Count, 150))
-                from.SendGump(new LadderGump(this.m_Ladder, this.m_Page + 1));
+            if (info.ButtonID == 1 && m_Page > 0)
+            {
+                from.SendGump(new LadderGump(m_Ladder, m_Page - 1));
+            }
+            else if (info.ButtonID == 2 && ((m_Page + 1) * 15) < Math.Min(m_List.Count, 150))
+            {
+                from.SendGump(new LadderGump(m_Ladder, m_Page + 1));
+            }
         }
 
         public string Center(string text)
@@ -250,24 +278,28 @@ namespace Server.Engines.ConPVP
             AddColoredText( x, y + 1, width, text, borderColor );*/
             /*AddColoredText( x - 1, y - 1, width, text, borderColor );
             AddColoredText( x + 1, y + 1, width, text, borderColor );*/
-            this.AddColoredText(x, y, width, text, color);
+            AddColoredText(x, y, width, text, color);
         }
 
         private void AddColoredText(int x, int y, int width, string text, int color)
         {
             if (color == 0)
-                this.AddHtml(x, y, width, 20, text, false, false);
+            {
+                AddHtml(x, y, width, 20, text, false, false);
+            }
             else
-                this.AddHtml(x, y, width, 20, this.Color(text, color), false, false);
+            {
+                AddHtml(x, y, width, 20, Color(text, color), false, false);
+            }
         }
 
         private void AddColumnHeader(int width, string name)
         {
-            this.AddBackground(this.m_ColumnX, 12, width, 20, 0x242C);
-            this.AddImageTiled(this.m_ColumnX + 2, 14, width - 4, 16, 0x2430);
-            this.AddBorderedText(this.m_ColumnX, 13, width, this.Center(name), 0xFFFFFF, 0);
+            AddBackground(m_ColumnX, 12, width, 20, 0x242C);
+            AddImageTiled(m_ColumnX + 2, 14, width - 4, 16, 0x2430);
+            AddBorderedText(m_ColumnX, 13, width, Center(name), 0xFFFFFF, 0);
 
-            this.m_ColumnX += width;
+            m_ColumnX += width;
         }
     }
 }

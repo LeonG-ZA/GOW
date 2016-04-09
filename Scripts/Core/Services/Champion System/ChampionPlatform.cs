@@ -1,4 +1,3 @@
-using System;
 using Server.Items;
 
 namespace Server.Engines.ChampionSpawns
@@ -83,7 +82,7 @@ namespace Server.Engines.ChampionSpawns
 
             int version = reader.ReadInt();
 
-            switch ( version )
+            switch (version)
             {
                 case 0:
                     {

@@ -39,7 +39,9 @@ namespace Server.Engines.Chat
         public static void SendCommandTo(Mobile to, ChatCommand type, string param1, string param2)
         {
             if (to != null)
+            {
                 to.Send(new ChatMessagePacket(null, (int)type + 20, param1, param2));
+            }
         }
 
         public static void OpenChatWindowRequest(NetState state, PacketReader pvSrc)
@@ -60,15 +62,21 @@ namespace Server.Engines.Chat
             string accountChatName = null;
 
             if (acct != null)
+            {
                 accountChatName = acct.GetTag("ChatName");
+            }
 
             if (accountChatName != null)
+            {
                 accountChatName = accountChatName.Trim();
+            }
 
             if (accountChatName != null && accountChatName.Length > 0)
             {
                 if (chatName.Length > 0 && chatName != accountChatName)
+                {
                     from.SendMessage("You cannot change chat nickname once it has been set.");
+                }
             }
             else
             {
@@ -120,7 +128,9 @@ namespace Server.Engines.Chat
             ChatUser user = ChatUser.GetChatUser(name);
 
             if (user == null)
+            {
                 from.SendMessage(32, name); // There is no player named '%1'.
+            }
 
             return user;
         }
@@ -128,7 +138,9 @@ namespace Server.Engines.Chat
         public static void ChatAction(NetState state, PacketReader pvSrc)
         {
             if (!m_Enabled)
+            {
                 return;
+            }
 
             try
             {
@@ -136,7 +148,9 @@ namespace Server.Engines.Chat
                 ChatUser user = ChatUser.GetChatUser(from);
 
                 if (user == null)
+                {
                     return;
+                }
 
                 string lang = pvSrc.ReadStringSafe(4);
                 int actionID = pvSrc.ReadInt16();

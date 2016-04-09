@@ -1,11 +1,8 @@
-using System;
-using Server;
-
 namespace Server.Items
 {
-	public class ReadingGlassesOfTheArts : ElvenGlasses, ICollectionItem
-	{
-		public override int LabelNumber { get { return 1073363; } } // Reading Glasses of the Arts
+    public class ReadingGlassesOfTheArts : ElvenGlasses, ICollectionItem
+    {
+        public override int LabelNumber { get { return 1073363; } } // Reading Glasses of the Arts
 
         public override int BasePhysicalResistance { get { return 8; } }
         public override int BaseFireResistance { get { return 4; } }
@@ -13,23 +10,23 @@ namespace Server.Items
         public override int BasePoisonResistance { get { return 1; } }
         public override int BaseEnergyResistance { get { return 7; } }
 
-		public override int InitMinHits { get { return 255; } }
-		public override int InitMaxHits { get { return 255; } }
+        public override int InitMinHits { get { return 255; } }
+        public override int InitMaxHits { get { return 255; } }
 
-		[Constructable]
-		public ReadingGlassesOfTheArts()
-		{
-			Hue = 115;
+        [Constructable]
+        public ReadingGlassesOfTheArts()
+        {
+            Hue = 115;
 
-			Attributes.BonusInt = 5;
-			Attributes.BonusStr = 5;
-			Attributes.BonusHits = 15;
-		}
+            Attributes.BonusInt = 5;
+            Attributes.BonusStr = 5;
+            Attributes.BonusHits = 15;
+        }
 
-		public ReadingGlassesOfTheArts( Serial serial )
-			: base( serial )
-		{
-		}
+        public ReadingGlassesOfTheArts(Serial serial)
+            : base(serial)
+        {
+        }
 
         public override void Serialize(GenericWriter writer)
         {
@@ -44,5 +41,5 @@ namespace Server.Items
 
             int version = reader.ReadInt();
         }
-	}
+    }
 }

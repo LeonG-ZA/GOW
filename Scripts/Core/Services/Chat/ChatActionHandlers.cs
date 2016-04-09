@@ -1,5 +1,3 @@
-using System;
-
 namespace Server.Engines.Chat
 {
     public class ChatActionHandlers
@@ -44,13 +42,17 @@ namespace Server.Engines.Chat
         public static void Register(int actionID, bool requireModerator, bool requireConference, OnChatAction callback)
         {
             if (actionID >= 0 && actionID < m_Handlers.Length)
+            {
                 m_Handlers[actionID] = new ChatActionHandler(requireModerator, requireConference, callback);
+            }
         }
 
         public static ChatActionHandler GetHandler(int actionID)
         {
             if (actionID >= 0 && actionID < m_Handlers.Length)
+            {
                 return m_Handlers[actionID];
+            }
 
             return null;
         }
@@ -58,17 +60,25 @@ namespace Server.Engines.Chat
         public static void ChannelMessage(ChatUser from, Channel channel, string param)
         {
             if (channel.CanTalk(from))
+            {
                 channel.SendIgnorableMessage(57, from, from.GetColorCharacter() + from.Username, param); // %1: %2
+            }
             else
+            {
                 from.SendMessage(36); // The moderator of this conference has not given you speaking priviledges.
+            }
         }
 
         public static void EmoteMessage(ChatUser from, Channel channel, string param)
         {
             if (channel.CanTalk(from))
+            {
                 channel.SendIgnorableMessage(58, from, from.GetColorCharacter() + from.Username, param); // %1 %2
+            }
             else
+            {
                 from.SendMessage(36); // The moderator of this conference has not given you speaking priviledges.
+            }
         }
 
         public static void PrivateMessage(ChatUser from, Channel channel, string param)
@@ -81,14 +91,22 @@ namespace Server.Engines.Chat
             ChatUser target = ChatSystem.SearchForUser(from, name);
 
             if (target == null)
+            {
                 return;
+            }
 
             if (target.IsIgnored(from))
+            {
                 from.SendMessage(35, target.Username); // %1 has chosen to ignore you. None of your messages to them will get through.
+            }
             else if (target.IgnorePrivateMessage)
+            {
                 from.SendMessage(42, target.Username); // %1 has chosen to not receive private messages at the moment.
+            }
             else
+            {
                 target.SendMessage(59, from.Mobile, from.GetColorCharacter() + from.Username, text); // [%1]: %2
+            }
         }
 
         public static void LeaveChat(ChatUser from, Channel channel, string param)
@@ -177,23 +195,33 @@ namespace Server.Engines.Chat
             }
 
             if (password != null)
+            {
                 password = password.Trim();
+            }
 
             if (password != null && password.Length == 0)
+            {
                 password = null;
+            }
 
             Channel joined = Channel.FindChannelByName(name);
 
             if (joined == null)
+            {
                 from.SendMessage(33, name); // There is no conference named '%1'.
+            }
             else
+            {
                 joined.AddUser(from, password);
+            }
         }
 
         public static void JoinNewChannel(ChatUser from, Channel channel, string param)
         {
             if ((param = param.Trim()).Length == 0)
+            {
                 return;
+            }
 
             string name;
             string password = null;
@@ -207,7 +235,9 @@ namespace Server.Engines.Chat
                 int end = param.IndexOf('}', start);
 
                 if (end >= start)
+                {
                     password = param.Substring(start, end - start);
+                }
             }
             else
             {
@@ -215,10 +245,14 @@ namespace Server.Engines.Chat
             }
 
             if (password != null)
+            {
                 password = password.Trim();
+            }
 
             if (password != null && password.Length == 0)
+            {
                 password = null;
+            }
 
             Channel.AddChannel(name, password).AddUser(from, password);
         }
@@ -228,7 +262,9 @@ namespace Server.Engines.Chat
             ChatUser target = ChatSystem.SearchForUser(from, param);
 
             if (target == null)
+            {
                 return;
+            }
 
             from.AddIgnored(target);
         }
@@ -238,7 +274,9 @@ namespace Server.Engines.Chat
             ChatUser target = ChatSystem.SearchForUser(from, param);
 
             if (target == null)
+            {
                 return;
+            }
 
             from.RemoveIgnored(target);
         }
@@ -248,12 +286,18 @@ namespace Server.Engines.Chat
             ChatUser target = ChatSystem.SearchForUser(from, param);
 
             if (target == null)
+            {
                 return;
+            }
 
             if (from.IsIgnored(target))
+            {
                 from.RemoveIgnored(target);
+            }
             else
+            {
                 from.AddIgnored(target);
+            }
         }
 
         public static void AddVoice(ChatUser from, Channel channel, string param)
@@ -261,7 +305,9 @@ namespace Server.Engines.Chat
             ChatUser target = ChatSystem.SearchForUser(from, param);
 
             if (target != null)
+            {
                 channel.AddVoiced(target, from);
+            }
         }
 
         public static void RemoveVoice(ChatUser from, Channel channel, string param)
@@ -269,7 +315,9 @@ namespace Server.Engines.Chat
             ChatUser target = ChatSystem.SearchForUser(from, param);
 
             if (target != null)
+            {
                 channel.RemoveVoiced(target, from);
+            }
         }
 
         public static void ToggleVoice(ChatUser from, Channel channel, string param)
@@ -277,12 +325,18 @@ namespace Server.Engines.Chat
             ChatUser target = ChatSystem.SearchForUser(from, param);
 
             if (target == null)
+            {
                 return;
+            }
 
             if (channel.IsVoiced(target))
+            {
                 channel.RemoveVoiced(target, from);
+            }
             else
+            {
                 channel.AddVoiced(target, from);
+            }
         }
 
         public static void AddModerator(ChatUser from, Channel channel, string param)
@@ -290,7 +344,9 @@ namespace Server.Engines.Chat
             ChatUser target = ChatSystem.SearchForUser(from, param);
 
             if (target != null)
+            {
                 channel.AddModerator(target, from);
+            }
         }
 
         public static void RemoveModerator(ChatUser from, Channel channel, string param)
@@ -298,7 +354,9 @@ namespace Server.Engines.Chat
             ChatUser target = ChatSystem.SearchForUser(from, param);
 
             if (target != null)
+            {
                 channel.RemoveModerator(target, from);
+            }
         }
 
         public static void ToggleModerator(ChatUser from, Channel channel, string param)
@@ -306,12 +364,18 @@ namespace Server.Engines.Chat
             ChatUser target = ChatSystem.SearchForUser(from, param);
 
             if (target == null)
+            {
                 return;
+            }
 
             if (channel.IsModerator(target))
+            {
                 channel.RemoveModerator(target, from);
+            }
             else
+            {
                 channel.AddModerator(target, from);
+            }
         }
 
         public static void RenameChannel(ChatUser from, Channel channel, string param)
@@ -324,12 +388,18 @@ namespace Server.Engines.Chat
             ChatUser target = ChatSystem.SearchForUser(from, param);
 
             if (target == null)
+            {
                 return;
+            }
 
             if (target.Anonymous)
+            {
                 from.SendMessage(41, target.Username); // %1 is remaining anonymous.
+            }
             else
+            {
                 from.SendMessage(43, target.Username, target.Mobile.Name); // %2 is known in the lands of Britannia as %2.
+            }
         }
 
         public static void Kick(ChatUser from, Channel channel, string param)
@@ -337,7 +407,9 @@ namespace Server.Engines.Chat
             ChatUser target = ChatSystem.SearchForUser(from, param);
 
             if (target != null)
+            {
                 channel.Kick(target, from);
+            }
         }
 
         public static void EnableDefaultVoice(ChatUser from, Channel channel, string param)

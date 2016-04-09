@@ -1,12 +1,6 @@
 using System;
-using System.IO;
-using System.Xml;
-using Server.Commands;
-using Server.Engines.Quests;
-using Server.Gumps;
 using Server.Items;
 using Server.Mobiles;
-using Server.Network;
 using Server.Misc;
 
 namespace Server
@@ -25,7 +19,9 @@ namespace Server
         public static bool SACheckArtifactChance(Mobile m, BaseCreature bc)
         {
             if (!Core.SA)
+            {
                 return false;
+            }
 
             return Paragon.CheckArtifactChance(m, bc);
         }
@@ -67,13 +63,19 @@ namespace Server
         public static bool CheckSA(Mobile from, bool message)
         {
             if (from == null || from.NetState == null)
+            {
                 return false;
+            }
 
             if (from.NetState.SupportsExpansion(Expansion.SA))
+            {
                 return true;
+            }
 
             if (message)
+            {
                 from.SendLocalizedMessage(1113763); // You must upgrade to Stygian Abyss in order to use that item.
+            }
 
             return false;
         }

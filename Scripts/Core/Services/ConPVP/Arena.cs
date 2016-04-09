@@ -14,7 +14,7 @@ namespace Server.Engines.ConPVP
         {
             get
             {
-                return this.m_Arena;
+                return m_Arena;
             }
             set
             {
@@ -26,11 +26,11 @@ namespace Server.Engines.ConPVP
         {
             get
             {
-                return this.m_IsPrivate;
+                return m_IsPrivate;
             }
             set
             {
-                this.m_IsPrivate = value;
+                m_IsPrivate = value;
             }
         }
 
@@ -46,10 +46,10 @@ namespace Server.Engines.ConPVP
         public ArenaController()
             : base(0x1B7A)
         {
-            this.Visible = false;
-            this.Movable = false;
+            Visible = false;
+            Movable = false;
 
-            this.m_Arena = new Arena();
+            m_Arena = new Arena();
 
             m_Instances.Add(this);
         }
@@ -59,13 +59,15 @@ namespace Server.Engines.ConPVP
             base.OnDelete();
 
             m_Instances.Remove(this);
-            this.m_Arena.Delete();
+            m_Arena.Delete();
         }
 
         public override void OnDoubleClick(Mobile from)
         {
             if (from.AccessLevel >= AccessLevel.GameMaster)
-                from.SendGump(new Gumps.PropertiesGump(from, this.m_Arena));
+            {
+                from.SendGump(new Gumps.PropertiesGump(from, m_Arena));
+            }
         }
 
         public ArenaController(Serial serial)
@@ -79,9 +81,9 @@ namespace Server.Engines.ConPVP
 
             writer.Write((int)1);
 
-            writer.Write((bool)this.m_IsPrivate);
+            writer.Write((bool)m_IsPrivate);
 
-            this.m_Arena.Serialize(writer);
+            m_Arena.Serialize(writer);
         }
 
         public override void Deserialize(GenericReader reader)
@@ -94,13 +96,13 @@ namespace Server.Engines.ConPVP
             {
                 case 1:
                     {
-                        this.m_IsPrivate = reader.ReadBool();
+                        m_IsPrivate = reader.ReadBool();
 
                         goto case 0;
                     }
                 case 0:
                     {
-                        this.m_Arena = new Arena(reader);
+                        m_Arena = new Arena(reader);
                         break;
                     }
             }
@@ -132,7 +134,7 @@ namespace Server.Engines.ConPVP
         {
             get
             {
-                return this.m_Points;
+                return m_Points;
             }
         }
 
@@ -141,11 +143,11 @@ namespace Server.Engines.ConPVP
         {
             get
             {
-                return this.m_Points[0];
+                return m_Points[0];
             }
             set
             {
-                this.m_Points[0] = value;
+                m_Points[0] = value;
             }
         }
 
@@ -154,11 +156,11 @@ namespace Server.Engines.ConPVP
         {
             get
             {
-                return this.m_Points[1];
+                return m_Points[1];
             }
             set
             {
-                this.m_Points[1] = value;
+                m_Points[1] = value;
             }
         }
 
@@ -167,11 +169,11 @@ namespace Server.Engines.ConPVP
         {
             get
             {
-                return this.m_Points[2];
+                return m_Points[2];
             }
             set
             {
-                this.m_Points[2] = value;
+                m_Points[2] = value;
             }
         }
 
@@ -180,11 +182,11 @@ namespace Server.Engines.ConPVP
         {
             get
             {
-                return this.m_Points[3];
+                return m_Points[3];
             }
             set
             {
-                this.m_Points[3] = value;
+                m_Points[3] = value;
             }
         }
 
@@ -193,11 +195,11 @@ namespace Server.Engines.ConPVP
         {
             get
             {
-                return this.m_Points[4];
+                return m_Points[4];
             }
             set
             {
-                this.m_Points[4] = value;
+                m_Points[4] = value;
             }
         }
 
@@ -206,11 +208,11 @@ namespace Server.Engines.ConPVP
         {
             get
             {
-                return this.m_Points[5];
+                return m_Points[5];
             }
             set
             {
-                this.m_Points[5] = value;
+                m_Points[5] = value;
             }
         }
 
@@ -219,11 +221,11 @@ namespace Server.Engines.ConPVP
         {
             get
             {
-                return this.m_Points[6];
+                return m_Points[6];
             }
             set
             {
-                this.m_Points[6] = value;
+                m_Points[6] = value;
             }
         }
 
@@ -232,11 +234,11 @@ namespace Server.Engines.ConPVP
         {
             get
             {
-                return this.m_Points[7];
+                return m_Points[7];
             }
             set
             {
-                this.m_Points[7] = value;
+                m_Points[7] = value;
             }
         }
 
@@ -252,23 +254,27 @@ namespace Server.Engines.ConPVP
 
         public ArenaStartPoints(Point3D[] points)
         {
-            this.m_Points = points;
+            m_Points = points;
         }
 
         public ArenaStartPoints(GenericReader reader)
         {
-            this.m_Points = new Point3D[reader.ReadEncodedInt()];
+            m_Points = new Point3D[reader.ReadEncodedInt()];
 
-            for (int i = 0; i < this.m_Points.Length; ++i)
-                this.m_Points[i] = reader.ReadPoint3D();
+            for (int i = 0; i < m_Points.Length; ++i)
+            {
+                m_Points[i] = reader.ReadPoint3D();
+            }
         }
 
         public void Serialize(GenericWriter writer)
         {
-            writer.WriteEncodedInt((int)this.m_Points.Length);
+            writer.WriteEncodedInt((int)m_Points.Length);
 
-            for (int i = 0; i < this.m_Points.Length; ++i)
-                writer.Write((Point3D)this.m_Points[i]);
+            for (int i = 0; i < m_Points.Length; ++i)
+            {
+                writer.Write((Point3D)m_Points[i]);
+            }
         }
     }
 
@@ -302,11 +308,11 @@ namespace Server.Engines.ConPVP
         {
             get
             {
-                return this.m_Ladder;
+                return m_Ladder;
             }
             set
             {
-                this.m_Ladder = value;
+                m_Ladder = value;
             }
         }
 
@@ -315,21 +321,25 @@ namespace Server.Engines.ConPVP
         {
             get
             {
-                return this.m_IsGuarded;
+                return m_IsGuarded;
             }
             set
             {
-                this.m_IsGuarded = value;
+                m_IsGuarded = value;
 
-                if (this.m_Region != null)
-                    this.m_Region.Disabled = !this.m_IsGuarded;
+                if (m_Region != null)
+                {
+                    m_Region.Disabled = !m_IsGuarded;
+                }
             }
         }
 
         public Ladder AcquireLadder()
         {
-            if (this.m_Ladder != null)
-                return this.m_Ladder.Ladder;
+            if (m_Ladder != null)
+            {
+                return m_Ladder.Ladder;
+            }
 
             return Server.Engines.ConPVP.Ladder.Instance;
         }
@@ -339,17 +349,21 @@ namespace Server.Engines.ConPVP
         {
             get
             {
-                return this.m_Tournament;
+                return m_Tournament;
             }
             set
             {
-                if (this.m_Tournament != null)
-                    this.m_Tournament.Tournament.Arenas.Remove(this);
+                if (m_Tournament != null)
+                {
+                    m_Tournament.Tournament.Arenas.Remove(this);
+                }
 
-                this.m_Tournament = value;
+                m_Tournament = value;
 
-                if (this.m_Tournament != null)
-                    this.m_Tournament.Tournament.Arenas.Add(this);
+                if (m_Tournament != null)
+                {
+                    m_Tournament.Tournament.Arenas.Add(this);
+                }
             }
         }
 
@@ -358,11 +372,11 @@ namespace Server.Engines.ConPVP
         {
             get
             {
-                return this.m_Announcer;
+                return m_Announcer;
             }
             set
             {
-                this.m_Announcer = value;
+                m_Announcer = value;
             }
         }
 
@@ -371,13 +385,15 @@ namespace Server.Engines.ConPVP
         {
             get
             {
-                return this.m_Name;
+                return m_Name;
             }
             set
             {
-                this.m_Name = value;
-                if (this.m_Active)
+                m_Name = value;
+                if (m_Active)
+                {
                     m_Arenas.Sort();
+                }
             }
         }
 
@@ -386,22 +402,30 @@ namespace Server.Engines.ConPVP
         {
             get
             {
-                return this.m_Facet;
+                return m_Facet;
             }
             set
             {
-                this.m_Facet = value;
+                m_Facet = value;
 
-                if (this.m_Teleporter != null)
-                    this.m_Teleporter.Map = value;
+                if (m_Teleporter != null)
+                {
+                    m_Teleporter.Map = value;
+                }
 
-                if (this.m_Region != null)
-                    this.m_Region.Unregister();
+                if (m_Region != null)
+                {
+                    m_Region.Unregister();
+                }
 
-                if (this.m_Zone.Start != Point2D.Zero && this.m_Zone.End != Point2D.Zero && this.m_Facet != null)
-                    this.m_Region = new SafeZone(this.m_Zone, this.m_Outside, this.m_Facet, this.m_IsGuarded);
+                if (m_Zone.Start != Point2D.Zero && m_Zone.End != Point2D.Zero && m_Facet != null)
+                {
+                    m_Region = new SafeZone(m_Zone, m_Outside, m_Facet, m_IsGuarded);
+                }
                 else
-                    this.m_Region = null;
+                {
+                    m_Region = null;
+                }
             }
         }
 
@@ -410,11 +434,11 @@ namespace Server.Engines.ConPVP
         {
             get
             {
-                return this.m_Bounds;
+                return m_Bounds;
             }
             set
             {
-                this.m_Bounds = value;
+                m_Bounds = value;
             }
         }
 
@@ -424,13 +448,17 @@ namespace Server.Engines.ConPVP
         {
             get
             {
-                if (this.m_Region == null)
+                if (m_Region == null)
+                {
                     return 0;
+                }
 
-                int specs = this.m_Region.GetPlayerCount() - this.m_Players.Count;
+                int specs = m_Region.GetPlayerCount() - m_Players.Count;
 
                 if (specs < 0)
+                {
                     specs = 0;
+                }
 
                 return specs;
             }
@@ -441,25 +469,29 @@ namespace Server.Engines.ConPVP
         {
             get
             {
-                return this.m_Zone;
+                return m_Zone;
             }
             set
             {
-                this.m_Zone = value;
+                m_Zone = value;
 
-                if (this.m_Zone.Start != Point2D.Zero && this.m_Zone.End != Point2D.Zero && this.m_Facet != null)
+                if (m_Zone.Start != Point2D.Zero && m_Zone.End != Point2D.Zero && m_Facet != null)
                 {
-                    if (this.m_Region != null)
-                        this.m_Region.Unregister();
+                    if (m_Region != null)
+                    {
+                        m_Region.Unregister();
+                    }
 
-                    this.m_Region = new SafeZone(this.m_Zone, this.m_Outside, this.m_Facet, this.m_IsGuarded);
+                    m_Region = new SafeZone(m_Zone, m_Outside, m_Facet, m_IsGuarded);
                 }
                 else
                 {
-                    if (this.m_Region != null)
-                        this.m_Region.Unregister();
+                    if (m_Region != null)
+                    {
+                        m_Region.Unregister();
+                    }
 
-                    this.m_Region = null;
+                    m_Region = null;
                 }
             }
         }
@@ -469,11 +501,11 @@ namespace Server.Engines.ConPVP
         {
             get
             {
-                return this.m_Outside;
+                return m_Outside;
             }
             set
             {
-                this.m_Outside = value;
+                m_Outside = value;
             }
         }
 
@@ -482,11 +514,11 @@ namespace Server.Engines.ConPVP
         {
             get
             {
-                return this.m_GateIn;
+                return m_GateIn;
             }
             set
             {
-                this.m_GateIn = value;
+                m_GateIn = value;
             }
         }
 
@@ -495,13 +527,15 @@ namespace Server.Engines.ConPVP
         {
             get
             {
-                return this.m_GateOut;
+                return m_GateOut;
             }
             set
             {
-                this.m_GateOut = value;
-                if (this.m_Teleporter != null)
-                    this.m_Teleporter.Location = this.m_GateOut;
+                m_GateOut = value;
+                if (m_Teleporter != null)
+                {
+                    m_Teleporter.Location = m_GateOut;
+                }
             }
         }
 
@@ -510,11 +544,11 @@ namespace Server.Engines.ConPVP
         {
             get
             {
-                return this.m_Wall;
+                return m_Wall;
             }
             set
             {
-                this.m_Wall = value;
+                m_Wall = value;
             }
         }
 
@@ -523,7 +557,7 @@ namespace Server.Engines.ConPVP
         {
             get
             {
-                return (this.m_Players.Count > 0);
+                return (m_Players.Count > 0);
             }
         }
 
@@ -532,7 +566,7 @@ namespace Server.Engines.ConPVP
         {
             get
             {
-                return this.m_Points;
+                return m_Points;
             }
             set
             {
@@ -543,11 +577,11 @@ namespace Server.Engines.ConPVP
         {
             get
             {
-                return this.m_Teleporter;
+                return m_Teleporter;
             }
             set
             {
-                this.m_Teleporter = value;
+                m_Teleporter = value;
             }
         }
 
@@ -555,7 +589,7 @@ namespace Server.Engines.ConPVP
         {
             get
             {
-                return this.m_Players;
+                return m_Players;
             }
         }
 
@@ -564,16 +598,18 @@ namespace Server.Engines.ConPVP
         {
             get
             {
-                return this.m_Active;
+                return m_Active;
             }
             set
             {
-                if (this.m_Active == value)
+                if (m_Active == value)
+                {
                     return;
+                }
 
-                this.m_Active = value;
+                m_Active = value;
 
-                if (this.m_Active)
+                if (m_Active)
                 {
                     m_Arenas.Add(this);
                     m_Arenas.Sort();
@@ -587,12 +623,14 @@ namespace Server.Engines.ConPVP
 
         public void Delete()
         {
-            this.Active = false;
+            Active = false;
 
-            if (this.m_Region != null)
-                this.m_Region.Unregister();
+            if (m_Region != null)
+            {
+                m_Region.Unregister();
+            }
 
-            this.m_Region = null;
+            m_Region = null;
         }
 
         public override string ToString()
@@ -603,9 +641,11 @@ namespace Server.Engines.ConPVP
         public Point3D GetBaseStartPoint(int index)
         {
             if (index < 0)
+            {
                 index = 0;
+            }
 
-            return this.m_Points.Points[index % this.m_Points.Points.Length];
+            return m_Points.Points[index % m_Points.Points.Length];
         }
 
         #region Offsets & Rotation
@@ -669,11 +709,15 @@ namespace Server.Engines.ConPVP
         public void MoveInside(DuelPlayer[] players, int index)
         {
             if (index < 0)
+            {
                 index = 0;
+            }
             else
-                index %= this.m_Points.Points.Length;
+            {
+                index %= m_Points.Points.Length;
+            }
 
-            Point3D start = this.GetBaseStartPoint(index);
+            Point3D start = GetBaseStartPoint(index);
 
             int offset = 0;
 
@@ -685,31 +729,37 @@ namespace Server.Engines.ConPVP
                 DuelPlayer pl = players[i];
 
                 if (pl == null)
+                {
                     continue;
+                }
 
                 Mobile mob = pl.Mobile;
 
                 Point2D p;
 
                 if (offset < offsets.Length)
+                {
                     p = offsets[offset++];
+                }
                 else
+                {
                     p = offsets[offsets.Length - 1];
+                }
 
                 p.X = (p.X * matrix[0, 0]) + (p.Y * matrix[0, 1]);
                 p.Y = (p.X * matrix[1, 0]) + (p.Y * matrix[1, 1]);
 
-                mob.MoveToWorld(new Point3D(start.X + p.X, start.Y + p.Y, start.Z), this.m_Facet);
-                mob.Direction = mob.GetDirectionTo(this.m_Wall);
+                mob.MoveToWorld(new Point3D(start.X + p.X, start.Y + p.Y, start.Z), m_Facet);
+                mob.Direction = mob.GetDirectionTo(m_Wall);
 
-                this.m_Players.Add(mob);
+                m_Players.Add(mob);
             }
         }
 
         public Arena()
         {
-            this.m_Points = new ArenaStartPoints();
-            this.m_Players = new List<Mobile>();
+            m_Points = new ArenaStartPoints();
+            m_Players = new List<Mobile>();
         }
 
         public Arena(GenericReader reader)
@@ -720,66 +770,66 @@ namespace Server.Engines.ConPVP
             {
                 case 7:
                     {
-                        this.m_IsGuarded = reader.ReadBool();
+                        m_IsGuarded = reader.ReadBool();
 
                         goto case 6;
                     }
                 case 6:
                     {
-                        this.m_Ladder = reader.ReadItem() as LadderController;
+                        m_Ladder = reader.ReadItem() as LadderController;
 
                         goto case 5;
                     }
                 case 5:
                     {
-                        this.m_Tournament = reader.ReadItem() as TournamentController;
-                        this.m_Announcer = reader.ReadMobile();
+                        m_Tournament = reader.ReadItem() as TournamentController;
+                        m_Announcer = reader.ReadMobile();
 
                         goto case 4;
                     }
                 case 4:
                     {
-                        this.m_Name = reader.ReadString();
+                        m_Name = reader.ReadString();
 
                         goto case 3;
                     }
                 case 3:
                     {
-                        this.m_Zone = reader.ReadRect2D();
+                        m_Zone = reader.ReadRect2D();
 
                         goto case 2;
                     }
                 case 2:
                     {
-                        this.m_GateIn = reader.ReadPoint3D();
-                        this.m_GateOut = reader.ReadPoint3D();
-                        this.m_Teleporter = reader.ReadItem();
+                        m_GateIn = reader.ReadPoint3D();
+                        m_GateOut = reader.ReadPoint3D();
+                        m_Teleporter = reader.ReadItem();
 
                         goto case 1;
                     }
                 case 1:
                     {
-                        this.m_Players = reader.ReadStrongMobileList();
+                        m_Players = reader.ReadStrongMobileList();
 
                         goto case 0;
                     }
                 case 0:
                     {
-                        this.m_Facet = reader.ReadMap();
-                        this.m_Bounds = reader.ReadRect2D();
-                        this.m_Outside = reader.ReadPoint3D();
-                        this.m_Wall = reader.ReadPoint3D();
+                        m_Facet = reader.ReadMap();
+                        m_Bounds = reader.ReadRect2D();
+                        m_Outside = reader.ReadPoint3D();
+                        m_Wall = reader.ReadPoint3D();
 
                         if (version == 0)
                         {
                             reader.ReadBool();
-                            this.m_Players = new List<Mobile>();
+                            m_Players = new List<Mobile>();
                         }
 
-                        this.m_Active = reader.ReadBool();
-                        this.m_Points = new ArenaStartPoints(reader);
+                        m_Active = reader.ReadBool();
+                        m_Points = new ArenaStartPoints(reader);
 
-                        if (this.m_Active)
+                        if (m_Active)
                         {
                             m_Arenas.Add(this);
                             m_Arenas.Sort();
@@ -789,20 +839,28 @@ namespace Server.Engines.ConPVP
                     }
             }
 
-            if (this.m_Zone.Start != Point2D.Zero && this.m_Zone.End != Point2D.Zero && this.m_Facet != null)
-                this.m_Region = new SafeZone(this.m_Zone, this.m_Outside, this.m_Facet, this.m_IsGuarded);
+            if (m_Zone.Start != Point2D.Zero && m_Zone.End != Point2D.Zero && m_Facet != null)
+            {
+                m_Region = new SafeZone(m_Zone, m_Outside, m_Facet, m_IsGuarded);
+            }
 
-            if (this.IsOccupied)
+            if (IsOccupied)
+            {
                 Timer.DelayCall(TimeSpan.FromSeconds(2.0), new TimerCallback(Evict));
+            }
 
-            if (this.m_Tournament != null)
+            if (m_Tournament != null)
+            {
                 Timer.DelayCall(TimeSpan.Zero, new TimerCallback(AttachToTournament_Sandbox));
+            }
         }
 
         private void AttachToTournament_Sandbox()
         {
-            if (this.m_Tournament != null)
-                this.m_Tournament.Tournament.Arenas.Add(this);
+            if (m_Tournament != null)
+            {
+                m_Tournament.Tournament.Arenas.Add(this);
+            }
         }
 
         [CommandProperty(AccessLevel.Administrator, AccessLevel.Administrator)]
@@ -815,7 +873,9 @@ namespace Server.Engines.ConPVP
             set
             {
                 if (value)
-                    this.Evict();
+                {
+                    Evict();
+                }
             }
         }
 
@@ -824,32 +884,36 @@ namespace Server.Engines.ConPVP
             Point3D loc;
             Map facet;
 
-            if (this.m_Facet == null)
+            if (m_Facet == null)
             {
                 loc = new Point3D(2715, 2165, 0);
                 facet = Map.Felucca;
             }
             else
             {
-                loc = this.m_Outside;
-                facet = this.m_Facet;
+                loc = m_Outside;
+                facet = m_Facet;
             }
 
-            bool hasBounds = (this.m_Bounds.Start != Point2D.Zero && this.m_Bounds.End != Point2D.Zero);
+            bool hasBounds = (m_Bounds.Start != Point2D.Zero && m_Bounds.End != Point2D.Zero);
 
-            for (int i = 0; i < this.m_Players.Count; ++i)
+            for (int i = 0; i < m_Players.Count; ++i)
             {
-                Mobile mob = this.m_Players[i];
+                Mobile mob = m_Players[i];
 
                 if (mob == null)
+                {
                     continue;
+                }
 
                 if (mob.Map == Map.Internal)
                 {
-                    if ((this.m_Facet == null || mob.LogoutMap == this.m_Facet) && (!hasBounds || this.m_Bounds.Contains(mob.LogoutLocation)))
+                    if ((m_Facet == null || mob.LogoutMap == m_Facet) && (!hasBounds || m_Bounds.Contains(mob.LogoutLocation)))
+                    {
                         mob.LogoutLocation = loc;
+                    }
                 }
-                else if ((this.m_Facet == null || mob.Map == this.m_Facet) && (!hasBounds || this.m_Bounds.Contains(mob.Location)))
+                else if ((m_Facet == null || mob.Map == m_Facet) && (!hasBounds || m_Bounds.Contains(mob.Location)))
                 {
                     mob.MoveToWorld(loc, facet);
                 }
@@ -864,13 +928,13 @@ namespace Server.Engines.ConPVP
             {
                 List<Mobile> pets = new List<Mobile>();
 
-                foreach (Mobile mob in facet.GetMobilesInBounds(this.m_Bounds))
+                foreach (Mobile mob in facet.GetMobilesInBounds(m_Bounds))
                 {
                     BaseCreature pet = mob as BaseCreature;
 
                     if (pet != null && pet.Controlled && pet.ControlMaster != null)
                     {
-                        if (this.m_Players.Contains(pet.ControlMaster))
+                        if (m_Players.Contains(pet.ControlMaster))
                         {
                             pets.Add(pet);
                         }
@@ -886,37 +950,37 @@ namespace Server.Engines.ConPVP
                 }
             }
 
-            this.m_Players.Clear();
+            m_Players.Clear();
         }
 
         public void Serialize(GenericWriter writer)
         {
             writer.WriteEncodedInt((int)7);
 
-            writer.Write((bool)this.m_IsGuarded);
+            writer.Write((bool)m_IsGuarded);
 
-            writer.Write((Item)this.m_Ladder);
+            writer.Write((Item)m_Ladder);
 
-            writer.Write((Item)this.m_Tournament);
-            writer.Write((Mobile)this.m_Announcer);
+            writer.Write((Item)m_Tournament);
+            writer.Write((Mobile)m_Announcer);
 
-            writer.Write((string)this.m_Name);
+            writer.Write((string)m_Name);
 
-            writer.Write((Rectangle2D)this.m_Zone);
+            writer.Write((Rectangle2D)m_Zone);
 
-            writer.Write((Point3D)this.m_GateIn);
-            writer.Write((Point3D)this.m_GateOut);
-            writer.Write((Item)this.m_Teleporter);
+            writer.Write((Point3D)m_GateIn);
+            writer.Write((Point3D)m_GateOut);
+            writer.Write((Item)m_Teleporter);
 
-            writer.Write(this.m_Players);
+            writer.Write(m_Players);
 
-            writer.Write((Map)this.m_Facet);
-            writer.Write((Rectangle2D)this.m_Bounds);
-            writer.Write((Point3D)this.m_Outside);
-            writer.Write((Point3D)this.m_Wall);
-            writer.Write((bool)this.m_Active);
+            writer.Write((Map)m_Facet);
+            writer.Write((Rectangle2D)m_Bounds);
+            writer.Write((Point3D)m_Outside);
+            writer.Write((Point3D)m_Wall);
+            writer.Write((bool)m_Active);
 
-            this.m_Points.Serialize(writer);
+            m_Points.Serialize(writer);
         }
 
         private static readonly List<Arena> m_Arenas = new List<Arena>();
@@ -934,10 +998,14 @@ namespace Server.Engines.ConPVP
             Preferences prefs = Preferences.Instance;
 
             if (prefs == null)
+            {
                 return FindArena();
+            }
 
             if (m_Arenas.Count == 0)
+            {
                 return null;
+            }
 
             if (players.Count > 0)
             {
@@ -960,9 +1028,13 @@ namespace Server.Engines.ConPVP
                             bool isNear;
 
                             if (house == null)
+                            {
                                 isNear = (controller.Map == check.Map && check.InRange(controller, 24));
+                            }
                             else
+                            {
                                 isNear = (Multis.BaseHouse.FindHouseAt(check) == house);
+                            }
 
                             if (!isNear)
                             {
@@ -972,7 +1044,9 @@ namespace Server.Engines.ConPVP
                         }
 
                         if (allNear)
+                        {
                             return controller.Arena;
+                        }
                     }
                 }
             }
@@ -984,11 +1058,15 @@ namespace Server.Engines.ConPVP
                 Arena arena = m_Arenas[i];
 
                 if (!arena.IsOccupied)
+                {
                     arenas.Add(new ArenaEntry(arena));
+                }
             }
 
             if (arenas.Count == 0)
+            {
                 return m_Arenas[0];
+            }
 
             int tc = 0;
 
@@ -1001,9 +1079,13 @@ namespace Server.Engines.ConPVP
                     PreferencesEntry pe = prefs.Find(players[j]);
 
                     if (pe.Disliked.Contains(ae.m_Arena.Name))
+                    {
                         ++ae.m_VotesAgainst;
+                    }
                     else
+                    {
                         ++ae.m_VotesFor;
+                    }
                 }
 
                 tc += ae.Value;
@@ -1016,7 +1098,9 @@ namespace Server.Engines.ConPVP
                 ArenaEntry ae = arenas[i];
 
                 if (rn < ae.Value)
+                {
                     return ae.m_Arena;
+                }
 
                 rn -= ae.Value;
             }
@@ -1034,7 +1118,7 @@ namespace Server.Engines.ConPVP
             {
                 get
                 {
-                    return this.m_VotesFor;
+                    return m_VotesFor;
                     /*if ( m_VotesFor > m_VotesAgainst )
                     return m_VotesFor - m_VotesAgainst;
                     else if ( m_VotesFor > 0 )
@@ -1046,14 +1130,16 @@ namespace Server.Engines.ConPVP
 
             public ArenaEntry(Arena arena)
             {
-                this.m_Arena = arena;
+                m_Arena = arena;
             }
         }
 
         public static Arena FindArena()
         {
             if (m_Arenas.Count == 0)
+            {
                 return null;
+            }
 
             int offset = Utility.Random(m_Arenas.Count);
 
@@ -1062,7 +1148,9 @@ namespace Server.Engines.ConPVP
                 Arena arena = m_Arenas[(i + offset) % m_Arenas.Count];
 
                 if (!arena.IsOccupied)
+                {
                     return arena;
+                }
             }
 
             return m_Arenas[offset];
@@ -1072,15 +1160,21 @@ namespace Server.Engines.ConPVP
         {
             Arena c = (Arena)obj;
 
-            string a = this.m_Name;
+            string a = m_Name;
             string b = c.m_Name;
 
             if (a == null && b == null)
+            {
                 return 0;
+            }
             else if (a == null)
+            {
                 return -1;
+            }
             else if (b == null)
+            {
                 return +1;
+            }
 
             return a.CompareTo(b);
         }
