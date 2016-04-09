@@ -56,7 +56,7 @@ namespace Server.Items
         private int m_Capacity;
         private int m_LowerAmmoCost;
         private int m_WeightReduction;
-        private int m_DamageIncrease;
+        //private int m_DamageIncrease;
         private Mobile m_Crafter;
         private ClothingQuality m_Quality;
         private bool m_PlayerConstructed;

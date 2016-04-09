@@ -108,7 +108,7 @@ namespace Server.Items
     public class RowBoatRope : RowBoatItem
     {
         private RowBoat m_RowBoat;
-        private BoatRopeSide m_Side;
+        //private BoatRopeSide m_Side;
 
         [CommandProperty(AccessLevel.GameMaster, true)]
         public override bool ShareHue

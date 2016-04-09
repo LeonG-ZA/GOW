@@ -12,7 +12,7 @@ namespace Server.Items
     public class ShameAltarAddon : BaseAddon
     {
         public override int LabelNumber { get { return 1151636; } } // Guardian's Altar
-        private DateTime LastUse;
+        //private DateTime LastUse;
         //public virtual TimeSpan Delay{ get{ return TimeSpan.FromHours( 1.0 ); } }
 
         bool mActive = true;

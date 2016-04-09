@@ -172,7 +172,7 @@ namespace Server.Mobiles
         // Doom Artifacts
         private int m_DoomCredits;
 
-        private int m_NonAutoreinsuredItems;
+        //private int m_NonAutoreinsuredItems;
         // number of items that could not be automaitically reinsured because gold in bank was not enough
 
         /*
@@ -3312,10 +3312,12 @@ namespace Server.Mobiles
 
         public override void OnDeath(Container c)
         {
+            /*
             if (m_NonAutoreinsuredItems > 0)
             {
                 SendLocalizedMessage(1061115);
             }
+            */
 
             base.OnDeath(c);
 
@@ -5785,7 +5787,6 @@ namespace Server.Mobiles
         #region Hair and beard mods
         private int m_HairModID = -1, m_HairModHue;
         private int m_BeardModID = -1, m_BeardModHue;
-        private int m_FaceModID = -1, m_FaceModHue;
 
         public void SetHairMods(int hairID, int beardID)
         {
@@ -6341,8 +6342,14 @@ namespace Server.Mobiles
                     pet.IsStabled = true;
                     pet.StabledBy = this;
 
-                    //pet.Loyalty = BaseCreature.MaxLoyalty; // Wonderfully happy
-                    pet.Loyalty = PetLoyalty.WonderfullyHappy; // Wonderfully happy
+                    if(Core.SA)
+                    {
+                        pet.Loyalty = PetLoyalty.WonderfullyHappy; // Wonderfully happy
+                    }
+                    else
+                    {
+                        pet.OldLoyalty = BaseCreature.OldMaxLoyalty; // Wonderfully happy
+                    }
 
                     Stabled.Add(pet);
                     m_AutoStabled.Add(pet);
@@ -6359,8 +6366,7 @@ namespace Server.Mobiles
 
             if (!Alive)
             {
-                SendLocalizedMessage(1076251);
-                // Your pet was unable to join you while you are a ghost.  Please re-login once you have ressurected to claim your pets.
+                SendLocalizedMessage(1076251);// Your pet was unable to join you while you are a ghost.  Please re-login once you have ressurected to claim your pets.
                 return;
             }
 
@@ -6398,8 +6404,14 @@ namespace Server.Mobiles
                     pet.IsStabled = false;
                     pet.StabledBy = null;
 
-                    //pet.Loyalty = BaseCreature.MaxLoyalty; // Wonderfully Happy
-                    pet.Loyalty = PetLoyalty.WonderfullyHappy; // Wonderfully happy
+                    if (Core.SA)
+                    {
+                        pet.Loyalty = PetLoyalty.WonderfullyHappy; // Wonderfully happy
+                    }
+                    else
+                    {
+                        pet.OldLoyalty = BaseCreature.OldMaxLoyalty; // Wonderfully happy
+                    }
 
                     if (Stabled.Contains(pet))
                     {

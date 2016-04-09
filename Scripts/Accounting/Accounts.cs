@@ -63,7 +63,9 @@ namespace Server.Accounting
             string filePath = Path.Combine("Saves/Accounts", "accounts.xml");
 
             if (!File.Exists(filePath))
+            {
                 return;
+            }
 
             XmlDocument doc = new XmlDocument();
             doc.Load(filePath);
@@ -86,7 +88,9 @@ namespace Server.Accounting
         public static void Save(WorldSaveEventArgs e)
         {
             if (!Directory.Exists("Saves/Accounts"))
+            {
                 Directory.CreateDirectory("Saves/Accounts");
+            }
 
             string filePath = Path.Combine("Saves/Accounts", "accounts.xml");
 
@@ -105,7 +109,9 @@ namespace Server.Accounting
                 xml.WriteAttributeString("count", m_Accounts.Count.ToString());
 
                 foreach (Account a in GetAccounts())
+                {
                     a.Save(xml);
+                }
 
                 xml.WriteEndElement();
 

@@ -341,11 +341,11 @@ namespace Server.Engines.Quests
         }
 
         #endregion
-		
-        public virtual void Initialize()
-        { 
+
+        public virtual new void Initialize()
+        {
         }
-		
+
         public override void Serialize(GenericWriter writer)
         {
             base.Serialize(writer);

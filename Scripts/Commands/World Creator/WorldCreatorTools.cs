@@ -49,7 +49,7 @@ namespace Server.Gumps
             AddLabel(175, 201, 2728, @"Door Generator Delete");
             AddLabel(175, 226, 2728, @"Public Moongate Delete");
             AddLabel(175, 250, 2728, @"Clear All");
-            AddLabel(175, 274, 2728, @"Region Controler");
+            AddLabel(175, 274, 2728, @"Region Controller");
             AddHtml(140, 296, 200, 100, @"Add a Region Controller
             double-click the Region
             Controller to configure it's region.

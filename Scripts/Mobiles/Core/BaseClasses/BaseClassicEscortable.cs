@@ -4,11 +4,7 @@ using System.Collections.Generic;
 using Server.ContextMenus;
 using Server.Items;
 using EDI = Server.Mobiles.ClassicEscortDestinationInfo;
-using Server.MainConfiguration;
 #region BBS Quests
-using Server;
-using Server.Mobiles;
-using Server.Network;
 using Server.Multis;
 using Server.NpcConfiguration;
 #endregion

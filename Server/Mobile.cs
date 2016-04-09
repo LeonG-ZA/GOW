@@ -3266,8 +3266,7 @@ namespace Server
                             {
                                 Item item = oldSector.Items[i];
 
-                                if (item.AtWorldPoint(oldX, oldY) &&
-                                    (item.Z == oldZ || ((item.Z + item.ItemData.Height) > oldZ && (oldZ + 15) > item.Z)) && !item.OnMoveOff(this))
+                                if (item.AtWorldPoint(oldX, oldY) && (item.Z == oldZ || ((item.Z + item.ItemData.Height) > oldZ && (oldZ + 15) > item.Z)) && !item.OnMoveOff(this))
                                 {
                                     return false;
                                 }
@@ -3372,13 +3371,11 @@ namespace Server
                             {
                                 Item item = oldSector.Items[i];
 
-                                if (item.AtWorldPoint(oldX, oldY) &&
-                                    (item.Z == oldZ || ((item.Z + item.ItemData.Height) > oldZ && (oldZ + 15) > item.Z)) && !item.OnMoveOff(this))
+                                if (item.AtWorldPoint(oldX, oldY) && (item.Z == oldZ || ((item.Z + item.ItemData.Height) > oldZ && (oldZ + 15) > item.Z)) && !item.OnMoveOff(this))
                                 {
                                     return false;
                                 }
-                                if (item.AtWorldPoint(x, y) &&
-                                    (item.Z == newZ || ((item.Z + item.ItemData.Height) > newZ && (newZ + 15) > item.Z)) && !item.OnMoveOver(this))
+                                if (item.AtWorldPoint(x, y) && (item.Z == newZ || ((item.Z + item.ItemData.Height) > newZ && (newZ + 15) > item.Z)) && !item.OnMoveOver(this))
                                 {
                                     return false;
                                 }
@@ -3400,8 +3397,7 @@ namespace Server
 						return false;
 					}
 
-					if (_FwdEnabled && _NetState != null && _AccessLevel < _FwdAccessOverride &&
-						(!_FwdUotdOverride || !_NetState.IsUOTDClient))
+					if (_FwdEnabled && _NetState != null && _AccessLevel < _FwdAccessOverride && (!_FwdUotdOverride || !_NetState.IsUOTDClient))
 					{
 						if (_MoveRecords == null)
 						{

@@ -4,7 +4,6 @@ using System.Collections.Generic;
 using Server.ContextMenus;
 using Server.Items;
 using EDI = Server.Mobiles.EscortDestinationInfo;
-using Server.MainConfiguration;
 using Server.NpcConfiguration;
 
 namespace Server.Mobiles

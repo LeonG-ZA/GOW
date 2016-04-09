@@ -1,16 +1,14 @@
-using System;
-
 namespace Server.Gumps
 {
     public class BaseConfirmGump : Gump
     {
         public BaseConfirmGump()
             : base(120, 50)
-        { 
-            this.Closable = false;
-            this.Disposable = true;
-            this.Dragable = true;
-            this.Resizable = false;
+        {
+            Closable = false;
+            Disposable = true;
+            Dragable = true;
+            Resizable = false;
 		
             this.AddPage(0);
 			

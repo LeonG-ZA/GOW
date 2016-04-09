@@ -67,14 +67,18 @@ namespace Server.Gumps
                 foreach (Item item in World.Items.Values)
                 {
                     if (isAbstract ? item.GetType().IsSubclassOf(type) : item.GetType() == type)
+                    {
                         worldList.Add(item);
+                    }
                 }
             }
 
             foreach (PrimeSpawner worldSpnr in worldList)
             {
                 if (worldSpnr.Map == from.Map)
+                {
                     facetList.Add(worldSpnr);
+                }
             }
 
             //TODO: Sort spawner list
@@ -118,30 +122,36 @@ namespace Server.Gumps
             AddAlphaRegion(8, 50, 250, 396);
             AddImageTiled(260, 50, 332, 396, 2624);
             AddAlphaRegion(260, 50, 332, 396);
-            AddLabel(220, 20, 52, "PREMIUM SPAWNER EDITOR");
+            AddLabel(220, 20, 52, "PRIME SPAWNER EDITOR");
             AddButton(550, 405, 0x158A, 0x158B, 10002, GumpButtonType.Reply, 1); //Quit Button
             AddButton(275, 412, 0x845, 0x846, 10008, GumpButtonType.Reply, 0); // Refresh button
             AddLabel(300, 410, 52, "Refresh");
 
             if (currentList.Count == 0)
             {
-                AddLabel(50, 210, 52, "No Premium Spawners Found");
+                AddLabel(50, 210, 52, "No Prime Spawners Found");
             }
             else
             {
                 if (page == 0)
                 {
                     if (currentList.Count < 15)
+                    {
                         listnum = currentList.Count;
+                    }
                     else
+                    {
                         listnum = 15;
+                    }
 
                     for (int x = 0; x < listnum; x++)
                     {
                         Item spawnr = null;
 
                         if (currentList[x] is Item)
+                        {
                             spawnr = currentList[x] as Item;
+                        }
 
                         string gumpMsg = "";
 
@@ -179,7 +189,9 @@ namespace Server.Gumps
                         buttonID = x + 1;
 
                         if (currentList[x] is Item)
+                        {
                             spawnr = currentList[x] as Item;
+                        }
 
                         string gumpMsg = "";
 
@@ -226,16 +238,22 @@ namespace Server.Gumps
                 stotPages = totPages.ToString();
             }
             else
+            {
                 stotPages = pageNum.ToString();
+            }
 
             string pageText = "Page " + (page + 1) + " of " + stotPages;
 
             AddLabel(40, 20, 52, pageText);
 
             if (selected == 0)
+            {
                 InitializeStartingRightPanel();
+            }
             else if (selected == 1)
+            {
                 InitializeSelectedRightPanel();
+            }
         }
 
         public void InitializeStartingRightPanel()
@@ -317,1279 +335,810 @@ namespace Server.Gumps
                 }
                 else if (strNum == 2)
                 {
-
                     if (i < initSpn.CreaturesName.Count - 1)
                     {
-
                         if (spns2.Length + initSpn.CreaturesName[i].ToString().Length < 50)
-
+                        {
                             spns2 += (string)initSpn.CreaturesName[i] + ", ";
-
+                        }
                         else
                         {
-
                             strNum = 3;
-
                             spns3 += (string)initSpn.CreaturesName[i] + ", ";
-
                         }
-
                     }
-
                     else
                     {
-
                         if (spns2.Length + initSpn.CreaturesName[i].ToString().Length < 50)
-
+                        {
                             spns2 += (string)initSpn.CreaturesName[i];
-
+                        }
                         else
                         {
-
                             strNum = 4;
-
                             spns3 += (string)initSpn.CreaturesName[i];
-
                         }
-
                     }
-
                 }
-
                 else if (strNum == 3)
                 {
-
                     if (i < initSpn.CreaturesName.Count - 1)
-
+                    {
                         spns3 += (string)initSpn.CreaturesName[i] + ", ";
-
+                    }
                     else
-
+                    {
                         spns3 += (string)initSpn.CreaturesName[i];
+                    }
 
                 }
-
             }
 
-
-
             string spnsNEWa = "";
-
             string spns1a = "";
-
             string spns2a = "";
-
             string spns3a = "";
-
-
 
             for (int i = 0; i < initSpn.SubSpawnerA.Count; i++)
             {
-
                 if (strNum == 0)
                 {
-
                     if (i < initSpn.SubSpawnerA.Count - 1)
                     {
-
                         if (spns.Length + initSpn.SubSpawnerA[i].ToString().Length < 50)
-
+                        {
                             spnsNEWa += (string)initSpn.SubSpawnerA[i] + ", ";
-
+                        }
                         else
                         {
-
                             strNum = 1;
-
                             spns1a += (string)initSpn.SubSpawnerA[i] + ", ";
-
                         }
-
+                    }
+                    else
+                    {
+                        spnsNEWa += (string)initSpn.SubSpawnerA[i];
                     }
 
-                    else
-
-                        spnsNEWa += (string)initSpn.SubSpawnerA[i];
-
                 }
-
                 else if (strNum == 1)
                 {
-
                     if (i < initSpn.SubSpawnerA.Count - 1)
                     {
-
                         if (spns1a.Length + initSpn.SubSpawnerA[i].ToString().Length < 50)
-
+                        {
                             spns1a += (string)initSpn.SubSpawnerA[i] + ", ";
-
+                        }
                         else
                         {
-
                             strNum = 2;
-
                             spns2a += (string)initSpn.SubSpawnerA[i] + ", ";
-
                         }
-
                     }
-
                     else
                     {
-
                         if (spns1a.Length + initSpn.SubSpawnerA[i].ToString().Length < 50)
-
+                        {
                             spns1a += (string)initSpn.SubSpawnerA[i];
-
+                        }
                         else
                         {
-
                             strNum = 3;
-
                             spns2a += (string)initSpn.SubSpawnerA[i];
-
                         }
-
                     }
-
                 }
-
                 else if (strNum == 2)
                 {
-
                     if (i < initSpn.SubSpawnerA.Count - 1)
                     {
-
                         if (spns2a.Length + initSpn.SubSpawnerA[i].ToString().Length < 50)
-
+                        {
                             spns2a += (string)initSpn.SubSpawnerA[i] + ", ";
-
+                        }
                         else
                         {
-
                             strNum = 3;
-
                             spns3a += (string)initSpn.SubSpawnerA[i] + ", ";
-
                         }
-
                     }
-
                     else
                     {
-
                         if (spns2a.Length + initSpn.SubSpawnerA[i].ToString().Length < 50)
-
+                        {
                             spns2a += (string)initSpn.SubSpawnerA[i];
-
+                        }
                         else
                         {
-
                             strNum = 4;
-
                             spns3a += (string)initSpn.SubSpawnerA[i];
-
                         }
-
                     }
-
                 }
-
                 else if (strNum == 3)
                 {
-
                     if (i < initSpn.SubSpawnerA.Count - 1)
-
+                    {
                         spns3a += (string)initSpn.SubSpawnerA[i] + ", ";
-
+                    }
                     else
-
+                    {
                         spns3a += (string)initSpn.SubSpawnerA[i];
-
+                    }
                 }
-
             }
 
-
-
             string spnsNEWb = "";
-
             string spns1b = "";
-
             string spns2b = "";
-
             string spns3b = "";
-
-
 
             for (int i = 0; i < initSpn.SubSpawnerB.Count; i++)
             {
-
                 if (strNum == 0)
                 {
-
                     if (i < initSpn.SubSpawnerB.Count - 1)
                     {
-
                         if (spns.Length + initSpn.SubSpawnerB[i].ToString().Length < 50)
-
+                        {
                             spnsNEWb += (string)initSpn.SubSpawnerB[i] + ", ";
-
+                        }
                         else
                         {
-
                             strNum = 1;
-
                             spns1b += (string)initSpn.SubSpawnerB[i] + ", ";
-
                         }
-
                     }
-
                     else
-
+                    {
                         spnsNEWb += (string)initSpn.SubSpawnerB[i];
-
+                    }
                 }
-
                 else if (strNum == 1)
                 {
-
                     if (i < initSpn.SubSpawnerB.Count - 1)
                     {
-
                         if (spns1b.Length + initSpn.SubSpawnerB[i].ToString().Length < 50)
-
+                        {
                             spns1b += (string)initSpn.SubSpawnerB[i] + ", ";
-
+                        }
                         else
                         {
-
                             strNum = 2;
-
                             spns2b += (string)initSpn.SubSpawnerB[i] + ", ";
-
                         }
-
                     }
-
                     else
                     {
-
                         if (spns1b.Length + initSpn.SubSpawnerB[i].ToString().Length < 50)
-
+                        {
                             spns1b += (string)initSpn.SubSpawnerB[i];
-
+                        }
                         else
                         {
-
                             strNum = 3;
-
                             spns2b += (string)initSpn.SubSpawnerB[i];
-
                         }
-
                     }
-
                 }
-
                 else if (strNum == 2)
                 {
-
                     if (i < initSpn.SubSpawnerB.Count - 1)
                     {
-
                         if (spns2b.Length + initSpn.SubSpawnerB[i].ToString().Length < 50)
-
+                        {
                             spns2b += (string)initSpn.SubSpawnerB[i] + ", ";
-
+                        }
                         else
                         {
-
                             strNum = 3;
-
                             spns3b += (string)initSpn.SubSpawnerB[i] + ", ";
-
                         }
-
                     }
-
                     else
                     {
-
                         if (spns2b.Length + initSpn.SubSpawnerB[i].ToString().Length < 50)
-
+                        {
                             spns2b += (string)initSpn.SubSpawnerB[i];
-
+                        }
                         else
                         {
-
                             strNum = 4;
-
                             spns3b += (string)initSpn.SubSpawnerB[i];
-
                         }
-
                     }
-
                 }
-
                 else if (strNum == 3)
                 {
-
                     if (i < initSpn.SubSpawnerB.Count - 1)
-
+                    {
                         spns3b += (string)initSpn.SubSpawnerB[i] + ", ";
-
+                    }
                     else
-
+                    {
                         spns3b += (string)initSpn.SubSpawnerB[i];
-
+                    }
                 }
-
             }
 
-
-
             string spnsNEWc = "";
-
             string spns1c = "";
-
             string spns2c = "";
-
             string spns3c = "";
-
-
 
             for (int i = 0; i < initSpn.SubSpawnerC.Count; i++)
             {
-
                 if (strNum == 0)
                 {
-
                     if (i < initSpn.SubSpawnerC.Count - 1)
                     {
-
                         if (spns.Length + initSpn.SubSpawnerC[i].ToString().Length < 50)
-
+                        {
                             spnsNEWc += (string)initSpn.SubSpawnerC[i] + ", ";
-
+                        }
                         else
                         {
-
                             strNum = 1;
-
                             spns1c += (string)initSpn.SubSpawnerC[i] + ", ";
-
                         }
-
                     }
-
                     else
-
+                    {
                         spnsNEWc += (string)initSpn.SubSpawnerC[i];
-
+                    }
                 }
-
                 else if (strNum == 1)
                 {
-
                     if (i < initSpn.SubSpawnerC.Count - 1)
                     {
-
                         if (spns1c.Length + initSpn.SubSpawnerC[i].ToString().Length < 50)
-
+                        {
                             spns1c += (string)initSpn.SubSpawnerC[i] + ", ";
-
+                        }
                         else
                         {
-
                             strNum = 2;
-
                             spns2c += (string)initSpn.SubSpawnerC[i] + ", ";
-
                         }
-
                     }
-
                     else
                     {
-
                         if (spns1c.Length + initSpn.SubSpawnerC[i].ToString().Length < 50)
-
+                        {
                             spns1c += (string)initSpn.SubSpawnerC[i];
-
+                        }
                         else
                         {
-
                             strNum = 3;
-
                             spns2c += (string)initSpn.SubSpawnerC[i];
-
                         }
-
                     }
-
                 }
-
                 else if (strNum == 2)
                 {
-
                     if (i < initSpn.SubSpawnerC.Count - 1)
                     {
-
                         if (spns2c.Length + initSpn.SubSpawnerC[i].ToString().Length < 50)
-
+                        {
                             spns2c += (string)initSpn.SubSpawnerC[i] + ", ";
-
+                        }
                         else
                         {
-
                             strNum = 3;
-
                             spns3c += (string)initSpn.SubSpawnerC[i] + ", ";
-
                         }
-
                     }
-
                     else
                     {
-
                         if (spns2c.Length + initSpn.SubSpawnerC[i].ToString().Length < 50)
-
+                        {
                             spns2c += (string)initSpn.SubSpawnerC[i];
-
+                        }
                         else
                         {
-
                             strNum = 4;
-
                             spns3c += (string)initSpn.SubSpawnerC[i];
-
                         }
-
                     }
-
                 }
-
                 else if (strNum == 3)
                 {
-
                     if (i < initSpn.SubSpawnerC.Count - 1)
-
+                    {
                         spns3c += (string)initSpn.SubSpawnerC[i] + ", ";
-
+                    }
                     else
-
+                    {
                         spns3c += (string)initSpn.SubSpawnerC[i];
-
+                    }
                 }
-
             }
 
-
-
             string spnsNEWd = "";
-
             string spns1d = "";
-
             string spns2d = "";
-
             string spns3d = "";
-
-
 
             for (int i = 0; i < initSpn.SubSpawnerD.Count; i++)
             {
-
                 if (strNum == 0)
                 {
-
                     if (i < initSpn.SubSpawnerD.Count - 1)
                     {
-
                         if (spns.Length + initSpn.SubSpawnerD[i].ToString().Length < 50)
-
+                        {
                             spnsNEWd += (string)initSpn.SubSpawnerD[i] + ", ";
-
+                        }
                         else
                         {
-
                             strNum = 1;
-
                             spns1d += (string)initSpn.SubSpawnerD[i] + ", ";
-
                         }
-
                     }
-
                     else
-
+                    {
                         spnsNEWd += (string)initSpn.SubSpawnerD[i];
-
+                    }
                 }
-
                 else if (strNum == 1)
                 {
-
                     if (i < initSpn.SubSpawnerD.Count - 1)
                     {
-
                         if (spns1d.Length + initSpn.SubSpawnerD[i].ToString().Length < 50)
-
+                        {
                             spns1d += (string)initSpn.SubSpawnerD[i] + ", ";
-
+                        }
                         else
                         {
-
                             strNum = 2;
-
                             spns2d += (string)initSpn.SubSpawnerD[i] + ", ";
-
                         }
-
                     }
-
                     else
                     {
-
                         if (spns1d.Length + initSpn.SubSpawnerD[i].ToString().Length < 50)
-
+                        {
                             spns1d += (string)initSpn.SubSpawnerD[i];
-
+                        }
                         else
                         {
-
                             strNum = 3;
-
                             spns2d += (string)initSpn.SubSpawnerD[i];
-
                         }
-
                     }
-
                 }
-
                 else if (strNum == 2)
                 {
-
                     if (i < initSpn.SubSpawnerD.Count - 1)
                     {
-
                         if (spns2d.Length + initSpn.SubSpawnerD[i].ToString().Length < 50)
-
+                        {
                             spns2d += (string)initSpn.SubSpawnerD[i] + ", ";
-
+                        }
                         else
                         {
-
                             strNum = 3;
-
                             spns3d += (string)initSpn.SubSpawnerD[i] + ", ";
-
                         }
-
                     }
-
                     else
                     {
-
                         if (spns2d.Length + initSpn.SubSpawnerD[i].ToString().Length < 50)
-
+                        {
                             spns2d += (string)initSpn.SubSpawnerD[i];
-
+                        }
                         else
                         {
-
                             strNum = 4;
-
                             spns3d += (string)initSpn.SubSpawnerD[i];
-
                         }
-
                     }
-
                 }
-
                 else if (strNum == 3)
                 {
-
                     if (i < initSpn.SubSpawnerD.Count - 1)
-
+                    {
                         spns3d += (string)initSpn.SubSpawnerD[i] + ", ";
-
+                    }
                     else
-
+                    {
                         spns3d += (string)initSpn.SubSpawnerD[i];
-
+                    }
                 }
-
             }
 
-
-
             string spnsNEWe = "";
-
             string spns1e = "";
-
             string spns2e = "";
-
             string spns3e = "";
-
-
 
             for (int i = 0; i < initSpn.SubSpawnerE.Count; i++)
             {
-
                 if (strNum == 0)
                 {
-
                     if (i < initSpn.SubSpawnerE.Count - 1)
                     {
-
                         if (spns.Length + initSpn.SubSpawnerE[i].ToString().Length < 50)
-
+                        {
                             spnsNEWe += (string)initSpn.SubSpawnerE[i] + ", ";
-
+                        }
                         else
                         {
-
                             strNum = 1;
-
                             spns1e += (string)initSpn.SubSpawnerE[i] + ", ";
-
                         }
-
                     }
-
                     else
-
+                    {
                         spnsNEWe += (string)initSpn.SubSpawnerE[i];
-
+                    }
                 }
-
                 else if (strNum == 1)
                 {
-
                     if (i < initSpn.SubSpawnerE.Count - 1)
                     {
-
                         if (spns1e.Length + initSpn.SubSpawnerE[i].ToString().Length < 50)
-
+                        {
                             spns1e += (string)initSpn.SubSpawnerE[i] + ", ";
-
+                        }
                         else
                         {
-
                             strNum = 2;
-
                             spns2e += (string)initSpn.SubSpawnerE[i] + ", ";
-
                         }
-
                     }
-
                     else
                     {
-
                         if (spns1e.Length + initSpn.SubSpawnerE[i].ToString().Length < 50)
-
+                        {
                             spns1e += (string)initSpn.SubSpawnerE[i];
-
+                        }
                         else
                         {
-
                             strNum = 3;
-
                             spns2e += (string)initSpn.SubSpawnerE[i];
-
                         }
-
                     }
-
                 }
-
                 else if (strNum == 2)
                 {
-
                     if (i < initSpn.SubSpawnerE.Count - 1)
                     {
-
                         if (spns2e.Length + initSpn.SubSpawnerE[i].ToString().Length < 50)
-
+                        {
                             spns2e += (string)initSpn.SubSpawnerE[i] + ", ";
-
+                        }
                         else
                         {
-
                             strNum = 3;
-
                             spns3e += (string)initSpn.SubSpawnerE[i] + ", ";
-
                         }
-
                     }
-
                     else
                     {
-
                         if (spns2e.Length + initSpn.SubSpawnerE[i].ToString().Length < 50)
-
+                        {
                             spns2e += (string)initSpn.SubSpawnerE[i];
-
+                        }
                         else
                         {
-
                             strNum = 4;
-
                             spns3e += (string)initSpn.SubSpawnerE[i];
-
                         }
-
                     }
-
                 }
-
                 else if (strNum == 3)
                 {
-
                     if (i < initSpn.SubSpawnerE.Count - 1)
-
+                    {
                         spns3e += (string)initSpn.SubSpawnerE[i] + ", ";
-
+                    }
                     else
-
+                    {
                         spns3e += (string)initSpn.SubSpawnerE[i];
-
+                    }
                 }
-
             }
 
-
-
             AddLabel(275, 85, 52, spns);
-
             AddLabel(280, 110, 52, "[1]");
-
             AddLabel(280, 180, 52, "[2]");
-
             AddLabel(280, 250, 52, "[3]");
-
             AddLabel(425, 110, 52, "[4]");
-
             AddLabel(425, 180, 52, "[5]");
-
             AddLabel(425, 250, 52, "[6]");
-
             AddHtml(300, 110, 115, 65, spnsNEW, true, true);
-
             AddHtml(300, 180, 115, 65, spnsNEWa, true, true);
-
             AddHtml(300, 250, 115, 65, spnsNEWb, true, true);
-
             AddHtml(445, 110, 115, 65, spnsNEWc, true, true);
-
             AddHtml(445, 180, 115, 65, spnsNEWd, true, true);
-
             AddHtml(445, 250, 115, 65, spnsNEWe, true, true);
 
             if (spns1 != "")
-
+            {
                 AddLabel(275, 105, 200, spns1);
-
-
-
+            }
             if (spns2 != "")
-
+            {
                 AddLabel(275, 125, 200, spns2);
-
-
-
+            }
             if (spns3 != "")
-
+            {
                 AddLabel(275, 145, 200, spns3);
-
-
+            }
 
             AddLabel(320, 320, 52, "Go to Spawner");
-
             AddButton(525, 320, 0x15E1, 0x15E5, 10005, GumpButtonType.Reply, 1);
-
             AddLabel(320, 345, 52, "Delete Selected Spawner");
-
             AddButton(525, 345, 0x15E1, 0x15E5, 10006, GumpButtonType.Reply, 0);
-
             AddLabel(320, 370, 52, "Edit Spawns");
-
             AddButton(525, 370, 0x15E1, 0x15E5, 10007, GumpButtonType.Reply, 0);
-
         }
-
-
 
         public List<string> CreateArray(RelayInfo info, Mobile from)
         {
-
             List<string> creaturesName = new List<string>();
-
-
-
             for (int i = 0; i < 13; i++)
             {
-
                 TextRelay te = info.GetTextEntry(i);
-
-
-
                 if (te != null)
                 {
-
                     string str = te.Text;
-
-
-
                     if (str.Length > 0)
                     {
-
                         str = str.Trim();
-
-
-
                         Type type = SpawnerType.GetType(str);
 
-
-
                         if (type != null)
-
+                        {
                             creaturesName.Add(str);
-
+                        }
                         else
-
+                        {
                             AddLabel(70, 230, 39, "Invalid Search String");
-
+                        }
                     }
-
                 }
-
             }
-
-
-
             return creaturesName;
-
         }
-
-
 
         public override void OnResponse(NetState state, RelayInfo info)
         {
-
-            Mobile from = state.Mobile;
-
             int buttonNum = 0;
-
-            ArrayList currentList = new ArrayList(tempList);
-
             int page = m_page;
 
-
+            Mobile from = state.Mobile;
+            ArrayList currentList = new ArrayList(tempList);
 
             if (info.ButtonID > 0 && info.ButtonID < 10000)
-
+            {
                 buttonNum = 1;
-
+            }
             else
-
+            {
                 buttonNum = info.ButtonID;
-
-
+            }
 
             switch (buttonNum)
             {
-
                 case 0:
                     {
-
                         //Close
-
                         break;
-
                     }
-
                 case 1:
                     {
-
                         selSpawner = currentList[info.ButtonID - 1] as Item;
-
                         SpawnEditor_OnCommand(from, page, currentList, 1, selSpawner);
-
                         break;
-
                     }
-
                 case 10000:
                     {
-
                         if (m_page * 10 < currentList.Count)
                         {
-
                             page = m_page += 1;
-
                             SpawnEditor_OnCommand(from, page, currentList);
-
                         }
-
                         break;
-
                     }
-
                 case 10001:
                     {
-
                         if (m_page != 0)
                         {
-
                             page = m_page -= 1;
-
                             SpawnEditor_OnCommand(from, page, currentList);
-
                         }
-
                         break;
-
                     }
-
                 case 10002:
                     {
-
                         //Close
-
                         break;
-
                     }
-
                 case 10003: // Filter to current region only
                     {
-
                         FilterByRegion(from, tempList, from.Region, from.Map, page);
-
                         break;
-
                     }
-
                 case 10004: // Filter by Distance
                     {
-
                         TextRelay oDis = info.GetTextEntry(0);
-
                         string sDis = (oDis == null ? "" : oDis.Text.Trim());
-
                         if (sDis != "")
                         {
-
                             try
                             {
-
                                 int distance = Convert.ToInt32(sDis);
-
                                 FilterByDistance(tempList, from, distance, page);
                             }
-
                             catch
                             {
-
                                 from.SendMessage("Distance must be a number");
-
                                 SpawnEditor_OnCommand(from, page, currentList);
-
                             }
-
                         }
-
                         else
                         {
-
                             from.SendMessage("You must specify a distance");
-
                             SpawnEditor_OnCommand(from, page, currentList);
-
                         }
-
                         break;
-
                     }
-
                 case 10005: // Go to Spawner
                     {
-
                         from.Location = new Point3D(selSpawner.X, selSpawner.Y, selSpawner.Z);
-
                         SpawnEditor_OnCommand(from, page, currentList, 1, selSpawner);
-
                         break;
-
                     }
-
                 case 10006: // Delete Selected Spawner
                     {
-
                         selSpawner.Delete();
-
                         SpawnEditor_OnCommand(from);
-
                         break;
-
                     }
-
-                case 10007: // Edit Spawns (Premium Sapwner Gump)
+                case 10007: // Edit Spawns (Prime Sapwner Gump)
                     {
-
                         from.SendGump(new PrimeSpawnerGump(selSpawner as PrimeSpawner));
-
                         SpawnEditor_OnCommand(from, page, currentList, 1, selSpawner);
-
                         break;
-
                     }
-
                 case 10008: // Refresh button
                     {
-
                         SpawnEditor_OnCommand(from);
-
                         break;
-
                     }
-
                 case 10009: // Search Spawners by Creature
                     {
-
                         TextRelay oSearch = info.GetTextEntry(1);
-
                         string sSearch = (oSearch == null ? null : oSearch.Text.Trim());
-
                         SearchByName(tempList, from, sSearch, page);
-
                         break;
-
                     }
-
                 case 10010: // Search Spawners by SpawnID
                     {
-
                         TextRelay oID = info.GetTextEntry(2);
-
                         string sID = (oID == null ? "" : oID.Text.Trim());
-
                         if (sID != "")
                         {
-
                             try
                             {
-
                                 int SearchID = Convert.ToInt32(sID);
-
                                 SearchByID(tempList, from, SearchID, page);
                             }
-
                             catch
                             {
-
                                 from.SendMessage("SpawnID must be a number");
-
                                 SpawnEditor_OnCommand(from, page, currentList);
-
                             }
-
                         }
-
                         else
                         {
-
                             from.SendMessage("You must specify a SpawnID");
-
                             SpawnEditor_OnCommand(from, page, currentList);
-
                         }
-
                         break;
-
                     }
-
             }
-
         }
-
-
-
-
 
         public static void FilterByRegion(Mobile from, ArrayList facetList, Region regr, Map regmap, int page)
         {
-
             ArrayList filregList = new ArrayList();
-
-
-
             foreach (Item regItem in facetList)
             {
-
                 Point2D p2 = new Point2D(regItem.X, regItem.Y);
-
                 Point3D p = new Point3D(p2, regItem.Z);
-
-
-
                 if (Region.Find(p, regmap) == regr)
-
+                {
                     filregList.Add(regItem);
-
+                }
             }
-
-
-
             from.SendGump(new SpawnEditorGump(from, 0, filregList, 0, null));
-
         }
-
-
 
         public static void FilterByDistance(ArrayList currentList, Mobile m, int dis, int page)
         {
-
             ArrayList fildisList = new ArrayList();
-
-
-
             for (int z = 0; z < currentList.Count; z++)
             {
-
                 Item disItem = currentList[z] as Item;
-
-
-
                 if (disItem.X >= m.X - dis && disItem.X <= m.X + dis && disItem.Y >= m.Y - dis && disItem.Y <= m.Y + dis)
-
+                {
                     fildisList.Add(disItem);
-
+                }
             }
-
-
-
             m.SendGump(new SpawnEditorGump(m, 0, fildisList, 0, null));
 
         }
 
-
-
         public static void SearchByName(ArrayList currentList, Mobile from, string search, int page)
         {
-
             ArrayList searchList = new ArrayList();
-
-
-
             foreach (PrimeSpawner spn in currentList)
             {
-
                 foreach (string str in spn.CreaturesName)
                 {
-
                     if (str.ToLower().IndexOf(search) >= 0)
-
+                    {
                         searchList.Add(spn);
-
+                    }
                 }
-
-
 
                 foreach (string str in spn.SubSpawnerA)
                 {
-
                     if (str.ToLower().IndexOf(search) >= 0)
-
+                    {
                         searchList.Add(spn);
-
+                    }
                 }
-
-
 
                 foreach (string str in spn.SubSpawnerB)
                 {
-
                     if (str.ToLower().IndexOf(search) >= 0)
-
+                    {
                         searchList.Add(spn);
-
+                    }
                 }
-
-
 
                 foreach (string str in spn.SubSpawnerC)
                 {
-
                     if (str.ToLower().IndexOf(search) >= 0)
-
+                    {
                         searchList.Add(spn);
-
+                    }
                 }
-
-
 
                 foreach (string str in spn.SubSpawnerD)
                 {
-
                     if (str.ToLower().IndexOf(search) >= 0)
-
+                    {
                         searchList.Add(spn);
-
+                    }
                 }
-
-
 
                 foreach (string str in spn.SubSpawnerE)
                 {
-
                     if (str.ToLower().IndexOf(search) >= 0)
-
+                    {
                         searchList.Add(spn);
-
+                    }
                 }
-
             }
-
-
-
             from.SendGump(new SpawnEditorGump(from, 0, searchList, 0, null));
-
         }
-
-
 
         public static void SearchByID(ArrayList currentList, Mobile from, int SearchID, int page)
         {
-
             ArrayList searchList = new ArrayList();
-
-
-
             foreach (PrimeSpawner spn in currentList)
             {
-
                 if (((PrimeSpawner)spn).SpawnID == SearchID)
                 {
-
                     searchList.Add(spn);
-
                 }
-
             }
-
-
-
             from.SendGump(new SpawnEditorGump(from, 0, searchList, 0, null));
-
         }
 
         public void AddTextField(int x, int y, int width, int height, int index)

@@ -40,22 +40,22 @@ namespace Server.Mobiles
 		public TalkingBaseVendor( Serial serial ) : base( serial )
 		{
 		}
-        
-		public virtual void Initialize()
-		{
-			// reestablish the DialogAttachment assignment
-			foreach(Mobile m in World.Mobiles.Values)
-			{
-				if(m is TalkingBaseVendor)
-				{
-					XmlDialog xa = XmlAttach.FindAttachment(m, typeof(XmlDialog)) as XmlDialog;
-					((TalkingBaseVendor)m).DialogAttachment = xa;
-				}
-			}
-		}
+
+        public virtual new void Initialize()
+        {
+            // reestablish the DialogAttachment assignment
+            foreach (Mobile m in World.Mobiles.Values)
+            {
+                if (m is TalkingBaseVendor)
+                {
+                    XmlDialog xa = XmlAttach.FindAttachment(m, typeof(XmlDialog)) as XmlDialog;
+                    ((TalkingBaseVendor)m).DialogAttachment = xa;
+                }
+            }
+        }
 
 
-		private XmlDialog m_DialogAttachment;
+        private XmlDialog m_DialogAttachment;
         
 		public XmlDialog DialogAttachment {get { return m_DialogAttachment; } set {m_DialogAttachment = value; }}
 

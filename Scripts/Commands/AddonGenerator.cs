@@ -1051,7 +1051,7 @@ namespace Server.Items
         [Constructable]
         public CEOIdentifyAddon()
         {
-            this.Delete();
+            //Delete();
         }
 
         public CEOIdentifyAddon(Serial serial)
@@ -1069,15 +1069,15 @@ namespace Server.Items
         {
             base.Deserialize(reader);
             int version = reader.ReadInt();
-            if (this.Map == null || this.Map == Map.Internal)
+            if (Map == null || Map == Map.Internal)
             {
-                this.Delete(); // Remove it because it's most 
+                Delete(); // Remove it because it's most 
             }
         }
 
         public void ReDeed(Mobile m)
         {
-            this.Delete();
+            Delete();
         }
     }
 }
