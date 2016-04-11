@@ -18,7 +18,7 @@ namespace Server.Mobiles
                 AI = AIType.AI_Mage;
                 ActiveSpeed = 0.2;
                 PassiveSpeed = 0.8;
-                RangePerception = BaseCreature.DefaultRangePerception;
+                RangePerception = DefaultRangePerception;
                 FightMode = FightMode.Aggressor;
             }
 
@@ -182,7 +182,7 @@ namespace Server.Mobiles
                 AI = AIType.AI_Mage;
                 ActiveSpeed = 0.2;
                 PassiveSpeed = 0.8;
-                RangePerception = BaseCreature.DefaultRangePerception;
+                RangePerception = DefaultRangePerception;
                 FightMode = FightMode.Aggressor;
             }
         }

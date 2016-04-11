@@ -13,54 +13,54 @@ namespace Server.Engines.Craft
         private readonly int m_Quality;
         public CustomCraft(Mobile from, CraftItem craftItem, CraftSystem craftSystem, Type typeRes, BaseTool tool, int quality)
         {
-            this.m_From = from;
-            this.m_CraftItem = craftItem;
-            this.m_CraftSystem = craftSystem;
-            this.m_TypeRes = typeRes;
-            this.m_Tool = tool;
-            this.m_Quality = quality;
+            m_From = from;
+            m_CraftItem = craftItem;
+            m_CraftSystem = craftSystem;
+            m_TypeRes = typeRes;
+            m_Tool = tool;
+            m_Quality = quality;
         }
 
         public Mobile From
         {
             get
             {
-                return this.m_From;
+                return m_From;
             }
         }
         public CraftItem CraftItem
         {
             get
             {
-                return this.m_CraftItem;
+                return m_CraftItem;
             }
         }
         public CraftSystem CraftSystem
         {
             get
             {
-                return this.m_CraftSystem;
+                return m_CraftSystem;
             }
         }
         public Type TypeRes
         {
             get
             {
-                return this.m_TypeRes;
+                return m_TypeRes;
             }
         }
         public BaseTool Tool
         {
             get
             {
-                return this.m_Tool;
+                return m_Tool;
             }
         }
         public int Quality
         {
             get
             {
-                return this.m_Quality;
+                return m_Quality;
             }
         }
         public abstract void EndCraftAction();

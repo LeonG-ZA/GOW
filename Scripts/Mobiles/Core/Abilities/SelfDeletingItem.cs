@@ -8,10 +8,10 @@ namespace Server.Items
         public SelfDeletingItem(int id, string name, int duration)
             : base(8391)
         {
-            this.Weight = 1.0;
-            this.ItemID = id;
-            this.Name = "name";
-            this.Movable = false;
+            Weight = 1.0;
+            ItemID = id;
+            Name = "name";
+            Movable = false;
 
             Timer.DelayCall(TimeSpan.FromSeconds(duration), new TimerCallback(Expire));
         }
@@ -37,10 +37,10 @@ namespace Server.Items
 
         private void Expire()
         {
-            if (this.Deleted)
+            if (Deleted)
                 return;
 
-            this.Delete();
+            Delete();
         }
     }
 }

@@ -1,11 +1,3 @@
-using System;
-using System.Collections;
-using Server;
-using Server.Targeting;
-using Server.Spells;
-using Server.Network;
-using Server.Items;
-
 namespace Server.Mobiles
 {
 	public class AmbusherAI : BaseAI

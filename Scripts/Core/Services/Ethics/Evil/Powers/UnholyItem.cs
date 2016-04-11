@@ -57,7 +57,7 @@ namespace Server.Ethics.Evil
                 from.Mobile.FixedEffect(0x375A, 10, 20);
                 from.Mobile.PlaySound(0x209);
 
-                this.FinishInvoke(from);
+                FinishInvoke(from);
             }
             else
             {

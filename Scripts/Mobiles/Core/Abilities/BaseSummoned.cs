@@ -9,7 +9,7 @@ namespace Server.Mobiles
         public BaseSummoned(AIType aitype, FightMode fightmode, int spot, int meleerange, double passivespeed, double activespeed)
             : base(aitype, fightmode, spot, meleerange, passivespeed, activespeed)
         {
-            this.m_DecayTime = DateTime.UtcNow + this.m_Delay;
+            m_DecayTime = DateTime.UtcNow + m_Delay;
         }
 
         public BaseSummoned(Serial serial)
@@ -63,9 +63,9 @@ namespace Server.Mobiles
         {
             if (DateTime.UtcNow > this.m_DecayTime)
             {
-                this.FixedParticles(14120, 10, 15, 5012, EffectLayer.Waist);
-                this.PlaySound(510);
-                this.Delete();
+                FixedParticles(14120, 10, 15, 5012, EffectLayer.Waist);
+                PlaySound(510);
+                Delete();
             }
         }
 
@@ -82,7 +82,7 @@ namespace Server.Mobiles
 
             int version = reader.ReadInt();
 
-            this.m_DecayTime = DateTime.UtcNow + TimeSpan.FromMinutes(1.0);
+            m_DecayTime = DateTime.UtcNow + TimeSpan.FromMinutes(1.0);
         }
     }
 }

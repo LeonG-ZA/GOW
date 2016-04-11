@@ -1,9 +1,6 @@
-using System;
 using System.Collections.Generic;
 using Server.Mobiles;
 using Server.Targeting;
-using Server.Gumps;
-using Server.Items;
 
 namespace Server.Targets
 {

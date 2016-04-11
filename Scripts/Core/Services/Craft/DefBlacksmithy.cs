@@ -1,7 +1,5 @@
-#region References
 using System;
 using Server.Items;
-#endregion
 
 namespace Server.Engines.Craft
 {

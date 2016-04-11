@@ -1,4 +1,3 @@
-using System;
 using Server.Items;
 
 namespace Server.Ethics.Hero
@@ -49,7 +48,9 @@ namespace Server.Ethics.Hero
             if (canImbue)
             {
                 if (!this.CheckInvoke(from))
+                {
                     return;
+                }
 
                 item.Hue = Ethic.Hero.Definition.PrimaryHue;
                 item.SavedFlags |= 0x100;

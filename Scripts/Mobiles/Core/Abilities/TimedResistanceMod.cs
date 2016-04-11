@@ -31,7 +31,9 @@ namespace Server
                 ResistanceModTimer t = m_Table[fullname];
 
                 if (t != null)
+                {
                     t.End();
+                }
 
                 m_Table.Remove(fullname);
             }
@@ -45,22 +47,24 @@ namespace Server
             public ResistanceModTimer(Mobile m, string name, ResistanceMod[] mods, TimeSpan duration)
                 : base(duration)
             {
-                this.m_Mobile = m;
-                this.m_Name = name;
-                this.m_Mods = mods;
+                m_Mobile = m;
+                m_Name = name;
+                m_Mods = mods;
             }
 
             public void End()
             {
-                for (int i = 0; i < this.m_Mods.Length; ++i)
-                    this.m_Mobile.RemoveResistanceMod(this.m_Mods[i]);
+                for (int i = 0; i < m_Mods.Length; ++i)
+                {
+                    m_Mobile.RemoveResistanceMod(m_Mods[i]);
+                }
 
-                this.Stop();
+                Stop();
             }
 
             protected override void OnTick()
             {
-                RemoveMod(this.m_Mobile, this.m_Name);
+                RemoveMod(m_Mobile, m_Name);
             }
         }
     }

@@ -1,4 +1,3 @@
-#region References
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -11,7 +10,6 @@ using Server.Mobiles;
 using Server.MainConfiguration;
 using Server.CharConfiguration;
 using Server.T2AConfiguration;
-#endregion
 
 namespace Server.Engines.Craft
 {

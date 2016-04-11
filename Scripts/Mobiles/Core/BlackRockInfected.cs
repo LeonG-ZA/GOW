@@ -1,21 +1,19 @@
 using System;
-using Server;
-using Server.Items;
 using Server.NpcConfiguration;
 
 namespace Server.Mobiles
 {
-	public class BlackRock
-	{
+    public class BlackRock
+    {
         public static double ChestChance = NpcConfig.NpcChestBlackrockInfectedChance;
         public static Map[] Maps = new Map[]            // Maps that Blackrock Infected will spawn on
 		{
-			Map.Ilshenar,
+            Map.Ilshenar,
             Map.Felucca,
             Map.Trammel,
             Map.Malas,
             Map.Tokuno
-		};
+        };
 
         public static int Hue = NpcConfig.NpcBlackrockInfectedHue;
 
@@ -47,154 +45,187 @@ namespace Server.Mobiles
                 }
             }
         }
-		
-		// Buffs
-		public static double HitsBuff   = 1.0;
-		public static double StrBuff    = 2.05;
-		public static double IntBuff    = 2.20;
-		public static double DexBuff    = 2.20;
-		public static double SkillsBuff = 2.20;
-		public static double SpeedBuff  = 2.20;
-		public static double FameBuff   = 2.40;
-		public static double KarmaBuff  = 2.40;
-		public static int    DamageBuff = 10;
 
-		public static void Convert( BaseCreature bc )
-		{
+        // Buffs
+        public static double HitsBuff = 1.0;
+        public static double StrBuff = 2.05;
+        public static double IntBuff = 2.20;
+        public static double DexBuff = 2.20;
+        public static double SkillsBuff = 2.20;
+        public static double SpeedBuff = 2.20;
+        public static double FameBuff = 2.40;
+        public static double KarmaBuff = 2.40;
+        public static int DamageBuff = 10;
+
+        public static void Convert(BaseCreature bc)
+        {
             if (bc.IsBlackRock || !bc.CanBeBlackRock)
             {
                 return;
             }
 
-			bc.Hue = Hue;
+            bc.Hue = Hue;
 
-			if ( bc.HitsMaxSeed >= 0 )
-				bc.HitsMaxSeed = (int)( bc.HitsMaxSeed * HitsBuff );
-			
-			bc.RawStr = (int)( bc.RawStr * StrBuff );
-			bc.RawInt = (int)( bc.RawInt * IntBuff );
-			bc.RawDex = (int)( bc.RawDex * DexBuff );
+            if (bc.HitsMaxSeed >= 0)
+            {
+                bc.HitsMaxSeed = (int)(bc.HitsMaxSeed * HitsBuff);
+            }
 
-			bc.Hits = bc.HitsMax;
-			bc.Mana = bc.ManaMax;
-			bc.Stam = bc.StamMax;
+            bc.RawStr = (int)(bc.RawStr * StrBuff);
+            bc.RawInt = (int)(bc.RawInt * IntBuff);
+            bc.RawDex = (int)(bc.RawDex * DexBuff);
 
-			for( int i = 0; i < bc.Skills.Length; i++ )
-			{
-				Skill skill = (Skill)bc.Skills[i];
+            bc.Hits = bc.HitsMax;
+            bc.Mana = bc.ManaMax;
+            bc.Stam = bc.StamMax;
 
-				if ( skill.Base > 0.0 )
-					skill.Base *= SkillsBuff;
-			}
+            for (int i = 0; i < bc.Skills.Length; i++)
+            {
+                Skill skill = (Skill)bc.Skills[i];
 
-			bc.PassiveSpeed /= SpeedBuff;
-			bc.ActiveSpeed /= SpeedBuff;
+                if (skill.Base > 0.0)
+                {
+                    skill.Base *= SkillsBuff;
+                }
+            }
+
+            bc.PassiveSpeed /= SpeedBuff;
+            bc.ActiveSpeed /= SpeedBuff;
             bc.CurrentSpeed = bc.PassiveSpeed;
 
-			bc.DamageMin += DamageBuff;
-			bc.DamageMax += DamageBuff;
+            bc.DamageMin += DamageBuff;
+            bc.DamageMax += DamageBuff;
 
-			if ( bc.Fame > 0 )
-				bc.Fame = (int)( bc.Fame * FameBuff );
+            if (bc.Fame > 0)
+            {
+                bc.Fame = (int)(bc.Fame * FameBuff);
+            }
 
-			if ( bc.Fame > 32000 )
-				bc.Fame = 32000;
+            if (bc.Fame > 32000)
+            {
+                bc.Fame = 32000;
+            }
 
-			// TODO: Mana regeneration rate = Sqrt( buffedFame ) / 4
+            // TODO: Mana regeneration rate = Sqrt( buffedFame ) / 4
 
-			if ( bc.Karma != 0 )
-			{
-				bc.Karma = (int)( bc.Karma * KarmaBuff );
+            if (bc.Karma != 0)
+            {
+                bc.Karma = (int)(bc.Karma * KarmaBuff);
 
-				if( Math.Abs( bc.Karma ) > 32000 )
-					bc.Karma = 32000 * Math.Sign( bc.Karma );
-			}
+                if (Math.Abs(bc.Karma) > 32000)
+                {
+                    bc.Karma = 32000 * Math.Sign(bc.Karma);
+                }
+            }
 
             new BlackRockStamRegen(bc).Start();
-		}
+        }
 
-		public static void UnConvert( BaseCreature bc )
-		{
+        public static void UnConvert(BaseCreature bc)
+        {
             if (!bc.IsBlackRock)
-				return;
+            {
+                return;
+            }
 
-			bc.Hue = 0;
+            bc.Hue = 0;
 
-			if ( bc.HitsMaxSeed >= 0 )
-				bc.HitsMaxSeed = (int)( bc.HitsMaxSeed / HitsBuff );
-			
-			bc.RawStr = (int)( bc.RawStr / StrBuff );
-			bc.RawInt = (int)( bc.RawInt / IntBuff );
-			bc.RawDex = (int)( bc.RawDex / DexBuff );
+            if (bc.HitsMaxSeed >= 0)
+            {
+                bc.HitsMaxSeed = (int)(bc.HitsMaxSeed / HitsBuff);
+            }
 
-			bc.Hits = bc.HitsMax;
-			bc.Mana = bc.ManaMax;
-			bc.Stam = bc.StamMax;
+            bc.RawStr = (int)(bc.RawStr / StrBuff);
+            bc.RawInt = (int)(bc.RawInt / IntBuff);
+            bc.RawDex = (int)(bc.RawDex / DexBuff);
 
-			for( int i = 0; i < bc.Skills.Length; i++ )
-			{
-				Skill skill = (Skill)bc.Skills[i];
+            bc.Hits = bc.HitsMax;
+            bc.Mana = bc.ManaMax;
+            bc.Stam = bc.StamMax;
 
-				if ( skill.Base > 0.0 )
-					skill.Base /= SkillsBuff;
-			}
-			
-			bc.PassiveSpeed *= SpeedBuff;
-			bc.ActiveSpeed *= SpeedBuff;
+            for (int i = 0; i < bc.Skills.Length; i++)
+            {
+                Skill skill = (Skill)bc.Skills[i];
 
-			bc.DamageMin -= DamageBuff;
-			bc.DamageMax -= DamageBuff;
+                if (skill.Base > 0.0)
+                {
+                    skill.Base /= SkillsBuff;
+                }
+            }
 
-			if ( bc.Fame > 0 )
-				bc.Fame = (int)( bc.Fame / FameBuff );
-			if ( bc.Karma != 0 )
-				bc.Karma = (int)( bc.Karma / KarmaBuff );
-		}
+            bc.PassiveSpeed *= SpeedBuff;
+            bc.ActiveSpeed *= SpeedBuff;
 
-		public static bool CheckConvert( BaseCreature bc )
-		{
-			return CheckConvert( bc, bc.Location, bc.Map );
-		}
+            bc.DamageMin -= DamageBuff;
+            bc.DamageMax -= DamageBuff;
 
-		public static bool CheckConvert( BaseCreature bc, Point3D location, Map m )
-		{
-			if ( !Core.AOS )
-				return false;
+            if (bc.Fame > 0)
+            {
+                bc.Fame = (int)(bc.Fame / FameBuff);
+            }
 
-			if ( Array.IndexOf( Maps, m ) == -1 )
-				return false;
+            if (bc.Karma != 0)
+            {
+                bc.Karma = (int)(bc.Karma / KarmaBuff);
+            }
+        }
+
+        public static bool CheckConvert(BaseCreature bc)
+        {
+            return CheckConvert(bc, bc.Location, bc.Map);
+        }
+
+        public static bool CheckConvert(BaseCreature bc, Point3D location, Map m)
+        {
+            if (!Core.AOS)
+            {
+                return false;
+            }
+
+            if (Array.IndexOf(Maps, m) == -1)
+            {
+                return false;
+            }
 
             if (bc is BaseChampion || bc is Harrower || bc is BaseVendor || bc is BaseEscortable || bc.Summoned || bc.Controlled || bc is Clone || bc.IsBlackRock)
+            {
                 return false;
+            }
 
             if (bc is DreadHorn || bc is MonstrousInterredGrizzle || bc is Travesty || bc is ChiefParoxysmus || bc is LadyMelisande || bc is ShimmeringEffusion || bc.IsParagon)
+            {
                 return false;
+            }
 
-			int fame = bc.Fame;
+            int fame = bc.Fame;
 
-			if ( fame > 32000 )
-				fame = 32000;
+            if (fame > 32000)
+            {
+                fame = 32000;
+            }
 
-			double chance = 1 / Math.Round( 20.0 - ( fame / 3200 ));
+            double chance = 1 / Math.Round(20.0 - (fame / 3200));
 
-			return ( chance > Utility.RandomDouble() );
-		}
+            return (chance > Utility.RandomDouble());
+        }
 
-		public static bool CheckArtifactChance( Mobile m, BaseCreature bc )
-		{
-			if ( !Core.AOS )
-				return false;
+        public static bool CheckArtifactChance(Mobile m, BaseCreature bc)
+        {
+            if (!Core.AOS)
+            {
+                return false;
+            }
 
-			double fame = (double)bc.Fame;
+            double fame = (double)bc.Fame;
 
-			if ( fame > 32000 )
-				fame = 32000;
+            if (fame > 32000)
+            {
+                fame = 32000;
+            }
 
-			double chance = 1 / ( Math.Max( 10, 100 * ( 0.83 - Math.Round( Math.Log( Math.Round( fame / 6000, 3 ) + 0.001, 10 ), 3 ) ) ) * ( 100 - Math.Sqrt( m.Luck ) ) / 100.0 );
+            double chance = 1 / (Math.Max(10, 100 * (0.83 - Math.Round(Math.Log(Math.Round(fame / 6000, 3) + 0.001, 10), 3))) * (100 - Math.Sqrt(m.Luck)) / 100.0);
 
-			return chance > Utility.RandomDouble();
-		}
-
-		
-	}
+            return chance > Utility.RandomDouble();
+        }
+    }
 }

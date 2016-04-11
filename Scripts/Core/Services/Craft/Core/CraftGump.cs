@@ -4,7 +4,6 @@ using System.Linq;
 using Server.Gumps;
 using Server.Items;
 using Server.Network;
-using Server.SkillHandlers;
 
 namespace Server.Engines.Craft
 {
@@ -199,7 +198,9 @@ namespace Server.Engines.Craft
                     Item[] items = from.Backpack.FindItemsByType(resourceType, true);
 
                     for (int i = 0; i < items.Length; ++i)
+                    {
                         resourceCount += items[i].Amount;
+                    }
 
 	                Type secondaryType = Craft.CraftItem.GetSecondaryResourceType(resourceType);
 

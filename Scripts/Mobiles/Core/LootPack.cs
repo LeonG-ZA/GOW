@@ -1,8 +1,6 @@
-#region References
 using System;
 using Server.Items;
 using Server.Mobiles;
-#endregion
 
 namespace Server
 {
@@ -44,7 +42,9 @@ namespace Server
         public static int GetLuckChanceForKiller(Mobile dead)
         {
             if (dead == null)
+            {
                 return 240;
+            }
 
             var list = BaseCreature.GetLootingRights(dead.DamageEntries, dead.HitsMax);
 

@@ -1,5 +1,3 @@
-using System;
-
 /*
 * PredatorAI, its an animal that can attack
 *	Dont flee but dont attack if not hurt or attacked

@@ -1,5 +1,3 @@
-// Created by Peoharen
-using System;
 using Server.Items;
 
 namespace Server.Mobiles

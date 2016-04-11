@@ -74,7 +74,9 @@ namespace Server.Engines.Craft
             }
 
             if (CraftableArtifacts.IsCraftableArtifact(item))
+            {
                 return EnhanceResult.BadItem;
+            }
 
             bool allRequiredSkills = false;
             if (craftItem.GetSuccessChance(from, resType, craftSystem, false, ref allRequiredSkills) <= 0.0)
@@ -85,12 +87,16 @@ namespace Server.Engines.Craft
             CraftResourceInfo info = CraftResources.GetInfo(resource);
 
             if (info == null || info.ResourceTypes.Length == 0)
+            {
                 return EnhanceResult.BadResource;
+            }
 
             CraftAttributeInfo attributes = info.AttributeInfo;
 
             if (attributes == null)
+            {
                 return EnhanceResult.BadResource;
+            }
 
             int resHue = 0, maxAmount = 0;
 

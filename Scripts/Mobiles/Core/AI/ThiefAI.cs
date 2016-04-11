@@ -1,8 +1,4 @@
-#region References
-using System;
-
 using Server.Items;
-#endregion
 
 //
 // This is a first simple AI

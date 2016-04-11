@@ -16,25 +16,25 @@ namespace Server.Mobiles
         {
             get
             {
-                if (this.m_Types == null)
+                if (m_Types == null)
                 {
-                    this.m_Types = new Type[this.m_Table.Keys.Count];
-                    this.m_Table.Keys.CopyTo(this.m_Types, 0);
+                    m_Types = new Type[m_Table.Keys.Count];
+                    m_Table.Keys.CopyTo(m_Types, 0);
                 }
 
-                return this.m_Types;
+                return m_Types;
             }
         }
         public void Add(Type type, int price)
         {
-            this.m_Table[type] = price;
-            this.m_Types = null;
+            m_Table[type] = price;
+            m_Types = null;
         }
 
         public int GetSellPriceFor(Item item)
         {
             int price = 0;
-            this.m_Table.TryGetValue(item.GetType(), out price);
+            m_Table.TryGetValue(item.GetType(), out price);
 
             if (item is BaseArmor)
             {
@@ -101,7 +101,7 @@ namespace Server.Mobiles
 
         public int GetBuyPriceFor(Item item)
         {
-            return (int)(1.90 * this.GetSellPriceFor(item));
+            return (int)(1.90 * GetSellPriceFor(item));
         }
 
         public string GetNameFor(Item item)
@@ -120,7 +120,7 @@ namespace Server.Mobiles
             //if ( item.Hue != 0 )
             //return false;
 
-            return this.IsInList(item.GetType());
+            return IsInList(item.GetType());
         }
 
         public bool IsResellable(Item item)
@@ -131,12 +131,12 @@ namespace Server.Mobiles
             //if ( item.Hue != 0 )
             //return false;
 
-            return this.IsInList(item.GetType());
+            return IsInList(item.GetType());
         }
 
         public bool IsInList(Type type)
         {
-            return this.m_Table.ContainsKey(type);
+            return m_Table.ContainsKey(type);
         }
     }
 }

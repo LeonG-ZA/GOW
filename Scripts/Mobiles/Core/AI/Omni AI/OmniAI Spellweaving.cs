@@ -1,4 +1,3 @@
-// Created by Peoharen
 using System;
 using Server.Items;
 using Server.Spells;

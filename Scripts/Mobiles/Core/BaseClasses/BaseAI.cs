@@ -1,16 +1,12 @@
-#region References
 using System;
-using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
 using System.IO;
-using Server;
 using Server.ContextMenus;
 using Server.Engines.Quests;
 using Server.Engines.Quests.Necro;
 using Server.Engines.XmlSpawner2;
 using Server.Factions;
-using Server.Gumps;
 using Server.Items;
 using Server.Network;
 using Server.Regions;
@@ -18,14 +14,10 @@ using Server.Spells;
 using Server.Spells.Spellweaving;
 using Server.Targets;
 using MoveImpl = Server.Movement.MovementImpl;
-using Server.Prompts;
-using Server.Misc;
 using Server.FeaturesConfiguration;
-using Server.Spells.Necromancy;
 using Server.Engines.Collections;
 using Server.Spells.Third;
 using Server.Targeting;
-#endregion
 
 namespace Server.Mobiles
 {

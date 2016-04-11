@@ -1,15 +1,12 @@
 #region References
 using System;
 using System.IO;
-using System.Net;
-using System.Linq;
 using System.Collections;
 using System.Collections.Generic;
 using Server.Buff.Icons;
 using Server.Accounting;
 using Server.ContextMenus;
 using Server.Engines.BulkOrders;
-using Server.Engines.ChampionSpawns;
 using Server.Engines.ConPVP;
 using Server.Engines.Craft;
 using Server.Engines.Help;
@@ -39,11 +36,9 @@ using Server.Spells.Seventh;
 using Server.Spells.Sixth;
 using Server.Spells.Spellweaving;
 using Server.Targeting;
-using Server.MainConfiguration;
 using RankDefinition = Server.Guilds.RankDefinition;
 using Server.CharConfiguration;
 using Server.LogConfiguration;
-using System.Threading;
 using Server.FeaturesConfiguration;
 using Server.Spells.Bard;
 using Server.Engines.Collections;
@@ -631,7 +626,9 @@ namespace Server.Mobiles
             PlayerMobile pm = from as PlayerMobile;
 
             if (pm == null)
+            {
                 return;
+            }
 
             try
             {
@@ -642,7 +639,9 @@ namespace Server.Mobiles
                         pm.ChampionTiers[i]--; // TODO: verify
 
                         if (pm.ChampionTiers[i] < 0)
+                        {
                             pm.ChampionTiers[i] = 0;
+                        }
                     }
 
                     pm.LastTierLoss = DateTime.UtcNow;
@@ -655,7 +654,9 @@ namespace Server.Mobiles
                         pm.SuperChampionTiers[i]--; // TODO: verify
 
                         if (pm.SuperChampionTiers[i] < 0)
+                        {
                             pm.SuperChampionTiers[i] = 0;
+                        }
                     }
 
                     pm.LastChampionTierLoss = DateTime.UtcNow;
@@ -666,7 +667,9 @@ namespace Server.Mobiles
                     pm.SuperChampionTiers[0]--; // TODO: verify
 
                     if (pm.SuperChampionTiers[0] < 0)
+                    {
                         pm.SuperChampionTiers[0] = 0;
+                    }
 
                     pm.LastSuperChampionTierLoss = DateTime.UtcNow;
                 }

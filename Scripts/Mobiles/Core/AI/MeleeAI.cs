@@ -1,5 +1,3 @@
-using System;
-
 //
 // This is a first simple AI
 //

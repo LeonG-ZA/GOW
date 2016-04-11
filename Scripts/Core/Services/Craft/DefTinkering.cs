@@ -1,7 +1,6 @@
 using System;
 using Server.Factions;
 using Server.Items;
-using Server.Mobiles;
 using Server.Targeting;
 using Server.FactionConfiguration;
 
@@ -78,11 +77,17 @@ namespace Server.Engines.Craft
         public override int CanCraft(Mobile from, IUsesRemaining tool, Type itemType)
         {
             if (tool == null || ((Item)tool).Deleted || tool.UsesRemaining < 0)
+            {
                 return 1044038; // You have worn out your tool!
+            }
             else if (!BaseTool.CheckAccessible((BaseTool)tool, from))
+            {
                 return 1044263; // The tool must be on your person to use.
+            }
             else if (itemType != null && (itemType.IsSubclassOf(typeof(BaseFactionTrapDeed)) || itemType == typeof(FactionTrapRemovalKit)) && Faction.Find(from) == null)
+            {
                 return 1044573; // You have to be in a faction to do that.
+            }
 
             return 0;
         }

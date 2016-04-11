@@ -1,6 +1,3 @@
-using System;
-using Server;
-using Server.Network;
 using Server.Mobiles;
 
 namespace Server.Items
@@ -27,8 +24,11 @@ namespace Server.Items
 		}
 		public override bool Toggle(byte state, Mobile who, int sid)
 		{
-			if (sid==lsid)
-				return false;
+            if (sid == lsid)
+            {
+                return false;
+            }
+
 			lsid= sid;
 			bool send = false;
 			

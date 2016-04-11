@@ -1,21 +1,15 @@
-using System;
 using System.Linq;
-using Server;
 using Server.Spells;
-using Server.Spells.First;
-using Server.Spells.Second;
 using Server.Spells.Third;
-using Server.Spells.Fourth;
 using Server.Spells.Fifth;
 using Server.Spells.Sixth;
-using Server.Spells.Seventh;
 using Server.Spells.Necromancy;
 using Server.Targeting;
 using Server.Items;
 
 namespace Server.Mobiles
 {
-	public class NecromancerAI : MageAI
+    public class NecromancerAI : MageAI
 	{
 		private const double ChanceToUseNecroSpells = 0.5;
 

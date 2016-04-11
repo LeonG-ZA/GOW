@@ -1,5 +1,3 @@
-using System;
-
 namespace Server.Ethics
 {
     public class EthicsPersistance : Item
@@ -9,12 +7,16 @@ namespace Server.Ethics
         public EthicsPersistance()
             : base(1)
         {
-            this.Movable = false;
+            Movable = false;
 
             if (m_Instance == null || m_Instance.Deleted)
+            {
                 m_Instance = this;
+            }
             else
+            {
                 base.Delete();
+            }
         }
 
         public EthicsPersistance(Serial serial)
@@ -44,7 +46,9 @@ namespace Server.Ethics
             writer.Write((int)0); // version
 
             for (int i = 0; i < Ethics.Ethic.Ethics.Length; ++i)
+            {
                 Ethics.Ethic.Ethics[i].Serialize(writer);
+            }
         }
 
         public override void Deserialize(GenericReader reader)
@@ -58,7 +62,9 @@ namespace Server.Ethics
                 case 0:
                     {
                         for (int i = 0; i < Ethics.Ethic.Ethics.Length; ++i)
+                        {
                             Ethics.Ethic.Ethics[i].Deserialize(reader);
+                        }
 
                         break;
                     }

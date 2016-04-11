@@ -1,6 +1,5 @@
 using System;
 using System.Collections.Generic;
-using Server;
 using Server.Factions;
 using Server.Items;
 using Server.Mobiles;
@@ -57,7 +56,9 @@ namespace Server.Gumps
             : base(25, 50)
         {
             if (page < 0)
+            {
                 page = 0;
+            }
 
             m_Owner = pm;
             m_ItemInsuranceInfo = infoCollection;
@@ -125,15 +126,21 @@ namespace Server.Gumps
         private void AddCheckButton(int x, int y, int buttonId, bool checkd)
         {
             if (checkd)
+            {
                 AddButton(x, y, 0x25FB, 0x25FC, buttonId, GumpButtonType.Reply, 0);
+            }
             else
+            {
                 AddButton(x, y, 0x25F8, 0x25FA, buttonId, GumpButtonType.Reply, 0);
+            }
         }
 
         public override void OnResponse(NetState sender, RelayInfo info)
         {
             if (!m_Owner.CheckAlive())
+            {
                 return;
+            }
 
             switch (info.ButtonID)
             {
@@ -200,7 +207,9 @@ namespace Server.Gumps
             foreach (ItemInsuranceInfo info in m_ItemInsuranceInfo)
             {
                 if (info.NowInsured())
+                {
                     total += info.GetCost();
+                }
             }
 
             return total;
@@ -211,9 +220,13 @@ namespace Server.Gumps
             foreach (Item item in cont.Items)
             {
                 if (item is Container && !(item is BaseQuiver))
+                {
                     RecurseSelectItems(list, (Container)item);
+                }
                 else if (ItemInsuranceHelper.CanInsure(item))
+                {
                     list.Add(new ItemInsuranceInfo(item));
+                }
             }
         }
 
@@ -224,11 +237,15 @@ namespace Server.Gumps
             foreach (Item item in pm.GetEquippedItems())
             {
                 if (ItemInsuranceHelper.CanInsure(item))
+                {
                     list.Add(new ItemInsuranceInfo(item));
+                }
             }
 
             if (pm.Backpack != null)
+            {
                 RecurseSelectItems(list, pm.Backpack);
+            }
 
             if (list.Count > 0)
             {
@@ -333,7 +350,9 @@ namespace Server.Gumps
                 }
             }
             else
+            {
                 cost = BaseVendor.GetVendorPrice(item.GetType());
+            }
 
             Utility.FixMinMax(ref cost, 10, 800);
 

@@ -45,13 +45,13 @@ namespace Server.Mobiles
             2, 1,
             2, 2
         };
-		private const double HealChance = 0.05;// 5% de chance de healar
+        private const double HealChance = 0.05;// 5% de chance de healar
         private const double TeleportChance = 0.05;// 5% chance to teleport at gm magery
         private const double DispelChance = 0.75;// 75% chance to dispel at gm magery
         private Mobile m_Animated;
         private DateTime m_NextCastTime;
         private DateTime m_NextHealTime = DateTime.UtcNow;
-		
+
         public ScalisAI(BaseCreature m)
             : base(m)
         {
@@ -207,7 +207,7 @@ namespace Server.Mobiles
 
             if (necro >= 0 && Utility.Random(4) < 3)
             {
-                switch ( Utility.Random(necro) )
+                switch (Utility.Random(necro))
                 {
                     case 0:
                         return new PoisonStrikeSpell(this.m_Mobile, null);
@@ -221,7 +221,7 @@ namespace Server.Mobiles
             }
             else
             {
-                switch ( Utility.Random(mage) )
+                switch (Utility.Random(mage))
                 {
                     case 0:
                         return new HarmSpell(this.m_Mobile, null);
@@ -230,7 +230,7 @@ namespace Server.Mobiles
                     case 2:
                         return new MindBlastSpell(this.m_Mobile, null);
                     default:
-						return new EnergyBoltSpell(this.m_Mobile, null);
+                        return new EnergyBoltSpell(this.m_Mobile, null);
                 }
             }
         }
@@ -242,7 +242,7 @@ namespace Server.Mobiles
 
             if (necro >= 0 && Utility.Random(3) < 2)
             {
-                switch ( Utility.Random(necro) )
+                switch (Utility.Random(necro))
                 {
                     case 0:
                         return new CorpseSkinSpell(this.m_Mobile, null);
@@ -258,7 +258,7 @@ namespace Server.Mobiles
             }
             else
             {
-                switch ( Utility.Random(mage) )
+                switch (Utility.Random(mage))
                 {
                     case 0:
                         return new ClumsySpell(this.m_Mobile, null);
@@ -297,13 +297,13 @@ namespace Server.Mobiles
 
             if (spell != null)
                 return spell;
-				
+
             double damage = ((this.m_Mobile.Skills[SkillName.SpiritSpeak].Value - c.Skills[SkillName.MagicResist].Value) / 10) + (c.Player ? 18 : 30);
-			
+
             if (damage > c.Hits)
                 return new PainSpikeSpell(this.m_Mobile, null);
 
-            switch ( Utility.Random(25) )
+            switch (Utility.Random(25))
             {
                 case 0:
                 case 1:
@@ -352,10 +352,10 @@ namespace Server.Mobiles
                 case 10: // Blood oath them
                     {
                         this.m_Mobile.DebugSay("Attempting to blood oath");
-										
+
                         if (this.m_Mobile.Skills[SkillName.Necromancy].Value > 30 && BloodOathSpell.GetBloodOath(c) != this.m_Mobile)
                             spell = new BloodOathSpell(this.m_Mobile, null);
-						
+
                         break;
                     }
                 case 11:
@@ -416,7 +416,7 @@ namespace Server.Mobiles
 
             if (this.m_Combo == 3 && spell == null)
             {
-                switch ( Utility.Random(4) )
+                switch (Utility.Random(4))
                 {
                     default:
                     case 0:
@@ -538,7 +538,7 @@ namespace Server.Mobiles
                     {
                         flee = Utility.Random(0, 100) > 10; // 10% chance to flee
                     }
-					
+
                     if (flee)
                     {
                         if (this.m_Mobile.Debug)
@@ -859,7 +859,7 @@ namespace Server.Mobiles
 
             if (this.m_Mobile.Hits < this.m_Mobile.HitsMax)
                 this.m_Mobile.UseSkill(SkillName.SpiritSpeak);
-			
+
             double delay;
 
             if (this.m_Mobile.Int >= 500)
@@ -921,7 +921,7 @@ namespace Server.Mobiles
             }
             else if (isAnimate)
             {
-                Item corpse = this.FindCorpseToAnimate();				
+                Item corpse = this.FindCorpseToAnimate();
 
                 if (corpse != null)
                     targ.Invoke(this.m_Mobile, corpse);

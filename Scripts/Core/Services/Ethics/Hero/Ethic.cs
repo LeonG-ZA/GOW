@@ -1,4 +1,3 @@
-using System;
 using Server.Factions;
 
 namespace Server.Ethics.Hero
@@ -27,7 +26,9 @@ namespace Server.Ethics.Hero
         public override bool IsEligible(Mobile mob)
         {
             if (mob.Kills >= 5)
+            {
                 return false;
+            }
 
             Faction fac = Faction.Find(mob);
 

@@ -10,39 +10,39 @@ namespace Server.Ethics
         private readonly TextDefinition m_Description;
         public PowerDefinition(int power, TextDefinition name, TextDefinition phrase, TextDefinition description)
         {
-            this.m_Power = power;
+            m_Power = power;
 
-            this.m_Name = name;
-            this.m_Phrase = phrase;
-            this.m_Description = description;
+            m_Name = name;
+            m_Phrase = phrase;
+            m_Description = description;
         }
 
         public int Power
         {
             get
             {
-                return this.m_Power;
+                return m_Power;
             }
         }
         public TextDefinition Name
         {
             get
             {
-                return this.m_Name;
+                return m_Name;
             }
         }
         public TextDefinition Phrase
         {
             get
             {
-                return this.m_Phrase;
+                return m_Phrase;
             }
         }
         public TextDefinition Description
         {
             get
             {
-                return this.m_Description;
+                return m_Description;
             }
         }
     }

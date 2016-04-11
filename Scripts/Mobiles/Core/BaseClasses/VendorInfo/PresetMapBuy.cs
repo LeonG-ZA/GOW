@@ -1,4 +1,3 @@
-using System;
 using Server.Items;
 
 namespace Server.Mobiles
@@ -9,7 +8,7 @@ namespace Server.Mobiles
         public PresetMapBuyInfo(PresetMapEntry entry, int price, int amount)
             : base(entry.Name.ToString(), null, price, amount, 0x14EC, 0)
         {
-            this.m_Entry = entry;
+            m_Entry = entry;
         }
 
         public override bool CanCacheDisplay
@@ -21,7 +20,7 @@ namespace Server.Mobiles
         }
         public override IEntity GetEntity()
         {
-            return new PresetMap(this.m_Entry);
+            return new PresetMap(m_Entry);
         }
     }
 }

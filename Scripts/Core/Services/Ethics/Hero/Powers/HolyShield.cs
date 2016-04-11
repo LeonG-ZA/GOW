@@ -1,5 +1,3 @@
-using System;
-
 namespace Server.Ethics.Hero
 {
     public sealed class HolyShield : Power

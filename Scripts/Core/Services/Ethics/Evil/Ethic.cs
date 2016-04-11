@@ -1,4 +1,3 @@
-using System;
 using Server.Factions;
 
 namespace Server.Ethics.Evil

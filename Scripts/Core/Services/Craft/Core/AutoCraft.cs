@@ -1,5 +1,4 @@
 using System;
-using Server;
 using Server.Prompts;
 using System.Collections.Generic;
 using Server.Items;
@@ -46,7 +45,9 @@ namespace Server.Engines.Craft
                 CraftContext context = m_CraftSystem.GetContext(from);
 
                 if (context != null)
+                {
                     context.MakeTotal = amount;
+                }
             }
         }
 
@@ -94,7 +95,9 @@ namespace Server.Engines.Craft
                 int resIndex = (m_CraftItem.UseSubRes2 ? context.LastResourceIndex2 : context.LastResourceIndex);
 
                 if (resIndex > -1)
+                {
                     m_TypeRes = res.GetAt(resIndex).ItemType;
+                }
             }
 
             m_AutoCraftTable[from] = this;
@@ -121,16 +124,22 @@ namespace Server.Engines.Craft
             CraftItem();
 
             if (m_Ticks >= m_Amount)
+            {
                 EndTimer(m_From);
+            }
         }
 
         private void CraftItem()
         {
             if (m_From.HasGump(typeof(CraftGump)))
+            {
                 m_From.CloseGump(typeof(CraftGump));
+            }
 
             if (m_From.HasGump(typeof(CraftGumpItem)))
+            {
                 m_From.CloseGump(typeof(CraftGumpItem));
+            }
 
             m_CraftSystem.CreateItem(m_From, m_CraftItem.ItemType, m_TypeRes, m_Tool, m_CraftItem);
         }
@@ -147,7 +156,9 @@ namespace Server.Engines.Craft
         public static void OnSuccessfulCraft(Mobile from)
         {
             if (HasTimer(from))
+            {
                 m_AutoCraftTable[from].m_Success++;
+            }
         }
 
         public static bool HasTimer(Mobile from)

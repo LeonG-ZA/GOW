@@ -1,4 +1,3 @@
-#region References
 using System;
 using System.Collections;
 using System.Collections.Generic;
@@ -16,8 +15,7 @@ using Server.MainConfiguration;
 using Server.CharConfiguration;
 using Server.NpcConfiguration;
 using Server.T2AConfiguration;
-using Server.AccountConfiguration;
-#endregion
+using System.Linq;
 
 namespace Server.Mobiles
 {
@@ -46,19 +44,25 @@ namespace Server.Mobiles
                 BaseVendor vendor = m as BaseVendor;
 
                 if (vendor == null)
+                {
                     continue;
+                }
 
                 List<Item> items = vendor.BuyPack.Items;
 
                 for (int i = items.Count - 1; i >= 0; --i)
                 {
                     if (i >= items.Count)
+                    {
                         continue;
+                    }
 
                     Item item = items[i];
 
                     if ((item.LastMoved + InventoryDecayTime) <= DateTime.UtcNow)
+                    {
                         item.Delete();
+                    }
                 }
             }
         }
@@ -68,7 +72,9 @@ namespace Server.Mobiles
         public static int GetVendorPrice(Type type)
         {
             if (m_VendorPrices.ContainsKey(type))
+            {
                 return m_VendorPrices[type];
+            }
 
             return 10;
         }
@@ -76,7 +82,9 @@ namespace Server.Mobiles
         public static void SetVendorPrice(Type type, int price)
         {
             if (type == null)
+            {
                 return;
+            }
 
             m_VendorPrices[type] = price;
         }
@@ -388,8 +396,7 @@ namespace Server.Mobiles
                         return;
                     }
 
-                    if (((m_Vendor is Blacksmith || m_Vendor is Weaponsmith) && !m_Vendor.BODisSmith) ||
-                        ((m_Vendor is Tailor || m_Vendor is Weaver) && m_Vendor.BODisSmith))
+                    if (((m_Vendor is Blacksmith || m_Vendor is Weaponsmith) && !m_Vendor.BODisSmith) || ((m_Vendor is Tailor || m_Vendor is Weaver) && m_Vendor.BODisSmith))
                     {
                         m_Vendor.SayTo(m_From, 1045130);    // That order is for some other shopkeeper.
                         return;
@@ -574,7 +581,7 @@ namespace Server.Mobiles
         }
 
 		public BaseVendor(string title)
-			: base(AIType.AI_Vendor, FightMode.None, 2, 1, 0.5, 2)
+			: base(AIType.AI_Vendor, FightMode.None, 2, 1, 1, 6)
 		{
 			LoadSBInfo();
 
@@ -689,16 +696,11 @@ namespace Server.Mobiles
 			switch (Utility.Random(5))
 			{
 				default:
-				case 0:
-					return Utility.RandomBlueHue();
-				case 1:
-					return Utility.RandomGreenHue();
-				case 2:
-					return Utility.RandomRedHue();
-				case 3:
-					return Utility.RandomYellowHue();
-				case 4:
-					return Utility.RandomNeutralHue();
+				case 0: return Utility.RandomBlueHue();
+				case 1: return Utility.RandomGreenHue();
+				case 2: return Utility.RandomRedHue();
+				case 3: return Utility.RandomYellowHue();
+				case 4: return Utility.RandomNeutralHue();
 			}
 		}
 
@@ -856,12 +858,9 @@ namespace Server.Mobiles
 		{
 			switch (Utility.Random(20))
 			{
-				case 0:
-					return 0;
-				case 1:
-					return 0x4E9;
-				default:
-					return Utility.RandomList(0x485, 0x497);
+				case 0: return 0;
+				case 1: return 0x4E9;
+				default: return Utility.RandomList(0x485, 0x497);
 			}
 		}
 
@@ -911,7 +910,9 @@ namespace Server.Mobiles
 
 		public virtual void TurnToGargRace()
 		{
-			for (int i = 0; i < Items.Count; ++i)
+            this.GetEquippedItems().OfType<BaseClothing>().Each(item => item.Delete());
+
+            /*for (int i = 0; i < Items.Count; ++i)
 			{
 				Item item = Items[i];
 
@@ -920,36 +921,27 @@ namespace Server.Mobiles
 					item.Delete();
 				}
 			}
+             */
 
-			Race = Race.Gargoyle;
+            HairItemID = 0;
+            FacialHairItemID = 0;
+
+            Race = Race.Gargoyle;
 
 			Hue = Race.RandomSkinHue();
-
-			HairItemID = Race.RandomHair(Female);
-			HairHue = Race.RandomHairHue();
-
-			FacialHairItemID = Race.RandomFacialHair(Female);
-			if (FacialHairItemID != 0)
-			{
-				FacialHairHue = Race.RandomHairHue();
-			}
-			else
-			{
-				FacialHairHue = 0;
-			}
 
 			InitGargOutfit();
 
 			if (Female = GetGender())
 			{
 				Body = 0x29B;
-				Name = NameList.RandomName("gargoyle female");
-			}
+                Name = NameList.RandomName("gargoyle vendor");
+            }
 			else
 			{
 				Body = 0x29A;
-				Name = NameList.RandomName("gargoyle male");
-			}
+                Name = NameList.RandomName("gargoyle vendor");
+            }
 
 			CapitalizeTitle();
 		}
@@ -992,36 +984,24 @@ namespace Server.Mobiles
 
 		public virtual void InitOutfit()
 		{
-			switch (Utility.Random(3))
-			{
-				case 0:
-					AddItem(new FancyShirt(GetRandomHue()));
-					break;
-				case 1:
-					AddItem(new Doublet(GetRandomHue()));
-					break;
-				case 2:
-					AddItem(new Shirt(GetRandomHue()));
-					break;
-			}
+                switch (Utility.Random(3))
+                {
+                    case 0: AddItem(new FancyShirt(GetRandomHue())); break;
+                    case 1: AddItem(new Doublet(GetRandomHue())); break;
+                    case 2: AddItem(new Shirt(GetRandomHue())); break;
+                }
 
-			switch (ShoeType)
-			{
-				case VendorShoeType.Shoes:
-					AddItem(new Shoes(GetShoeHue()));
-					break;
-				case VendorShoeType.Boots:
-					AddItem(new Boots(GetShoeHue()));
-					break;
-				case VendorShoeType.Sandals:
-					AddItem(new Sandals(GetShoeHue()));
-					break;
-				case VendorShoeType.ThighBoots:
-					AddItem(new ThighBoots(GetShoeHue()));
-					break;
-			}
+                switch (ShoeType)
+                {
+                    case VendorShoeType.Shoes: AddItem(new Shoes(GetShoeHue())); break;
+                    case VendorShoeType.Boots: AddItem(new Boots(GetShoeHue())); break;
+                    case VendorShoeType.Sandals: AddItem(new Sandals(GetShoeHue())); break;
+                    case VendorShoeType.ThighBoots: AddItem(new ThighBoots(GetShoeHue())); break;
+                    case VendorShoeType.SamuraiTabi: AddItem(new SamuraiTabi(GetShoeHue())); break;
+                    case VendorShoeType.NinjaTabi: AddItem(new NinjaTabi(GetShoeHue())); break;
+                }
 
-			int hairHue = GetHairHue();
+            int hairHue = GetHairHue();
 
 			Utility.AssignRandomHair(this, hairHue);
 			Utility.AssignRandomFacialHair(this, hairHue);

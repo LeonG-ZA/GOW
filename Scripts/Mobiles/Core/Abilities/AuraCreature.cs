@@ -20,11 +20,11 @@ namespace Server.Mobiles
         {
             get
             {
-                return this.m_MinAuraDelay;
+                return m_MinAuraDelay;
             }
             set
             {
-                this.m_MinAuraDelay = value;
+                m_MinAuraDelay = value;
             }
         }
 
@@ -33,11 +33,11 @@ namespace Server.Mobiles
         {
             get
             {
-                return this.m_MaxAuraDelay;
+                return m_MaxAuraDelay;
             }
             set
             {
-                this.m_MaxAuraDelay = value;
+                m_MaxAuraDelay = value;
             }
         }
 
@@ -46,11 +46,11 @@ namespace Server.Mobiles
         {
             get
             {
-                return this.m_MinAuraDamage;
+                return m_MinAuraDamage;
             }
             set
             {
-                this.m_MinAuraDamage = value;
+                m_MinAuraDamage = value;
             }
         }
 
@@ -59,11 +59,11 @@ namespace Server.Mobiles
         {
             get
             {
-                return this.m_MaxAuraDamage;
+                return m_MaxAuraDamage;
             }
             set
             {
-                this.m_MaxAuraDamage = value;
+                m_MaxAuraDamage = value;
             }
         }
 
@@ -72,11 +72,11 @@ namespace Server.Mobiles
         {
             get
             {
-                return this.m_AuraRange;
+                return m_AuraRange;
             }
             set
             {
-                this.m_AuraRange = value;
+                m_AuraRange = value;
             }
         }
 
@@ -85,11 +85,11 @@ namespace Server.Mobiles
         {
             get
             {
-                return this.m_AuraType;
+                return m_AuraType;
             }
             set
             {
-                this.m_AuraType = value;
+                m_AuraType = value;
             }
         }
 
@@ -98,11 +98,11 @@ namespace Server.Mobiles
         {
             get
             {
-                return this.m_AuraPoison;
+                return m_AuraPoison;
             }
             set
             {
-                this.m_AuraPoison = value;
+                m_AuraPoison = value;
             }
         }
 
@@ -111,11 +111,11 @@ namespace Server.Mobiles
         {
             get
             {
-                return this.m_AuraMessage;
+                return m_AuraMessage;
             }
             set
             {
-                this.m_AuraMessage = value;
+                m_AuraMessage = value;
             }
         }
         #endregion
@@ -123,7 +123,7 @@ namespace Server.Mobiles
         public AuraCreature(AIType aitype, FightMode fightmode, int spot, int meleerange, double passivespeed, double activespeed)
             : base(aitype, fightmode, spot, meleerange, passivespeed, activespeed)
         {
-            this.m_AuraDelay = DateTime.UtcNow;
+            m_AuraDelay = DateTime.UtcNow;
             /*
             Default is ?
             AuraMessage = "The intense cold is damaging you!";
@@ -138,12 +138,12 @@ namespace Server.Mobiles
 
         public override void OnThink()
         {
-            if (DateTime.UtcNow > this.m_AuraDelay)
+            if (DateTime.UtcNow > m_AuraDelay)
             {
-                this.DebugSay("Auraing");
-                Ability.Aura(this, this.m_MinAuraDamage, this.m_MaxAuraDamage, this.m_AuraType, this.m_AuraRange, this.m_AuraPoison, this.m_AuraMessage);
+                DebugSay("Auraing");
+                Ability.Aura(this, m_MinAuraDamage, m_MaxAuraDamage, m_AuraType, m_AuraRange, m_AuraPoison, m_AuraMessage);
 
-                this.m_AuraDelay = DateTime.UtcNow + TimeSpan.FromSeconds(Utility.RandomMinMax(this.m_MinAuraDelay, this.m_MaxAuraDelay));
+                m_AuraDelay = DateTime.UtcNow + TimeSpan.FromSeconds(Utility.RandomMinMax(m_MinAuraDelay, m_MaxAuraDelay));
             }
 
             base.OnThink();
@@ -158,29 +158,29 @@ namespace Server.Mobiles
         {
             base.Serialize(writer);
             writer.Write((int)0);
-            writer.Write(this.m_MinAuraDelay);
-            writer.Write(this.m_MaxAuraDelay);
-            writer.Write(this.m_MinAuraDamage);
-            writer.Write(this.m_MaxAuraDamage);
-            writer.Write(this.m_AuraRange);
-            writer.Write((int)this.m_AuraType);
-            Poison.Serialize(this.m_AuraPoison, writer);
-            writer.Write(this.m_AuraMessage);
+            writer.Write(m_MinAuraDelay);
+            writer.Write(m_MaxAuraDelay);
+            writer.Write(m_MinAuraDamage);
+            writer.Write(m_MaxAuraDamage);
+            writer.Write(m_AuraRange);
+            writer.Write((int)m_AuraType);
+            Poison.Serialize(m_AuraPoison, writer);
+            writer.Write(m_AuraMessage);
         }
 
         public override void Deserialize(GenericReader reader)
         {
             base.Deserialize(reader);
             int version = reader.ReadInt();
-            this.m_MinAuraDelay = reader.ReadInt();
-            this.m_MaxAuraDelay = reader.ReadInt();
-            this.m_MinAuraDamage = reader.ReadInt();
-            this.m_MaxAuraDamage = reader.ReadInt();
-            this.m_AuraRange = reader.ReadInt();
-            this.m_AuraType = (ResistanceType)reader.ReadInt();
-            this.m_AuraPoison = Poison.Deserialize(reader);
-            this.m_AuraMessage = reader.ReadString();
-            this.m_AuraDelay = DateTime.UtcNow;
+            m_MinAuraDelay = reader.ReadInt();
+            m_MaxAuraDelay = reader.ReadInt();
+            m_MinAuraDamage = reader.ReadInt();
+            m_MaxAuraDamage = reader.ReadInt();
+            m_AuraRange = reader.ReadInt();
+            m_AuraType = (ResistanceType)reader.ReadInt();
+            m_AuraPoison = Poison.Deserialize(reader);
+            m_AuraMessage = reader.ReadString();
+            m_AuraDelay = DateTime.UtcNow;
         }
     }
 }

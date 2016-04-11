@@ -85,7 +85,9 @@ namespace Server.Mobiles
             bc.Hue = Hue;
 
             if (bc.HitsMaxSeed >= 0)
+            {
                 bc.HitsMaxSeed = (int)(bc.HitsMaxSeed * HitsBuff);
+            }
 
             bc.RawStr = (int)(bc.RawStr * StrBuff);
             bc.RawInt = (int)(bc.RawInt * IntBuff);
@@ -100,7 +102,9 @@ namespace Server.Mobiles
                 Skill skill = (Skill)bc.Skills[i];
 
                 if (skill.Base > 0.0)
+                {
                     skill.Base *= SkillsBuff;
+                }
             }
 
             bc.PassiveSpeed /= SpeedBuff;
@@ -111,10 +115,14 @@ namespace Server.Mobiles
             bc.DamageMax += DamageBuff;
 
             if (bc.Fame > 0)
+            {
                 bc.Fame = (int)(bc.Fame * FameBuff);
+            }
 
             if (bc.Fame > 32000)
+            {
                 bc.Fame = 32000;
+            }
 
             // TODO: Mana regeneration rate = Sqrt( buffedFame ) / 4
 
@@ -123,7 +131,9 @@ namespace Server.Mobiles
                 bc.Karma = (int)(bc.Karma * KarmaBuff);
 
                 if (Math.Abs(bc.Karma) > 32000)
+                {
                     bc.Karma = 32000 * Math.Sign(bc.Karma);
+                }
 
                 new ParagonStamRegen(bc).Start(); 
             }
@@ -137,7 +147,9 @@ namespace Server.Mobiles
             bc.Hue = 0;
 
             if (bc.HitsMaxSeed >= 0)
+            {
                 bc.HitsMaxSeed = (int)(bc.HitsMaxSeed / HitsBuff);
+            }
 
             bc.RawStr = (int)(bc.RawStr / StrBuff);
             bc.RawInt = (int)(bc.RawInt / IntBuff);
@@ -152,7 +164,9 @@ namespace Server.Mobiles
                 Skill skill = (Skill)bc.Skills[i];
 
                 if (skill.Base > 0.0)
+                {
                     skill.Base /= SkillsBuff;
+                }
             }
 
             bc.PassiveSpeed *= SpeedBuff;
@@ -163,9 +177,14 @@ namespace Server.Mobiles
             bc.DamageMax -= DamageBuff;
 
             if (bc.Fame > 0)
+            {
                 bc.Fame = (int)(bc.Fame / FameBuff);
+            }
+
             if (bc.Karma != 0)
+            {
                 bc.Karma = (int)(bc.Karma / KarmaBuff);
+            }
         }
 
         public static bool CheckConvert(BaseCreature bc)
@@ -176,21 +195,31 @@ namespace Server.Mobiles
         public static bool CheckConvert(BaseCreature bc, Point3D location, Map m)
         {
             if (!Core.AOS)
+            {
                 return false;
+            }
 
             if (Array.IndexOf(Maps, m) == -1)
+            {
                 return false;
+            }
 
             if (bc is BaseChampion || bc is Harrower || bc is BaseVendor || bc is BaseEscortable || bc.Summoned || bc.Controlled || bc is Clone || bc.IsParagon)
+            {
                 return false;
+            }
 
             if (bc is DreadHorn || bc is MonstrousInterredGrizzle || bc is Travesty || bc is ChiefParoxysmus || bc is LadyMelisande || bc is ShimmeringEffusion)
+            {
                 return false;
+            }
 
             int fame = bc.Fame;
 
             if (fame > 32000)
+            {
                 fame = 32000;
+            }
 
             double chance = 1 / Math.Round(20.0 - (fame / 3200));
 
@@ -200,12 +229,16 @@ namespace Server.Mobiles
         public static bool CheckArtifactChance(Mobile m, BaseCreature bc)
         {
             if (!Core.AOS)
+            {
                 return false;
+            }
 
             double fame = (double)bc.Fame;
 
             if (fame > 32000)
+            {
                 fame = 32000;
+            }
 
             double chance = 1 / (Math.Max(10, 100 * (0.83 - Math.Round(Math.Log(Math.Round(fame / 6000, 3) + 0.001, 10), 3))) * (100 - Math.Sqrt(m.Luck)) / 100.0);
 

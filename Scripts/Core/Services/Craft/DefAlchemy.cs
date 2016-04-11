@@ -28,7 +28,9 @@ namespace Server.Engines.Craft
             get
             {
                 if (m_CraftSystem == null)
+                {
                     m_CraftSystem = new DefAlchemy();
+                }
 
                 return m_CraftSystem;
             }
@@ -80,7 +82,9 @@ namespace Server.Engines.Craft
         public override int PlayEndingEffect(Mobile from, bool failed, bool lostMaterial, bool toolBroken, int quality, bool makersMark, CraftItem item)
         {
             if (toolBroken)
+            {
                 from.SendLocalizedMessage(1044038); // You have worn out your tool
+            }
 
             if (failed)
             {
@@ -101,9 +105,13 @@ namespace Server.Engines.Craft
                 if (IsPotion(item.ItemType))
                 {
                     if (quality == -1)
+                    {
                         return 1048136; // You create the potion and pour it into a keg.
+                    }
                     else
+                    {
                         return 500279; // You pour the potion into a bottle...
+                    }
                 }
                 else
                 {

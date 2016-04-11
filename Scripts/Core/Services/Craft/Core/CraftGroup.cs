@@ -1,5 +1,3 @@
-using System;
-
 namespace Server.Engines.Craft
 {
     public class CraftGroup
@@ -9,35 +7,35 @@ namespace Server.Engines.Craft
         private readonly int m_NameNumber;
         public CraftGroup(TextDefinition groupName)
         {
-            this.m_NameNumber = groupName;
-            this.m_NameString = groupName;
-            this.m_arCraftItem = new CraftItemCol();
+            m_NameNumber = groupName;
+            m_NameString = groupName;
+            m_arCraftItem = new CraftItemCol();
         }
 
         public CraftItemCol CraftItems
         {
             get
             {
-                return this.m_arCraftItem;
+                return m_arCraftItem;
             }
         }
         public string NameString
         {
             get
             {
-                return this.m_NameString;
+                return m_NameString;
             }
         }
         public int NameNumber
         {
             get
             {
-                return this.m_NameNumber;
+                return m_NameNumber;
             }
         }
         public void AddCraftItem(CraftItem craftItem)
         {
-            this.m_arCraftItem.Add(craftItem);
+            m_arCraftItem.Add(craftItem);
         }
     }
 }

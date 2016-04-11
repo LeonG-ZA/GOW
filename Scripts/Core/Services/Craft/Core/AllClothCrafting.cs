@@ -19,7 +19,9 @@ namespace Server.Engines.Craft
         private int Verify(BaseCloth mistcloth)
         {
             if (!(mistcloth is BaseCloth))
+            {
                 return 1044456;
+            }
 
             return 0;
         }
@@ -68,9 +70,13 @@ namespace Server.Engines.Craft
                 }
 
                 if (m_AllCraft.Acquire(targeted, out message))
+                {
                     m_AllCraft.CraftItem.CompleteCraft(m_AllCraft.Quality, false, m_AllCraft.From, m_AllCraft.CraftSystem, m_AllCraft.TypeRes, m_AllCraft.Tool, m_AllCraft);
+                }
                 else
+                {
                     Failure(message);
+                }
             }
 
             protected override void OnTargetCancel(Mobile from, TargetCancelType cancelType)
@@ -85,9 +91,13 @@ namespace Server.Engines.Craft
                 BaseTool tool = m_AllCraft.Tool;
 
                 if (tool != null && !tool.Deleted && tool.UsesRemaining > 0)
+                {
                     from.SendGump(new CraftGump(from, m_AllCraft.CraftSystem, tool, message));
+                }
                 else if (message > 0)
+                {
                     from.SendLocalizedMessage(message);
+                }
             }
         }
 
@@ -111,7 +121,9 @@ namespace Server.Engines.Craft
                         Item packItem = packItems[i];
 
                         if (packItem is OilCloth)
+                        {
                             packItem.Hue = 0;
+                        }
 
                         if (packItem is BaseCloth && packItem.Hue == j)
                         {

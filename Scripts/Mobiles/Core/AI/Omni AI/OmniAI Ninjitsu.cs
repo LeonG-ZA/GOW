@@ -1,4 +1,3 @@
-// Created by Peoharen
 using System;
 using Server.Spells;
 using Server.Spells.Ninjitsu;

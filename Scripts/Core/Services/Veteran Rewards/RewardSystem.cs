@@ -3,7 +3,6 @@ using System.Collections.Generic;
 using Server.Accounting;
 using Server.Items;
 using Server.Mobiles;
-using Server.MainConfiguration;
 using Server.Gumps;
 using Server.VeteranRewardsConfiguration;
 

@@ -17,7 +17,9 @@ namespace Server.Ethics.Hero
         public override void BeginInvoke(Player from)
         {
             if (from.Familiar != null && from.Familiar.Deleted)
+            {
                 from.Familiar = null;
+            }
 
             if (from.Familiar != null)
             {
@@ -33,7 +35,7 @@ namespace Server.Ethics.Hero
 
             HolyFamiliar familiar = new HolyFamiliar();
 
-            if (Mobiles.BaseCreature.Summon(familiar, from.Mobile, from.Mobile.Location, 0x217, TimeSpan.FromHours(1.0)))
+            if (BaseCreature.Summon(familiar, from.Mobile, from.Mobile.Location, 0x217, TimeSpan.FromHours(1.0)))
             {
                 from.Familiar = familiar;
 

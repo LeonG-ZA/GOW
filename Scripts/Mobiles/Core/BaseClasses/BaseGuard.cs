@@ -1,4 +1,3 @@
-using System;
 using Server.Items;
 
 namespace Server.Mobiles
@@ -9,10 +8,10 @@ namespace Server.Mobiles
         {
             if (target != null)
             {
-                this.Location = target.Location;
-                this.Map = target.Map;
+                Location = target.Location;
+                Map = target.Map;
 
-                Effects.SendLocationParticles(EffectItem.Create(this.Location, this.Map, EffectItem.DefaultDuration), 0x3728, 10, 10, 5023);
+                Effects.SendLocationParticles(EffectItem.Create(Location, Map, EffectItem.DefaultDuration), 0x3728, 10, 10, 5023);
             }
         }
 
@@ -57,11 +56,11 @@ namespace Server.Mobiles
 
         public override bool OnBeforeDeath()
         {
-            Effects.SendLocationParticles(EffectItem.Create(this.Location, this.Map, EffectItem.DefaultDuration), 0x3728, 10, 10, 2023);
+            Effects.SendLocationParticles(EffectItem.Create(Location, Map, EffectItem.DefaultDuration), 0x3728, 10, 10, 2023);
 
-            this.PlaySound(0x1FE);
+            PlaySound(0x1FE);
 
-            this.Delete();
+            Delete();
 
             return false;
         }

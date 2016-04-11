@@ -1,6 +1,3 @@
-using System;
-using Server;
-using Server.Network;
 using Server.Mobiles;
 
 namespace Server.Items
@@ -62,8 +59,10 @@ namespace Server.Items
 		}
 		public override bool Toggle(byte state, Mobile who, int sid)
 		{
-			if (sid==lsid)
-				return false;
+            if (sid == lsid)
+            {
+                return false;
+            }
 			lsid= sid;
 			
 			bool send = false;
@@ -73,12 +72,17 @@ namespace Server.Items
 				if (state == 0 && m_NulifyOnZero)
 				{
 					m_spawner.TriggerMob = null;
-				}else if (state !=0)
+				}
+                else if (state !=0)
 				{
-					if (!m_setInvoker)
-						m_spawner.TriggerMob = m_mobile;
-					else
-						m_spawner.TriggerMob = who;
+                    if (!m_setInvoker)
+                    {
+                        m_spawner.TriggerMob = m_mobile;
+                    }
+                    else
+                    {
+                        m_spawner.TriggerMob = who;
+                    }
 				}
 				send = true;
 			}
@@ -108,8 +112,10 @@ namespace Server.Items
 			m_spawner = reader.ReadItem() as XmlSpawner;
 			m_NulifyOnZero = reader.ReadBool();
 			m_mobile = reader.ReadMobile();
-			if(version >0)
-				m_setInvoker = reader.ReadBool();
+            if (version > 0)
+            {
+                m_setInvoker = reader.ReadBool();
+            }
 		}
 	}
 }

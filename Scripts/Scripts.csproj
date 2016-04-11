@@ -6248,8 +6248,6 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Mobiles\Quests\Stygian Abyss Quests\Royal City\Zhah\Items\AthenaeumTeleporter.cs" />
-    <None Include="Core\Services\Help\Automated Staff\GameObjects\PromotionalDeed\Counselor\PromotionalDeed.gump" />
-    <None Include="Core\Services\Help\Automated Staff\GameObjects\PromotionalDeed\Gamemaster\PromotionalDeed.gump" />
     <None Include="Core\Services\Spawn Systems\XMLSpawner\XMLSpawner Extras\XmlQuestNPC\Abbott.npc" />
     <None Include="Core\Services\Spawn Systems\XMLSpawner\XMLSpawner Extras\XmlQuestNPC\Costello.npc" />
     <None Include="Core\Services\Spawn Systems\XMLSpawner\XMLSpawner Extras\XmlQuestNPC\Dracondar.npc" />

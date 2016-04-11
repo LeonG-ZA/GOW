@@ -17,7 +17,9 @@ namespace Server.Engines.Craft
             get
             {
                 if (m_CraftSystem == null)
+                {
                     m_CraftSystem = new DefGlassblowing();
+                }
 
                 return m_CraftSystem;
             }
@@ -39,7 +41,9 @@ namespace Server.Engines.Craft
         public override double GetChanceAtMin(CraftItem item)
         {
             if (item.ItemType == typeof(HollowPrism))
+            {
                 return 0.5; // 50%
+            }
 
             return 0.0; // 0%
         }
@@ -47,20 +51,30 @@ namespace Server.Engines.Craft
         public override int CanCraft(Mobile from, IUsesRemaining tool, Type itemType)
         {
             if (tool == null || ((Item)tool).Deleted || tool.UsesRemaining < 0)
+            {
                 return 1044038; // You have worn out your tool!
+            }
             else if (!BaseTool.CheckTool((BaseTool)tool, from))
+            {
                 return 1048146; // If you have a tool equipped, you must use that tool.
+            }
             else if (!(from is PlayerMobile && ((PlayerMobile)from).Glassblowing && from.Skills[SkillName.Alchemy].Base >= 100.0))
+            {
                 return 1044634; // You havent learned glassblowing.
+            }
             else if (!BaseTool.CheckAccessible((BaseTool)tool, from))
+            {
                 return 1044263; // The tool must be on your person to use.
+            }
 
             bool anvil, forge;
 
             DefBlacksmithy.CheckAnvilAndForge(from, 2, out anvil, out forge);
 
             if (forge)
+            {
                 return 0;
+            }
 
             return 1044628; // You must be near a forge to blow glass.
         }
@@ -99,27 +113,41 @@ namespace Server.Engines.Craft
         public override int PlayEndingEffect(Mobile from, bool failed, bool lostMaterial, bool toolBroken, int quality, bool makersMark, CraftItem item)
         {
             if (toolBroken)
+            {
                 from.SendLocalizedMessage(1044038); // You have worn out your tool
+            }
 
             if (failed)
             {
                 if (lostMaterial)
+                {
                     return 1044043; // You failed to create the item, and some of your materials are lost.
+                }
                 else
+                {
                     return 1044157; // You failed to create the item, but no materials were lost.
+                }
             }
             else
             {
                 from.PlaySound(0x41); // glass breaking
 
                 if (quality == 0)
+                {
                     return 502785; // You were barely able to make this item.  It's quality is below average.
+                }
                 else if (makersMark && quality == 2)
+                {
                     return 1044156; // You create an exceptional quality item and affix your maker's mark.
+                }
                 else if (quality == 2)
+                {
                     return 1044155; // You create an exceptional quality item.
+                }
                 else
+                {
                     return 1044154; // You create the item.
+                }
             }
         }
 
@@ -130,48 +158,48 @@ namespace Server.Engines.Craft
             #region Weapons
             if (Core.SA)
             {
-                index = this.AddCraft(typeof(GlassSword), 1044566, 1022316, 55.0, 100.0, typeof(Sand), 1044625, 14, 1044627);
-                this.SetNeededExpansion(index, Expansion.SA);
-                index = this.AddCraft(typeof(GlassStaff), 1044566, 1022309, 53.6, 100.0, typeof(Sand), 1044625, 10, 1044627);
-                this.SetNeededExpansion(index, Expansion.SA);
+                index = AddCraft(typeof(GlassSword), 1044566, 1022316, 55.0, 100.0, typeof(Sand), 1044625, 14, 1044627);
+                SetNeededExpansion(index, Expansion.SA);
+                index = AddCraft(typeof(GlassStaff), 1044566, 1022309, 53.6, 100.0, typeof(Sand), 1044625, 10, 1044627);
+                SetNeededExpansion(index, Expansion.SA);
             }
             #endregion
 
             #region Miscellaneous
-            index = this.AddCraft(typeof(Bottle), 1044050, 1023854, 52.5, 102.5, typeof(Sand), 1044625, 1, 1044627);
-            this.SetUseAllRes(index, true);
-            this.AddCraft(typeof(SmallFlask), 1044050, 1044610, 52.5, 102.5, typeof(Sand), 1044625, 2, 1044627);
-            this.AddCraft(typeof(MediumFlask), 1044050, 1044611, 52.5, 102.5, typeof(Sand), 1044625, 3, 1044627);
-            this.AddCraft(typeof(CurvedFlask), 1044050, 1044612, 55.0, 105.0, typeof(Sand), 1044625, 2, 1044627);
-            this.AddCraft(typeof(LongFlask), 1044050, 1044613, 57.5, 107.5, typeof(Sand), 1044625, 4, 1044627);
-            this.AddCraft(typeof(LargeFlask), 1044050, 1044623, 60.0, 110.0, typeof(Sand), 1044625, 5, 1044627);
-            this.AddCraft(typeof(AniSmallBlueFlask), 1044050, 1044614, 60.0, 110.0, typeof(Sand), 1044625, 5, 1044627);
-            this.AddCraft(typeof(AniLargeVioletFlask), 1044050, 1044615, 60.0, 110.0, typeof(Sand), 1044625, 5, 1044627);
-            this.AddCraft(typeof(AniRedRibbedFlask), 1044050, 1044624, 60.0, 110.0, typeof(Sand), 1044625, 7, 1044627);
-            this.AddCraft(typeof(EmptyVialsWRack), 1044050, 1044616, 65.0, 115.0, typeof(Sand), 1044625, 8, 1044627);
-            this.AddCraft(typeof(FullVialsWRack), 1044050, 1044617, 65.0, 115.0, typeof(Sand), 1044625, 9, 1044627);
-            this.AddCraft(typeof(SpinningHourglass), 1044050, 1044618, 75.0, 125.0, typeof(Sand), 1044625, 10, 1044627);
+            index = AddCraft(typeof(Bottle), 1044050, 1023854, 52.5, 102.5, typeof(Sand), 1044625, 1, 1044627);
+            SetUseAllRes(index, true);
+            AddCraft(typeof(SmallFlask), 1044050, 1044610, 52.5, 102.5, typeof(Sand), 1044625, 2, 1044627);
+            AddCraft(typeof(MediumFlask), 1044050, 1044611, 52.5, 102.5, typeof(Sand), 1044625, 3, 1044627);
+            AddCraft(typeof(CurvedFlask), 1044050, 1044612, 55.0, 105.0, typeof(Sand), 1044625, 2, 1044627);
+            AddCraft(typeof(LongFlask), 1044050, 1044613, 57.5, 107.5, typeof(Sand), 1044625, 4, 1044627);
+            AddCraft(typeof(LargeFlask), 1044050, 1044623, 60.0, 110.0, typeof(Sand), 1044625, 5, 1044627);
+            AddCraft(typeof(AniSmallBlueFlask), 1044050, 1044614, 60.0, 110.0, typeof(Sand), 1044625, 5, 1044627);
+            AddCraft(typeof(AniLargeVioletFlask), 1044050, 1044615, 60.0, 110.0, typeof(Sand), 1044625, 5, 1044627);
+            AddCraft(typeof(AniRedRibbedFlask), 1044050, 1044624, 60.0, 110.0, typeof(Sand), 1044625, 7, 1044627);
+            AddCraft(typeof(EmptyVialsWRack), 1044050, 1044616, 65.0, 115.0, typeof(Sand), 1044625, 8, 1044627);
+            AddCraft(typeof(FullVialsWRack), 1044050, 1044617, 65.0, 115.0, typeof(Sand), 1044625, 9, 1044627);
+            AddCraft(typeof(SpinningHourglass), 1044050, 1044618, 75.0, 125.0, typeof(Sand), 1044625, 10, 1044627);
 
             if (Core.ML)
             {
-                index = this.AddCraft(typeof(HollowPrism), 1044050, 1072895, 100.0, 150.0, typeof(Sand), 1044625, 8, 1044627);
-                this.SetNeededExpansion(index, Expansion.ML);
+                index = AddCraft(typeof(HollowPrism), 1044050, 1072895, 100.0, 150.0, typeof(Sand), 1044625, 8, 1044627);
+                SetNeededExpansion(index, Expansion.ML);
             }
 
             if (Core.SA)
             {
-                index = this.AddCraft(typeof(GargoyleFloorMirror), 1044566, 1095314, 75.0, 100.0, typeof(Sand), 1044625, 20, 1044627);
-                this.SetNeededExpansion(index, Expansion.SA);
+                index = AddCraft(typeof(GargoyleFloorMirror), 1044566, 1095314, 75.0, 100.0, typeof(Sand), 1044625, 20, 1044627);
+                SetNeededExpansion(index, Expansion.SA);
 
-                index = this.AddCraft(typeof(GargoyleWallMirror), 1044566, 1095325, 70.0, 100.0, typeof(Sand), 1044625, 10, 1044627);
-                this.SetNeededExpansion(index, Expansion.SA);
+                index = AddCraft(typeof(GargoyleWallMirror), 1044566, 1095325, 70.0, 100.0, typeof(Sand), 1044625, 10, 1044627);
+                SetNeededExpansion(index, Expansion.SA);
 
-                index = this.AddCraft(typeof(SoulstoneFragment), 1044566, 1071000, 100.0, 100.0, typeof(CrystalGranules), 1112329, 2, 502910);
+                index = AddCraft(typeof(SoulstoneFragment), 1044566, 1071000, 100.0, 100.0, typeof(CrystalGranules), 1112329, 2, 502910);
                 AddRes(index, typeof(VoidEssence), 1112327, 2, 502910);
-                this.SetNeededExpansion(index, Expansion.SA);
+                SetNeededExpansion(index, Expansion.SA);
 
-                index = this.AddCraft(typeof(EmptyVenomVial), 1044566, 1112215, 52.5, 100.0, typeof(Sand), 1044625, 1, 1044627);
-                this.SetNeededExpansion(index, Expansion.SA);
+                index = AddCraft(typeof(EmptyVenomVial), 1044566, 1112215, 52.5, 100.0, typeof(Sand), 1044625, 1, 1044627);
+                SetNeededExpansion(index, Expansion.SA);
             }
             #endregion
         }
@@ -183,12 +211,12 @@ namespace Server.Engines.Craft
             public InternalTimer(Mobile from)
                 : base(TimeSpan.FromSeconds(0.7))
             {
-                this.m_From = from;
+                m_From = from;
             }
 
             protected override void OnTick()
             {
-                this.m_From.PlaySound(0x2A);
+                m_From.PlaySound(0x2A);
             }
         }
     }

@@ -1,14 +1,10 @@
-using System;
 using System.Collections;
-using Server;
-using Server.Targeting;
 using Server.Spells;
 using Server.Spells.Bushido;
-using Server.Network;
 
 namespace Server.Mobiles
 {
-	public class SamuraiAI : BaseAI
+    public class SamuraiAI : BaseAI
 	{
 		private static double defenceChance = 0.6;
 		private static double attackChance = 0.5;

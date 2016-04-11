@@ -27,10 +27,14 @@ namespace Server.Ethics.Hero
             IPoint3D p = obj as IPoint3D;
 
             if (p == null)
+            {
                 return;
+            }
 
             if (!this.CheckInvoke(from))
+            {
                 return;
+            }
 
             bool powerFunctioned = false;
 
@@ -39,13 +43,19 @@ namespace Server.Ethics.Hero
             foreach (Mobile mob in from.Mobile.GetMobilesInRange(6))
             {
                 if (mob != from.Mobile && SpellHelper.ValidIndirectTarget(from.Mobile, mob))
+                {
                     continue;
+                }
 
                 if (mob.GetStatMod("Holy Bless") != null)
+                {
                     continue;
+                }
 
                 if (!from.Mobile.CanBeBeneficial(mob, false))
+                {
                     continue;
+                }
 
                 from.Mobile.DoBeneficial(mob);
 
