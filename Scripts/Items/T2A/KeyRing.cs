@@ -12,9 +12,9 @@ namespace Server.Items
         public KeyRing()
             : base(0x1011)
         {
-            this.Weight = 1.0; // They seem to have no weight on OSI ?!
+            Weight = 1.0; // They seem to have no weight on OSI ?!
 
-            this.m_Keys = new List<Key>();
+            m_Keys = new List<Key>();
         }
 
         public KeyRing(Serial serial)
@@ -26,12 +26,12 @@ namespace Server.Items
         {
             get
             {
-                return this.m_Keys;
+                return m_Keys;
             }
         }
         public override bool OnDragDrop(Mobile from, Item dropped)
         {
-            if (!this.IsChildOf(from.Backpack))
+            if (!IsChildOf(from.Backpack))
             {
                 from.SendLocalizedMessage(1060640); // The item must be in your backpack to use it.
                 return false;
@@ -44,14 +44,14 @@ namespace Server.Items
                 from.SendLocalizedMessage(501689); // Only non-blank keys can be put on a keyring.
                 return false;
             }
-            else if (this.Keys.Count >= MaxKeys)
+            else if (Keys.Count >= MaxKeys)
             {
                 from.SendLocalizedMessage(1008138); // This keyring is full.
                 return false;
             }
             else
             {
-                this.Add(key);
+                Add(key);
                 from.SendLocalizedMessage(501691); // You put the key on the keyring.
                 return true;
             }
@@ -59,78 +59,84 @@ namespace Server.Items
 
         public override void OnDoubleClick(Mobile from)
         {
-            if (!this.IsChildOf(from.Backpack))
+            if (!IsChildOf(from.Backpack))
             {
                 from.SendLocalizedMessage(1060640); // The item must be in your backpack to use it.
                 return;
             }
 
             from.SendLocalizedMessage(501680); // What do you want to unlock?
-            from.Target = new InternalTarget(this);
+            from.Target = new KeyTarget(this);
         }
 
         public override void OnDelete()
         {
             base.OnDelete();
 
-            foreach (Key key in this.m_Keys)
+            foreach (Key key in m_Keys)
             {
                 key.Delete();
             }
 
-            this.m_Keys.Clear();
+            m_Keys.Clear();
         }
 
         public void Add(Key key)
         {
             key.Internalize();
-            this.m_Keys.Add(key);
+            m_Keys.Add(key);
 
-            this.UpdateItemID();
+            UpdateItemID();
         }
 
         public void Open(Mobile from)
         {
-            Container cont = this.Parent as Container;
+            Container cont = Parent as Container;
 
             if (cont == null)
-                return;
-
-            for (int i = this.m_Keys.Count - 1; i >= 0; i--)
             {
-                Key key = this.m_Keys[i];
-
-                if (!key.Deleted && !cont.TryDropItem(from, key, true))
-                    break;
-
-                this.m_Keys.RemoveAt(i);
+                return;
             }
 
-            this.UpdateItemID();
+            for (int i = m_Keys.Count - 1; i >= 0; i--)
+            {
+                Key key = m_Keys[i];
+
+                if (!key.Deleted && !cont.TryDropItem(from, key, true))
+                {
+                    break;
+                }
+
+                m_Keys.RemoveAt(i);
+            }
+
+            UpdateItemID();
         }
 
         public void RemoveKeys(uint keyValue)
         {
-            for (int i = this.m_Keys.Count - 1; i >= 0; i--)
+            for (int i = m_Keys.Count - 1; i >= 0; i--)
             {
-                Key key = this.m_Keys[i];
+                Key key = m_Keys[i];
 
                 if (key.KeyValue == keyValue)
                 {
                     key.Delete();
-                    this.m_Keys.RemoveAt(i);
+                    m_Keys.RemoveAt(i);
                 }
             }
 
-            this.UpdateItemID();
+            UpdateItemID();
         }
 
         public bool ContainsKey(uint keyValue)
         {
-            foreach (Key key in this.m_Keys)
+            foreach (Key key in m_Keys)
             {
                 if (key.KeyValue == keyValue)
+                {
                     return true;
+                }
             }
 
             return false;
@@ -142,7 +148,7 @@ namespace Server.Items
 
             writer.WriteEncodedInt(0); // version
 
-            writer.WriteItemList<Key>(this.m_Keys);
+            writer.WriteItemList<Key>(m_Keys);
         }
 
         public override void Deserialize(GenericReader reader)
@@ -151,51 +157,61 @@ namespace Server.Items
 
             int version = reader.ReadEncodedInt();
 
-            this.m_Keys = reader.ReadStrongItemList<Key>();
+            m_Keys = reader.ReadStrongItemList<Key>();
         }
 
         private void UpdateItemID()
         {
-            if (this.Keys.Count < 1)
-                this.ItemID = 0x1011;
-            else if (this.Keys.Count < 3)
-                this.ItemID = 0x1769;
-            else if (this.Keys.Count < 5)
-                this.ItemID = 0x176A;
+            if (Keys.Count < 1)
+            {
+                ItemID = 0x1011;
+            }
+            else if (Keys.Count < 3)
+            {
+                ItemID = 0x1769;
+            }
+            else if (Keys.Count < 5)
+            {
+                ItemID = 0x176A;
+            }
             else
-                this.ItemID = 0x176B;
+            {
+                ItemID = 0x176B;
+            }
         }
 
-        private class InternalTarget : Target
+        private class KeyTarget : Target
         {
             private readonly KeyRing m_KeyRing;
-            public InternalTarget(KeyRing keyRing)
+            public KeyTarget(KeyRing keyRing)
                 : base(-1, false, TargetFlags.None)
             {
-                this.m_KeyRing = keyRing;
+                m_KeyRing = keyRing;
             }
 
             protected override void OnTarget(Mobile from, object targeted)
             {
-                if (this.m_KeyRing.Deleted || !this.m_KeyRing.IsChildOf(from.Backpack))
+                if (m_KeyRing.Deleted || !m_KeyRing.IsChildOf(from.Backpack))
                 {
                     from.SendLocalizedMessage(1060640); // The item must be in your backpack to use it.
                     return;
                 }
 
-                if (this.m_KeyRing == targeted)
+                if (m_KeyRing == targeted)
                 {
-                    this.m_KeyRing.Open(from);
+                    m_KeyRing.Open(from);
                     from.SendLocalizedMessage(501685); // You open the keyring.
                 }
                 else if (targeted is ILockable)
                 {
                     ILockable o = (ILockable)targeted;
 
-                    foreach (Key key in this.m_KeyRing.Keys)
+                    foreach (Key key in m_KeyRing.Keys)
                     {
                         if (key.UseOn(from, o))
+                        {
                             return;
+                        }
                     }
 
                     from.SendLocalizedMessage(1008140); // You do not have a key for that.

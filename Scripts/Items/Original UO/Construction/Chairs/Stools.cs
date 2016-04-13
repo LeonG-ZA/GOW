@@ -1,5 +1,3 @@
-using System;
-
 namespace Server.Items
 {
     [Furniture]
@@ -9,7 +7,7 @@ namespace Server.Items
         public Stool()
             : base(0xA2A)
         {
-            this.Weight = 10.0;
+            Weight = 10.0;
         }
 
         public Stool(Serial serial)

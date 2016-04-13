@@ -1,5 +1,3 @@
-using System;
-
 namespace Server.Items
 {
     [Furniture]
@@ -10,7 +8,7 @@ namespace Server.Items
         public FancyWoodenChairCushion()
             : base(0xB4F)
         {
-            this.Weight = 20.0;
+            Weight = 20.0;
         }
 
         public FancyWoodenChairCushion(Serial serial)

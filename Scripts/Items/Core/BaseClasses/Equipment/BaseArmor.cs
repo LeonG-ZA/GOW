@@ -128,7 +128,8 @@ namespace Server.Items
 
         //public virtual bool CanFortify { get { return m_TimesImbued == 0; } }
         //public virtual bool CanFortify { get { return m_TimesImbued == 0 && NegativeAttributes.Antique < 3; } }
-        public virtual bool CanFortify { get { return m_IsImbued == false && NegativeAttributes.Antique < 3; } }
+        //public virtual bool CanFortify { get { return m_IsImbued == false && NegativeAttributes.Antique < 3; } }
+        public virtual bool CanFortify { get { return !IsImbued && NegativeAttributes.Antique < 3; } }
         public virtual bool UseIntOrDexProperty { get { return false; } }
         public virtual int IntOrDexPropertyValue { get { return 0; } }
         public virtual bool CanRepair { get { return m_NegativeAttributes.NoRepair == 0; } }
@@ -268,7 +269,8 @@ namespace Server.Items
         {
             get
             {
-                if (this.TimesImbued >= 1)
+                //if (this.TimesImbued >= 1)
+                if (TimesImbued >= 1 && !m_IsImbued)
                 {
                     m_IsImbued = true;
                 }
@@ -276,7 +278,7 @@ namespace Server.Items
             }
             set
             {
-                if (this.TimesImbued >= 1)
+                if (TimesImbued >= 1)
                 {
                     m_IsImbued = true;
                 }
@@ -2446,7 +2448,8 @@ namespace Server.Items
                     }
 
                     //if (m_TimesImbued > 0)
-                    if (this.m_IsImbued == true)
+                    //if (this.m_IsImbued == true)
+                    if (IsImbued)
                     {
                         list.Add(1080418); // (Imbued)
                     }
@@ -2573,7 +2576,8 @@ namespace Server.Items
                     list.Add(1050043, m_Crafter.TitleName); // crafted by ~1_NAME~ 
 
                 //if (m_TimesImbued > 0)
-                if (this.m_IsImbued == true)
+                //if (this.m_IsImbued == true)
+                if (IsImbued)
                     list.Add(1080418); // (Imbued)
 
                 if ( m_Altered )

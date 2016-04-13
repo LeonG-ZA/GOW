@@ -1,12 +1,7 @@
 using System;
 using System.Globalization;
 using Server.Accounting;
-using Server.Engines.Quests;
-using Server.Mobiles;
 using Server.Network;
-using Haven = Server.Engines.Quests.Haven;
-using Necro = Server.Engines.Quests.Necro;
-using Server.AccountConfiguration;
 
 namespace Server.Items
 {
@@ -89,9 +84,13 @@ namespace Server.Items
             string worth;
 
             if (Core.ML)
+            {
                 worth = m_Worth.ToString("N0", CultureInfo.GetCultureInfo("en-US"));
+            }
             else
+            {
                 worth = m_Worth.ToString();
+            }
 
             list.Add(1060738, worth); // value: ~1_val~
         }

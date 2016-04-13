@@ -1,5 +1,3 @@
-using System;
-
 namespace Server.Items
 {
     [Furniture]
@@ -10,7 +8,7 @@ namespace Server.Items
         public Throne()
             : base(0xB33)
         {
-            this.Weight = 1.0;
+            Weight = 1.0;
         }
 
         public Throne(Serial serial)

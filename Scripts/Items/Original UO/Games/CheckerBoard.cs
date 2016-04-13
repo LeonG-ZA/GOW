@@ -1,5 +1,3 @@
-using System;
-
 namespace Server.Items
 {
     public class CheckerBoard : BaseBoard
@@ -26,12 +24,12 @@ namespace Server.Items
         {
             for (int i = 0; i < 4; i++)
             {
-                this.CreatePiece(new PieceWhiteChecker(this), (50 * i) + 45, 25);
-                this.CreatePiece(new PieceWhiteChecker(this), (50 * i) + 70, 50);
-                this.CreatePiece(new PieceWhiteChecker(this), (50 * i) + 45, 75);
-                this.CreatePiece(new PieceBlackChecker(this), (50 * i) + 70, 150);
-                this.CreatePiece(new PieceBlackChecker(this), (50 * i) + 45, 175);
-                this.CreatePiece(new PieceBlackChecker(this), (50 * i) + 70, 200);
+                CreatePiece(new PieceWhiteChecker(this), (50 * i) + 45, 25);
+                CreatePiece(new PieceWhiteChecker(this), (50 * i) + 70, 50);
+                CreatePiece(new PieceWhiteChecker(this), (50 * i) + 45, 75);
+                CreatePiece(new PieceBlackChecker(this), (50 * i) + 70, 150);
+                CreatePiece(new PieceBlackChecker(this), (50 * i) + 45, 175);
+                CreatePiece(new PieceBlackChecker(this), (50 * i) + 70, 200);
             }
         }
 

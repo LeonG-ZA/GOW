@@ -1,5 +1,3 @@
-using System;
-
 namespace Server.Items
 {
     public abstract class Hair : Item
@@ -72,9 +70,9 @@ namespace Server.Items
         protected Hair(int itemID, int hue)
             : base(itemID)
         {
-            this.LootType = LootType.Blessed;
-            this.Layer = Layer.Hair;
-            this.Hue = hue;
+            LootType = LootType.Blessed;
+            Layer = Layer.Hair;
+            Hue = hue;
         }
 
         public override bool DisplayLootType
@@ -92,8 +90,8 @@ namespace Server.Items
         public override DeathMoveResult OnParentDeath(Mobile parent)
         {
             //			Dupe( Amount );
-            parent.HairItemID = this.ItemID;
-            parent.HairHue = this.Hue;
+            parent.HairItemID = ItemID;
+            parent.HairHue = Hue;
 
             return DeathMoveResult.MoveToCorpse;
         }
@@ -108,7 +106,7 @@ namespace Server.Items
         public override void Deserialize(GenericReader reader)
         {
             base.Deserialize(reader);
-            this.LootType = LootType.Blessed;
+            LootType = LootType.Blessed;
 
             int version = reader.ReadInt();
         }

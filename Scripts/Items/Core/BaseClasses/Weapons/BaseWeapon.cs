@@ -18,7 +18,6 @@ using Server.Spells.Spellweaving;
 using Server.MainConfiguration;
 using Server.T2AConfiguration;
 using Server.FeaturesConfiguration;
-using Server.Buff.Icons;
 using Server.Spells.Mysticism;
 using Server.Spells.Fourth;
 
@@ -182,7 +181,7 @@ namespace Server.Items
 		//public virtual bool CanFortify { get { return true; } }
         //public virtual bool CanFortify { get { return m_TimesImbued == 0; } }
         //public virtual bool CanFortify { get { return m_TimesImbued == 0 && NegativeAttributes.Antique < 3; } } 
-        public virtual bool CanFortify { get { return m_IsImbued == false && NegativeAttributes.Antique < 3; } }
+        public virtual bool CanFortify { get { return !IsImbued && NegativeAttributes.Antique < 3; } }
         public virtual bool CanRepair { get { return m_NegativeAttributes.NoRepair == 0; } }
         //public virtual bool CanImbue { get { return true; } }
         public virtual bool CanImbue { get { return ArtifactRarity == 0; } }
@@ -612,7 +611,8 @@ namespace Server.Items
         {
             get
             {
-                if (this.TimesImbued >= 1)
+                //if (this.TimesImbued >= 1)
+                if (TimesImbued >= 1 && !m_IsImbued)
                 {
                     m_IsImbued = true;
                 }
@@ -620,7 +620,7 @@ namespace Server.Items
             }
             set
             {
-                if (this.TimesImbued >= 1)
+                if (TimesImbued >= 1)
                 {
                     m_IsImbued = true;
                 }
@@ -5175,7 +5175,7 @@ if (DefenseMastery.GetMalus(attacker, ref defenseMasteryMalus))
                     }
 
                     //if (m_TimesImbued > 0)
-                    if (m_IsImbued == true)
+                    if (IsImbued)
                     {
                         list.Add(1080418); // (Imbued)
                     }
@@ -5807,7 +5807,7 @@ if (DefenseMastery.GetMalus(attacker, ref defenseMasteryMalus))
                 }
 
                 //if (m_TimesImbued > 0)
-                if (m_IsImbued == true)
+                if (IsImbued)
                 {
                     list.Add(1080418); // (Imbued)
                 }

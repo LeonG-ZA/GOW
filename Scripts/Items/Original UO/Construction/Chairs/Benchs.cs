@@ -1,5 +1,3 @@
-using System;
-
 namespace Server.Items
 {
     [Furniture]
@@ -10,7 +8,7 @@ namespace Server.Items
         public WoodenBench()
             : base(0xB2D)
         {
-            this.Weight = 6;
+            Weight = 6;
         }
 
         public WoodenBench(Serial serial)

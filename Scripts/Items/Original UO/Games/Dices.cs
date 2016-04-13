@@ -1,4 +1,3 @@
-using System;
 using Server.Network;
 
 namespace Server.Items
@@ -20,9 +19,11 @@ namespace Server.Items
         public override void OnDoubleClick(Mobile from)
         {
             if (!from.InRange(this.GetWorldLocation(), 2))
+            {
                 return;
+            }
 
-            this.Roll(from);
+            Roll(from);
         }
 
         public void OnTelekinesis(Mobile from)

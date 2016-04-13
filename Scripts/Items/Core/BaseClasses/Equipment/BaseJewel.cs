@@ -1,8 +1,6 @@
 using System;
 using System.Collections.Generic;
 using Server.ContextMenus;
-using Server.Items;
-using Server.Network;
 using Server.Engines.Craft;
 using Server.MainConfiguration;
 using Server.T2AConfiguration;
@@ -243,7 +241,7 @@ namespace Server.Items
         [CommandProperty(AccessLevel.GameMaster)]
         public int TimesImbued
         {
-            get { return this.m_TimesImbued; }
+            get { return m_TimesImbued; }
             set { m_TimesImbued = value; InvalidateProperties(); }
         }
 
@@ -252,7 +250,7 @@ namespace Server.Items
         {
             get
             {
-                if (this.TimesImbued >= 1)
+                if (TimesImbued >= 1 && !m_IsImbued)
                 {
                     m_IsImbued = true;
                 }
@@ -260,7 +258,7 @@ namespace Server.Items
             }
             set
             {
-                if (this.TimesImbued >= 1)
+                if (TimesImbued >= 1)
                 {
                     m_IsImbued = true;
                 }
@@ -550,7 +548,7 @@ namespace Server.Items
 
         //public virtual bool CanFortify { get { return false; } }
         //public virtual bool CanFortify { get { return m_TimesImbued == 0 && NegativeAttributes.Antique < 3; } }
-        public virtual bool CanFortify { get { return m_IsImbued == false && NegativeAttributes.Antique < 3; } }
+        public virtual bool CanFortify { get { return IsImbued == false && NegativeAttributes.Antique < 3; } }
         public virtual bool CanRepair { get { return m_NegativeAttributes.NoRepair == 0; } }
 
         public override void OnAdded(IEntity parent)
@@ -685,7 +683,7 @@ namespace Server.Items
                 if (m_Identified)
                 {
                     //if (this.m_TimesImbued > 0)
-                    if (this.m_IsImbued == true)
+                    if (IsImbued)
                         list.Add(1080418); // (Imbued)
 
                     if (m_AosAttributes.Brittle > 0 || Brittle)
@@ -862,7 +860,7 @@ namespace Server.Items
             else
             {
                 //if (this.m_TimesImbued > 0)
-                if (this.m_IsImbued == true) 
+                if (IsImbued) 
                     list.Add(1080418); // (Imbued)
 
                 if (m_AosAttributes.Brittle > 0 || Brittle)

@@ -1,4 +1,3 @@
-using System;
 using Server.Guilds;
 using Server.Multis;
 using Server.Prompts;
@@ -11,7 +10,7 @@ namespace Server.Items
         public GuildDeed()
             : base(0x14F0)
         {
-            this.Weight = 1.0;
+            Weight = 1.0;
         }
 
         public GuildDeed(Serial serial)
@@ -39,8 +38,8 @@ namespace Server.Items
 
             int version = reader.ReadInt();
 
-            if (this.Weight == 0.0)
-                this.Weight = 1.0;
+            if (Weight == 0.0)
+                Weight = 1.0;
         }
 
         public override void OnDoubleClick(Mobile from)
@@ -48,7 +47,7 @@ namespace Server.Items
             if (Guild.NewGuildSystem)
                 return;
 
-            if (!this.IsChildOf(from.Backpack))
+            if (!IsChildOf(from.Backpack))
             {
                 from.SendLocalizedMessage(1042001); // That must be in your pack for you to use it.
             }
@@ -85,15 +84,15 @@ namespace Server.Items
             private readonly GuildDeed m_Deed;
             public InternalPrompt(GuildDeed deed)
             {
-                this.m_Deed = deed;
+                m_Deed = deed;
             }
 
             public override void OnResponse(Mobile from, string text)
             {
-                if (this.m_Deed.Deleted)
+                if (m_Deed.Deleted)
                     return;
 
-                if (!this.m_Deed.IsChildOf(from.Backpack))
+                if (!m_Deed.IsChildOf(from.Backpack))
                 {
                     from.SendLocalizedMessage(1042001); // That must be in your pack for you to use it.
                 }
@@ -119,7 +118,7 @@ namespace Server.Items
                     }
                     else
                     {
-                        this.m_Deed.Delete();
+                        m_Deed.Delete();
 
                         if (text.Length > 40)
                             text = text.Substring(0, 40);
