@@ -1,4 +1,3 @@
-using System;
 using System.IO;
 using System.Text;
 
@@ -37,10 +36,10 @@ namespace System
         {
             if (m_Newline)
             {
-                value = this.Timestamp + value;
+                value = Timestamp + value;
             }
 
-            byte[] data = this.Encoding.GetBytes(value);
+            byte[] data = Encoding.GetBytes(value);
             m_OldOutput.Write(data, 0, data.Length);
             m_OldOutput.WriteByte(10);
             m_Newline = true;
@@ -50,10 +49,10 @@ namespace System
         {
             if (m_Newline)
             {
-                value = this.Timestamp + value;
+                value = Timestamp + value;
             }
 
-            byte[] data = this.Encoding.GetBytes(value);
+            byte[] data = Encoding.GetBytes(value);
             m_OldOutput.Write(data, 0, data.Length);
             m_Newline = false;
         }

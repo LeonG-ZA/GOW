@@ -20,25 +20,25 @@ namespace Server
         public VirtueInfoGump(Mobile beholder, VirtueName virtue, int description, string webPage)
             : base(0, 0)
         {
-            this.m_Beholder = beholder;
-            this.m_Virtue = virtue;
-            this.m_Desc = description;
-            this.m_Page = webPage;
+            m_Beholder = beholder;
+            m_Virtue = virtue;
+            m_Desc = description;
+            m_Page = webPage;
 
             int value = beholder.Virtues.GetValue((int)virtue);
 
-            this.AddPage(0);
+            AddPage(0);
 
-            this.AddImage(30, 40, 2080);
-            this.AddImage(47, 77, 2081);
-            this.AddImage(47, 147, 2081);
-            this.AddImage(47, 217, 2081);
-            this.AddImage(47, 267, 2083);
-            this.AddImage(70, 213, 2091);
+            AddImage(30, 40, 2080);
+            AddImage(47, 77, 2081);
+            AddImage(47, 147, 2081);
+            AddImage(47, 217, 2081);
+            AddImage(47, 267, 2083);
+            AddImage(70, 213, 2091);
 
-            this.AddPage(1);
+            AddPage(1);
 
-            int maxValue = VirtueHelper.GetMaxAmount(this.m_Virtue);
+            int maxValue = VirtueHelper.GetMaxAmount(m_Virtue);
 
             int valueDesc;
             int dots;
@@ -53,7 +53,7 @@ namespace Server
                 dots = 10;
 
             for (int i = 0; i < 10; ++i)
-                this.AddImage(95 + (i * 17), 50, i < dots ? 2362 : 2360);
+                AddImage(95 + (i * 17), 50, i < dots ? 2362 : 2360);
 
             if (value < 1)
                 valueDesc = 1052044; // You have not started on the path of this Virtue.
@@ -74,15 +74,15 @@ namespace Server
             else
                 valueDesc = 1052050; // You have achieved the highest path in this Virtue.
 
-            this.AddHtmlLocalized(157, 73, 200, 40, 1051000 + (int)virtue, false, false);
-            this.AddHtmlLocalized(75, 95, 220, 140, description, false, false);
-            this.AddHtmlLocalized(70, 224, 229, 60, valueDesc, false, false);
+            AddHtmlLocalized(157, 73, 200, 40, 1051000 + (int)virtue, false, false);
+            AddHtmlLocalized(75, 95, 220, 140, description, false, false);
+            AddHtmlLocalized(70, 224, 229, 60, valueDesc, false, false);
 
-            this.AddButton(65, 277, 1209, 1209, 1, GumpButtonType.Reply, 0);
+            AddButton(65, 277, 1209, 1209, 1, GumpButtonType.Reply, 0);
 
-            this.AddButton(280, 43, 4014, 4014, 2, GumpButtonType.Reply, 0);
+            AddButton(280, 43, 4014, 4014, 2, GumpButtonType.Reply, 0);
 
-            this.AddHtmlLocalized(83, 275, 400, 40, (webPage == null) ? 1052055 : 1052052, false, false); // This virtue is not yet defined. OR -click to learn more (opens webpage)
+            AddHtmlLocalized(83, 275, 400, 40, (webPage == null) ? 1052055 : 1052052, false, false); // This virtue is not yet defined. OR -click to learn more (opens webpage)
 
             AddKRHtmlLocalized(0, 0, 0, 0, 1078056, false, false); // MORE
             AddKRHtmlLocalized(0, 0, 0, 0, 1011447, false, false); // BACK
@@ -97,15 +97,15 @@ namespace Server
             {
                 case 1:
                     {
-                        this.m_Beholder.SendGump(new VirtueInfoGump(this.m_Beholder, this.m_Virtue, this.m_Desc, this.m_Page));
+                        m_Beholder.SendGump(new VirtueInfoGump(m_Beholder, m_Virtue, m_Desc, m_Page));
 
-                        if (this.m_Page != null)
-                            state.Send(new LaunchBrowser(this.m_Page)); //No message about web browser starting on OSI
+                        if (m_Page != null)
+                            state.Send(new LaunchBrowser(m_Page)); //No message about web browser starting on OSI
                         break;
                     }
                 case 2:
                     {
-                        this.m_Beholder.SendGump(new VirtueStatusGump(this.m_Beholder));
+                        m_Beholder.SendGump(new VirtueStatusGump(m_Beholder));
                         break;
                     }
             }

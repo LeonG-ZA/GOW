@@ -15,9 +15,13 @@ namespace Server.Gumps
             int totalGold = from.TotalGold;
 
             if (offer > totalGold)
+            {
                 offer = totalGold;
+            }
             else if (offer < 0)
+            {
                 offer = 0;
+            }
 
             m_From = from;
             m_Offer = offer;
@@ -65,7 +69,7 @@ namespace Server.Gumps
                 case 0:
                     {
                         // You have decided to tithe no gold to the shrine.
-                        this.m_From.LocalOverheadMessage(MessageType.Regular, 0x3B2, 1060193);
+                        m_From.LocalOverheadMessage(MessageType.Regular, 0x3B2, 1060193);
                         break;
                     }
                 case 1:
@@ -78,56 +82,62 @@ namespace Server.Gumps
                         switch ( info.ButtonID )
                         {
                             case 1:
-                                offer = this.m_Offer - 100;
+                                offer = m_Offer - 100;
                                 break;
                             case 2:
                                 offer = 0;
                                 break;
                             case 3:
-                                offer = this.m_Offer + 100;
+                                offer = m_Offer + 100;
                                 break;
                             case 4:
-                                offer = this.m_From.TotalGold;
+                                offer = m_From.TotalGold;
                                 break;
                         }
 
-                        this.m_From.SendGump(new TithingGump(this.m_From, offer));
+                        m_From.SendGump(new TithingGump(m_From, offer));
                         break;
                     }
                 case 5:
                     {
-                        int totalGold = this.m_From.TotalGold;
+                        int totalGold = m_From.TotalGold;
 
-                        if (this.m_Offer > totalGold)
-                            this.m_Offer = totalGold;
-                        else if (this.m_Offer < 0)
-                            this.m_Offer = 0;
+                        if (m_Offer > totalGold)
+                        {
+                            m_Offer = totalGold;
+                        }
+                        else if (m_Offer < 0)
+                        {
+                            m_Offer = 0;
+                        }
 
-                        if ((this.m_From.TithingPoints + this.m_Offer) > 100000) // TODO: What's the maximum?
-                            this.m_Offer = (100000 - this.m_From.TithingPoints);
+                        if ((m_From.TithingPoints + m_Offer) > 100000) // TODO: What's the maximum?
+                        {
+                            m_Offer = (100000 - m_From.TithingPoints);
+                        }
 
-                        if (this.m_Offer <= 0)
+                        if (m_Offer <= 0)
                         {
                             // You have decided to tithe no gold to the shrine.
-                            this.m_From.LocalOverheadMessage(MessageType.Regular, 0x3B2, 1060193);
+                            m_From.LocalOverheadMessage(MessageType.Regular, 0x3B2, 1060193);
                             break;
                         }
 
-                        Container pack = this.m_From.Backpack;
+                        Container pack = m_From.Backpack;
 
-                        if (pack != null && pack.ConsumeTotal(typeof(Gold), this.m_Offer))
+                        if (pack != null && pack.ConsumeTotal(typeof(Gold), m_Offer))
                         {
                             // You tithe gold to the shrine as a sign of devotion.
-                            this.m_From.LocalOverheadMessage(MessageType.Regular, 0x3B2, 1060195);
-                            this.m_From.TithingPoints += this.m_Offer;
+                            m_From.LocalOverheadMessage(MessageType.Regular, 0x3B2, 1060195);
+                            m_From.TithingPoints += m_Offer;
 
-                            this.m_From.PlaySound(0x243);
-                            this.m_From.PlaySound(0x2E6);
+                            m_From.PlaySound(0x243);
+                            m_From.PlaySound(0x2E6);
                         }
                         else
                         {
                             // You do not have enough gold to tithe that amount!
-                            this.m_From.LocalOverheadMessage(MessageType.Regular, 0x3B2, 1060194);
+                            m_From.LocalOverheadMessage(MessageType.Regular, 0x3B2, 1060194);
                         }
 
                         break;

@@ -1,14 +1,12 @@
 using System;
 using System.Collections.Generic;
 using System.IO;
-using Server;
 using Server.Commands;
-using Server.Mobiles;
 using Server.CharConfiguration;
 
 namespace Server.Engines
 {
-	public class GuaranteedGainSystem : Timer
+    public class GuaranteedGainSystem : Timer
 	{
         // From OSI - http://guide.uo.com/skill_1001.html
 		private static int[] m_Terms350 = new int[] { 1, 4, 7, 9, 12, 14, 17, 20, 23, 25, 27, 33, 55, 78, 114, 144, 180, 228, 276, 336, 396, 468, 540, 618 };

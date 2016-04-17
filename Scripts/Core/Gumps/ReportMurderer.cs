@@ -20,10 +20,10 @@ namespace Server.Gumps
         private ReportMurdererGump(Mobile victum, List<Mobile> killers, int idx)
             : base(0, 0)
         {
-            this.m_Killers = killers;
-            this.m_Victum = victum;
-            this.m_Idx = idx;
-            this.BuildGump();
+            m_Killers = killers;
+            m_Victum = victum;
+            m_Idx = idx;
+            BuildGump();
         }
 
         public static void Initialize()
@@ -51,13 +51,17 @@ namespace Server.Gumps
                     }
                 }
                 if (ai.Attacker.Player && (DateTime.UtcNow - ai.LastCombatTime) < TimeSpan.FromSeconds(30.0) && !toGive.Contains(ai.Attacker))
+                {
                     toGive.Add(ai.Attacker);
+                }
             }
 
             foreach (AggressorInfo ai in m.Aggressed)
             {
                 if (ai.Defender.Player && (DateTime.UtcNow - ai.LastCombatTime) < TimeSpan.FromSeconds(30.0) && !toGive.Contains(ai.Defender))
+                {
                     toGive.Add(ai.Defender);
+                }
             }
 
             foreach (Mobile g in toGive)
@@ -72,9 +76,13 @@ namespace Server.Gumps
                 int karmaAward = 0;
 
                 if (innocent)
+                {
                     karmaAward = (ourKarma > -2500 ? -850 : -110 - (m.Karma / 100));
+                }
                 else if (criminal)
+                {
                     karmaAward = 50;
+                }
 
                 Titles.AwardFame(g, fameAward, false);
                 Titles.AwardKarma(g, karmaAward, true);
@@ -83,10 +91,14 @@ namespace Server.Gumps
             }
 
             if (m is PlayerMobile && ((PlayerMobile)m).NpcGuild == NpcGuild.ThievesGuild)
+            {
                 return;
+            }
 
             if (killers.Count > 0)
+            {
                 new GumpTimer(m, killers).Start();
+            }
         }
 
         public static void ReportedListExpiry_Callback(object state)
@@ -110,7 +122,7 @@ namespace Server.Gumps
             {
                 case 1:
                     {
-                        Mobile killer = this.m_Killers[this.m_Idx];
+                        Mobile killer = m_Killers[m_Idx];
                         if (killer != null && !killer.Deleted)
                         {
                             killer.Kills++;
@@ -146,38 +158,40 @@ namespace Server.Gumps
                     }
             }
 
-            this.m_Idx++;
-            if (this.m_Idx < this.m_Killers.Count)
-                from.SendGump(new ReportMurdererGump(from, this.m_Killers, this.m_Idx));
+            m_Idx++;
+            if (m_Idx < m_Killers.Count)
+            {
+                from.SendGump(new ReportMurdererGump(from, m_Killers, m_Idx));
+            }
         }
 
         private void BuildGump()
         {
-            this.AddBackground(265, 205, 320, 290, 5054);
-            this.Closable = false;
-            this.Resizable = false;
+            AddBackground(265, 205, 320, 290, 5054);
+            Closable = false;
+            Resizable = false;
 
-            this.AddPage(0);
+            AddPage(0);
 
-            this.AddImageTiled(225, 175, 50, 45, 0xCE);   //Top left corner
-            this.AddImageTiled(267, 175, 315, 44, 0xC9);  //Top bar
-            this.AddImageTiled(582, 175, 43, 45, 0xCF);   //Top right corner
-            this.AddImageTiled(225, 219, 44, 270, 0xCA);  //Left side
-            this.AddImageTiled(582, 219, 44, 270, 0xCB);  //Right side
-            this.AddImageTiled(225, 489, 44, 43, 0xCC);   //Lower left corner
-            this.AddImageTiled(267, 489, 315, 43, 0xE9);  //Lower Bar
-            this.AddImageTiled(582, 489, 43, 43, 0xCD);   //Lower right corner
+            AddImageTiled(225, 175, 50, 45, 0xCE);   //Top left corner
+            AddImageTiled(267, 175, 315, 44, 0xC9);  //Top bar
+            AddImageTiled(582, 175, 43, 45, 0xCF);   //Top right corner
+            AddImageTiled(225, 219, 44, 270, 0xCA);  //Left side
+            AddImageTiled(582, 219, 44, 270, 0xCB);  //Right side
+            AddImageTiled(225, 489, 44, 43, 0xCC);   //Lower left corner
+            AddImageTiled(267, 489, 315, 43, 0xE9);  //Lower Bar
+            AddImageTiled(582, 489, 43, 43, 0xCD);   //Lower right corner
 
-            this.AddPage(1);
+            AddPage(1);
 
-            this.AddHtml(260, 234, 300, 140, ((Mobile)this.m_Killers[this.m_Idx]).Name, false, false); // Player's Name
-            this.AddHtmlLocalized(260, 254, 300, 140, 1049066, false, false); // Would you like to report...
+            AddHtml(260, 234, 300, 140, ((Mobile)m_Killers[m_Idx]).Name, false, false); // Player's Name
+            AddHtmlLocalized(260, 254, 300, 140, 1049066, false, false); // Would you like to report...
 
-            this.AddButton(260, 300, 0xFA5, 0xFA7, 1, GumpButtonType.Reply, 0);
-            this.AddHtmlLocalized(300, 300, 300, 50, 1046362, false, false); // Yes
+            AddButton(260, 300, 0xFA5, 0xFA7, 1, GumpButtonType.Reply, 0);
+            AddHtmlLocalized(300, 300, 300, 50, 1046362, false, false); // Yes
 
-            this.AddButton(360, 300, 0xFA5, 0xFA7, 2, GumpButtonType.Reply, 0);
-            this.AddHtmlLocalized(400, 300, 300, 50, 1046363, false, false); // No
+            AddButton(360, 300, 0xFA5, 0xFA7, 2, GumpButtonType.Reply, 0);
+            AddHtmlLocalized(400, 300, 300, 50, 1046363, false, false); // No
         }
 
         private class GumpTimer : Timer
@@ -187,13 +201,13 @@ namespace Server.Gumps
             public GumpTimer(Mobile victim, List<Mobile> killers)
                 : base(TimeSpan.FromSeconds(4.0))
             {
-                this.m_Victim = victim;
-                this.m_Killers = killers;
+                m_Victim = victim;
+                m_Killers = killers;
             }
 
             protected override void OnTick()
             {
-                this.m_Victim.SendGump(new ReportMurdererGump(this.m_Victim, this.m_Killers));
+                m_Victim.SendGump(new ReportMurdererGump(m_Victim, m_Killers));
             }
         }
     }

@@ -1,7 +1,5 @@
 using System;
-using Server;
 using Server.Mobiles;
-using Server.Network;
 
 namespace Server.Buff.Icons
 {
@@ -22,9 +20,11 @@ namespace Server.Buff.Icons
                 EventSink.ClientVersionReceived += new ClientVersionReceivedHandler(delegate(ClientVersionReceivedArgs args)
                 {
                     PlayerMobile pm = args.State.Mobile as PlayerMobile;
-					
+
                     if (pm != null)
+                    {
                         Timer.DelayCall(TimeSpan.Zero, pm.ResendBuffs);
+                    }
                 });
             }
         }
@@ -156,7 +156,9 @@ namespace Server.Buff.Icons
             PlayerMobile pm = m as PlayerMobile;
 
             if (pm != null)
+            {
                 pm.AddBuff(b);
+            }
         }
 
         public static void RemoveBuff(Mobile m, BuffInfo b)
@@ -164,7 +166,9 @@ namespace Server.Buff.Icons
             PlayerMobile pm = m as PlayerMobile;
 
             if (pm != null)
+            {
                 pm.RemoveBuff(b);
+            }
         }
 
         public static void RemoveBuff(Mobile m, BuffIcon b)
@@ -172,7 +176,9 @@ namespace Server.Buff.Icons
             PlayerMobile pm = m as PlayerMobile;
 
             if (pm != null)
+            {
                 pm.RemoveBuff(b);
+            }
         }
         #endregion
     }

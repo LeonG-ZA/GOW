@@ -61,10 +61,14 @@ namespace Server
         public static int Damage( Mobile m, Mobile from, int damage, bool ignoreArmor, int phys, int fire, int cold, int pois, int nrgy, int chaos, int direct, bool keepAlive, bool archer, bool deathStrike)
         {
             if (m == null || m.Deleted || !m.Alive || damage <= 0)
+            {
                 return 0;
+            }
 
             if (phys == 0 && fire == 100 && cold == 0 && pois == 0 && nrgy == 0)
-                Mobiles.MeerMage.StopEffect(m, true);
+            {
+                MeerMage.StopEffect(m, true);
+            }
 
             if (!Core.AOS)
             {
@@ -84,28 +88,20 @@ namespace Server
             {
                 switch (Utility.Random(5))
                 {
-                    case 0:
-                        phys += chaos;
-                        break;
-                    case 1:
-                        fire += chaos;
-                        break;
-                    case 2:
-                        cold += chaos;
-                        break;
-                    case 3:
-                        pois += chaos;
-                        break;
-                    case 4:
-                        nrgy += chaos;
-                        break;
+                    case 0: phys += chaos; break;
+                    case 1: fire += chaos; break;
+                    case 2: cold += chaos; break;
+                    case 3: pois += chaos; break;
+                    case 4: nrgy += chaos; break;
                 }
             }
 
             BaseQuiver quiver = null;
 
             if (archer && from != null)
+            {
                 quiver = from.FindItemOnLayer(Layer.Cloak) as BaseQuiver;
+            }
 
             int totalDamage;
 
@@ -129,28 +125,40 @@ namespace Server
                     totalDamage += damage * direct / 100;
 
                     if (quiver != null)
+                    {
                         totalDamage += totalDamage * quiver.DamageIncrease / 100;
+                    }
                 }
 
                 if (totalDamage < 1)
+                {
                     totalDamage = 1;
+                }
             }
             else if (Core.ML && m is PlayerMobile && from is PlayerMobile)
             {
                 if (quiver != null)
+                {
                     damage += damage * quiver.DamageIncrease / 100;
+                }
 
                 if (!deathStrike)
-                    totalDamage = Math.Min(damage, 35);	// Direct Damage cap of 35
+                {
+                    totalDamage = Math.Min(damage, 35); // Direct Damage cap of 35
+                }
                 else
-                    totalDamage = Math.Min(damage, 70);	// Direct Damage cap of 70
+                {
+                    totalDamage = Math.Min(damage, 70); // Direct Damage cap of 70
+                }
             }
             else
             {
                 totalDamage = damage;
 
                 if (Core.ML && quiver != null)
+                {
                     totalDamage += totalDamage * quiver.DamageIncrease / 100;
+                }
             }
 
             if ((from == null || !from.Player) && m.Player && m.Mount is SwampDragon)
@@ -164,9 +172,10 @@ namespace Server
 
                     totalDamage -= absorbed;
 
-                    // Mondain's Legacy mod
                     if (!(pet is ParoxysmusSwampDragon))
+                    {
                         pet.BardingHP -= absorbed;
+                    }
 
                     if (pet.BardingHP < 0)
                     {
@@ -177,13 +186,20 @@ namespace Server
                     }
                 }
             }
-            //Should this go in after or before dragon barding absorb?
+
             if (ignoreArmor)
+            {
                 DamageEaterContext.CheckDamage(m, totalDamage, 0, 0, 0, 0, 0, 100);
+            }
             else
+            {
                 DamageEaterContext.CheckDamage(m, totalDamage, phys, fire, cold, pois, nrgy, direct);
+            }
+
             if (keepAlive && totalDamage > m.Hits)
+            {
                 totalDamage = m.Hits;
+            }
 
             if (from != null && !from.Deleted && from.Alive)
             {
@@ -211,15 +227,21 @@ namespace Server
             */
 
             if (direct > 0)
+            {
                 Spells.Spellweaving.AttunementSpell.TryAbsorb(m, ref totalDamage);
+            }
 
             if (from != null)
+            {
                 SpellHelper.DoLeech(totalDamage, from, m);
+            }
 
             m.Damage(totalDamage, from, true, false);
 
             if (m.Spell != null)
+            {
                 ((Spell)m.Spell).CheckCasterDisruption(true, phys, fire, cold, pois, nrgy);
+            }
 
             BattleLust.IncreaseBattleLust(m, totalDamage);
 
@@ -229,7 +251,9 @@ namespace Server
         public static void Fix(ref int val)
         {
             if (val < 0)
+            {
                 val = 0;
+            }
         }
 
         public static int Scale(int input, int percent)
@@ -315,7 +339,9 @@ namespace Server
         public static int GetValue(Mobile m, AosAttribute attribute)
         {
             if (!Core.AOS)
+            {
                 return 0;
+            }
 
             List<Item> items = m.Items;
             int value = 0;
@@ -331,55 +357,73 @@ namespace Server
                     AosAttributes attrs = ((BaseWeapon)obj).Attributes;
 
                     if (attrs != null)
+                    {
                         value += attrs[attribute];
+                    }
 
                     if (attribute == AosAttribute.Luck)
+                    {
                         value += ((BaseWeapon)obj).GetLuckBonus();
+                    }
                 }
                 else if (obj is BaseArmor)
                 {
                     AosAttributes attrs = ((BaseArmor)obj).Attributes;
 
                     if (attrs != null)
+                    {
                         value += attrs[attribute];
+                    }
 
                     if (attribute == AosAttribute.Luck)
+                    {
                         value += ((BaseArmor)obj).GetLuckBonus();
+                    }
                 }
                 else if (obj is BaseJewel)
                 {
                     AosAttributes attrs = ((BaseJewel)obj).Attributes;
 
                     if (attrs != null)
+                    {
                         value += attrs[attribute];
+                    }
                 }
                 else if (obj is BaseClothing)
                 {
                     AosAttributes attrs = ((BaseClothing)obj).Attributes;
 
                     if (attrs != null)
+                    {
                         value += attrs[attribute];
+                    }
                 }
                 else if (obj is Spellbook)
                 {
                     AosAttributes attrs = ((Spellbook)obj).Attributes;
 
                     if (attrs != null)
+                    {
                         value += attrs[attribute];
+                    }
                 }
                 else if (obj is BaseQuiver)
                 {
                     AosAttributes attrs = ((BaseQuiver)obj).Attributes;
 
                     if (attrs != null)
+                    {
                         value += attrs[attribute];
+                    }
                 }
                 else if (obj is BaseTalisman)
                 {
                     AosAttributes attrs = ((BaseTalisman)obj).Attributes;
 
                     if (attrs != null)
+                    {
                         value += attrs[attribute];
+                    }
                 }
 
                 if (obj is ISetItem)
@@ -388,44 +432,56 @@ namespace Server
                     AosAttributes attrs = item.SetAttributes;
 
                     if (attrs != null && item.LastEquipped)
+                    {
                         value += attrs[attribute];
+                    }
                 }
 
                 if (attribute == AosAttribute.WeaponDamage)
                 {
                     if (BaseMagicalFood.IsUnderInfluence(m, MagicalFood.WrathGrapes))
+                    {
                         value += 10; // TODO check
+                    }
                 }
                 else if (attribute == AosAttribute.SpellDamage)
                 {
                     if (BaseMagicalFood.IsUnderInfluence(m, MagicalFood.WrathGrapes))
+                    {
                         value += 5; // TODO check
+                    }
                 }
                 else if (attribute == AosAttribute.CastSpeed)
                 {
                     if (MonstrousInterredGrizzle.UnderCacophonicAttack(m))
+                    {
                         value -= 3; // TODO check
+                    }
                 }
                 else if (attribute == AosAttribute.WeaponSpeed)
                 {
                     if (MonstrousInterredGrizzle.UnderCacophonicAttack(m))
+                    {
                         value -= 3; // TODO check
+                    }
                 }
                 else if (attribute == AosAttribute.RegenHits)
                 {
                     if (SearingWeaponContext.HasContext(m))
+                    {
                         value -= m is PlayerMobile ? 20 : 60;
+                    }
                 }
             }
             return value;
         }
 
-        public int this[AosAttribute attribute] { get { return this.ExtendedGetValue((int)attribute); } set { this.SetValue((int)attribute, value); } }
+        public int this[AosAttribute attribute] { get { return ExtendedGetValue((int)attribute); } set { SetValue((int)attribute, value); } }
 
         public int ExtendedGetValue(int bitmask)
         {
-            int value = this.GetValue(bitmask);
-            XmlAosAttributes xaos = (XmlAosAttributes)XmlAttach.FindAttachment(this.Owner, typeof(XmlAosAttributes));
+            int value = GetValue(bitmask);
+            XmlAosAttributes xaos = (XmlAosAttributes)XmlAttach.FindAttachment(Owner, typeof(XmlAosAttributes));
 
             if (xaos != null)
             {
@@ -442,13 +498,13 @@ namespace Server
 
         public void AddStatBonuses(Mobile to)
         {
-            int strBonus = this.BonusStr;
-            int dexBonus = this.BonusDex;
-            int intBonus = this.BonusInt;
+            int strBonus = BonusStr;
+            int dexBonus = BonusDex;
+            int intBonus = BonusInt;
 
             if (strBonus != 0 || dexBonus != 0 || intBonus != 0)
             {
-                string modName = this.Owner.Serial.ToString();
+                string modName = Owner.Serial.ToString();
 
                 if (strBonus != 0)
                 {
@@ -469,7 +525,7 @@ namespace Server
 
         public void RemoveStatBonuses(Mobile from)
         {
-            string modName = this.Owner.Serial.ToString();
+            string modName = Owner.Serial.ToString();
 
             from.RemoveStatMod(modName + "Str");
             from.RemoveStatMod(modName + "Dex");
@@ -593,22 +649,34 @@ namespace Server
         public void GetProperties(ObjectPropertyList list, Item item)
         {
             if (Brittle > 0 || item is BaseWeapon && ((BaseWeapon)item).Attributes.Brittle > 0 || item is BaseArmor && ((BaseArmor)item).Attributes.Brittle > 0 || item is BaseJewel && ((BaseJewel)item).Attributes.Brittle > 0 || item is BaseClothing && ((BaseClothing)item).Attributes.Brittle > 0)
+            {
                 list.Add(1116209);
+            }
 
             if (Prized > 0)
+            {
                 list.Add(1154910);
+            }
 
             if (Massive > 0)
+            {
                 list.Add(1038003);
+            }
 
             if (Unwieldly > 0)
+            {
                 list.Add(1154909);
+            }
 
             if (Antique > 0)
+            {
                 list.Add(1076187);
+            }
 
             if (NoRepair > 0)
+            {
                 list.Add(1151782);
+            }
         }
 
         public int this[NegativeAttribute attribute]
@@ -696,7 +764,9 @@ namespace Server
         public static int GetValue(Mobile m, AosWeaponAttribute attribute)
         {
             if (!Core.AOS)
+            {
                 return 0;
+            }
 
             List<Item> items = m.Items;
             int value = 0;
@@ -712,7 +782,9 @@ namespace Server
                     AosWeaponAttributes attrs = ((BaseWeapon)obj).WeaponAttributes;
 
                     if (attrs != null)
+                    {
                         value += attrs[attribute];
+                    }
                 }
             }
 
@@ -723,19 +795,19 @@ namespace Server
         {
             get
             {
-                return this.ExtendedGetValue((int)attribute);
+                return ExtendedGetValue((int)attribute);
             }
             set
             {
-                this.SetValue((int)attribute, value);
+                SetValue((int)attribute, value);
             }
         }
 
         public int ExtendedGetValue(int bitmask)
         {
-            int value = this.GetValue(bitmask);
+            int value = GetValue(bitmask);
 
-            XmlAosAttributes xaos = (XmlAosAttributes)XmlAttach.FindAttachment(this.Owner, typeof(XmlAosAttributes));
+            XmlAosAttributes xaos = (XmlAosAttributes)XmlAttach.FindAttachment(Owner, typeof(XmlAosAttributes));
 
             if (xaos != null)
             {
@@ -777,9 +849,13 @@ namespace Server
                     this[AosWeaponAttribute.SelfRepair] = value;
 
                     if (Owner is BaseArmor)
+                    {
                         ((BaseArmor)Owner).OnSelfRepairChanged();
+                    }
                     else if (Owner is BaseClothing)
+                    {
                         ((BaseClothing)Owner).OnSelfRepairChanged();
+                    }
                 }
             }
         }
@@ -1160,7 +1236,9 @@ namespace Server
         public static int GetValue(Mobile m, AosArmorAttribute attribute)
         {
             if (!Core.AOS)
+            {
                 return 0;
+            }
 
             List<Item> items = m.Items;
             int value = 0;
@@ -1174,14 +1252,18 @@ namespace Server
                     AosArmorAttributes attrs = ((BaseArmor)obj).ArmorAttributes;
 
                     if (attrs != null)
+                    {
                         value += attrs[attribute];
+                    }
                 }
                 else if (obj is BaseClothing)
                 {
                     AosArmorAttributes attrs = ((BaseClothing)obj).ClothingAttributes;
 
                     if (attrs != null)
+                    {
                         value += attrs[attribute];
+                    }
                 }
             }
 
@@ -1192,18 +1274,18 @@ namespace Server
         {
             get
             {
-                return this.ExtendedGetValue((int)attribute);
+                return ExtendedGetValue((int)attribute);
             }
             set
             {
-                this.SetValue((int)attribute, value);
+                SetValue((int)attribute, value);
             }
         }
 
         public int ExtendedGetValue(int bitmask)
         {
-            int value = this.GetValue(bitmask);
-            XmlAosAttributes xaos = (XmlAosAttributes)XmlAttach.FindAttachment(this.Owner, typeof(XmlAosAttributes));
+            int value = GetValue(bitmask);
+            XmlAosAttributes xaos = (XmlAosAttributes)XmlAttach.FindAttachment(Owner, typeof(XmlAosAttributes));
 
             if (xaos != null)
             {
@@ -1323,8 +1405,10 @@ namespace Server
                 SkillName skill;
                 double bonus;
 
-                if (!this.GetValues(i, out skill, out bonus))
+                if (!GetValues(i, out skill, out bonus))
+                {
                     continue;
+                }
 
                 list.Add(1060451 + i, "#{0}\t{1}", GetLabel(skill), bonus);
             }
@@ -1334,58 +1418,62 @@ namespace Server
         {
             switch (skill)
             {
-                case SkillName.EvalInt:
-                    return 1002070; // Evaluate Intelligence
-                case SkillName.Forensics:
-                    return 1002078; // Forensic Evaluation
-                case SkillName.Lockpicking:
-                    return 1002097; // Lockpicking
-                default:
-                    return 1044060 + (int)skill;
+                case SkillName.EvalInt: return 1002070; // Evaluate Intelligence
+                case SkillName.Forensics: return 1002078; // Forensic Evaluation
+                case SkillName.Lockpicking: return 1002097; // Lockpicking
+                default: return 1044060 + (int)skill;
             }
         }
 
         public void AddTo(Mobile m)
         {
-            this.Remove();
+            Remove();
 
             for (int i = 0; i < 5; ++i)
             {
                 SkillName skill;
                 double bonus;
 
-                if (!this.GetValues(i, out skill, out bonus))
+                if (!GetValues(i, out skill, out bonus))
+                {
                     continue;
+                }
 
-                if (this.m_Mods == null)
-                    this.m_Mods = new List<SkillMod>();
+                if (m_Mods == null)
+                {
+                    m_Mods = new List<SkillMod>();
+                }
 
                 SkillMod sk = new DefaultSkillMod(skill, true, bonus);
                 sk.ObeyCap = true;
                 m.AddSkillMod(sk);
-                this.m_Mods.Add(sk);
+                m_Mods.Add(sk);
             }
         }
 
         public void Remove()
         {
-            if (this.m_Mods == null)
-                return;
-
-            for (int i = 0; i < this.m_Mods.Count; ++i)
+            if (m_Mods == null)
             {
-                Mobile m = this.m_Mods[i].Owner;
-                this.m_Mods[i].Remove();
+                return;
+            }
+
+            for (int i = 0; i < m_Mods.Count; ++i)
+            {
+                Mobile m = m_Mods[i].Owner;
+                m_Mods[i].Remove();
 
                 if (Core.ML)
-                    this.CheckCancelMorph(m);
+                {
+                    CheckCancelMorph(m);
+                }
             }
-            this.m_Mods = null;
+            m_Mods = null;
         }
 
         public bool GetValues(int index, out SkillName skill, out double bonus)
         {
-            int v = this.GetValue(1 << index);
+            int v = GetValue(1 << index);
             int vSkill = 0;
             int vBonus = 0;
 
@@ -1423,7 +1511,7 @@ namespace Server
                 vSkill >>= 1;
             }
 
-            this.SetValue(1 << index, v);
+            SetValue(1 << index, v);
         }
 
         public SkillName GetSkill(int index)
@@ -1431,14 +1519,14 @@ namespace Server
             SkillName skill;
             double bonus;
 
-            this.GetValues(index, out skill, out bonus);
+            GetValues(index, out skill, out bonus);
 
             return skill;
         }
 
         public void SetSkill(int index, SkillName skill)
         {
-            this.SetValues(index, skill, this.GetBonus(index));
+            SetValues(index, skill, GetBonus(index));
         }
 
         public double GetBonus(int index)
@@ -1446,14 +1534,14 @@ namespace Server
             SkillName skill;
             double bonus;
 
-            this.GetValues(index, out skill, out bonus);
+            GetValues(index, out skill, out bonus);
 
             return bonus;
         }
 
         public void SetBonus(int index, double bonus)
         {
-            this.SetValues(index, this.GetSkill(index), bonus);
+            SetValues(index, GetSkill(index), bonus);
         }
 
         public override string ToString()
@@ -1464,7 +1552,9 @@ namespace Server
         public void CheckCancelMorph(Mobile m)
         {
             if (m == null)
+            {
                 return;
+            }
 
             AnimalFormContext acontext = AnimalForm.GetContext(m);
             TransformationSpell.TransformContext context = TransformationSpell.GetContext(m);
@@ -1473,10 +1563,16 @@ namespace Server
             {
                 int i;
                 for (i = 0; i < AnimalForm.Entries.Length; ++i)
+                {
                     if (AnimalForm.Entries[i].Type == acontext.Type)
+                    {
                         break;
+                    }
+                }
                 if (m.Skills[SkillName.Ninjitsu].Value < AnimalForm.Entries[i].ReqSkill)
+                {
                     AnimalForm.RemoveContext(m, true);
+                }
             }
             if (!m.CanBeginAction(typeof(PolymorphSpell)) && m.Skills[SkillName.Magery].Value < 66.1)
             {
@@ -1490,7 +1586,9 @@ namespace Server
             if (!m.CanBeginAction(typeof(IncognitoSpell)) && m.Skills[SkillName.Magery].Value < 38.1)
             {
                 if (m is PlayerMobile)
+                {
                     ((PlayerMobile)m).SetHairMods(-1, -1);
+                }
                 m.BodyMod = 0;
                 m.HueMod = -1;
                 m.NameMod = null;
@@ -1507,11 +1605,11 @@ namespace Server
         {
             get
             {
-                return this.GetBonus(0);
+                return GetBonus(0);
             }
             set
             {
-                this.SetBonus(0, value);
+                SetBonus(0, value);
             }
         }
 
@@ -1520,11 +1618,11 @@ namespace Server
         {
             get
             {
-                return this.GetSkill(0);
+                return GetSkill(0);
             }
             set
             {
-                this.SetSkill(0, value);
+                SetSkill(0, value);
             }
         }
 
@@ -1533,11 +1631,11 @@ namespace Server
         {
             get
             {
-                return this.GetBonus(1);
+                return GetBonus(1);
             }
             set
             {
-                this.SetBonus(1, value);
+                SetBonus(1, value);
             }
         }
 
@@ -1546,11 +1644,11 @@ namespace Server
         {
             get
             {
-                return this.GetSkill(1);
+                return GetSkill(1);
             }
             set
             {
-                this.SetSkill(1, value);
+                SetSkill(1, value);
             }
         }
 
@@ -1559,11 +1657,11 @@ namespace Server
         {
             get
             {
-                return this.GetBonus(2);
+                return GetBonus(2);
             }
             set
             {
-                this.SetBonus(2, value);
+                SetBonus(2, value);
             }
         }
 
@@ -1572,11 +1670,11 @@ namespace Server
         {
             get
             {
-                return this.GetSkill(2);
+                return GetSkill(2);
             }
             set
             {
-                this.SetSkill(2, value);
+                SetSkill(2, value);
             }
         }
 
@@ -1585,11 +1683,11 @@ namespace Server
         {
             get
             {
-                return this.GetBonus(3);
+                return GetBonus(3);
             }
             set
             {
-                this.SetBonus(3, value);
+                SetBonus(3, value);
             }
         }
 
@@ -1598,11 +1696,11 @@ namespace Server
         {
             get
             {
-                return this.GetSkill(3);
+                return GetSkill(3);
             }
             set
             {
-                this.SetSkill(3, value);
+                SetSkill(3, value);
             }
         }
 
@@ -1611,11 +1709,11 @@ namespace Server
         {
             get
             {
-                return this.GetBonus(4);
+                return GetBonus(4);
             }
             set
             {
-                this.SetBonus(4, value);
+                SetBonus(4, value);
             }
         }
 
@@ -1624,11 +1722,11 @@ namespace Server
         {
             get
             {
-                return this.GetSkill(4);
+                return GetSkill(4);
             }
             set
             {
-                this.SetSkill(4, value);
+                SetSkill(4, value);
             }
         }
     }
@@ -1694,16 +1792,22 @@ namespace Server
                     SAAbsorptionAttributes attrs = ((BaseArmor)obj).AbsorptionAttributes;
 
                     if (attrs != null)
+                    {
                         value += attrs[attribute];
+                    }
                 }
                 else
+                {
                     if (obj is BaseWeapon)
                     {
                         SAAbsorptionAttributes attrs = ((BaseWeapon)obj).AbsorptionAttributes;
 
                         if (attrs != null)
+                        {
                             value += attrs[attribute];
+                        }
                     }
+                }
             }
 
             return value;
@@ -1713,11 +1817,11 @@ namespace Server
         {
             get
             {
-                return this.GetValue((int)attribute);
+                return GetValue((int)attribute);
             }
             set
             {
-                this.SetValue((int)attribute, value);
+                SetValue((int)attribute, value);
             }
         }
 
@@ -2016,12 +2120,12 @@ namespace Server
         {
         }
 
-        public int this[AosElementAttribute attribute] { get { return this.ExtendedGetValue((int)attribute); } set { this.SetValue((int)attribute, value); } }
+        public int this[AosElementAttribute attribute] { get { return ExtendedGetValue((int)attribute); } set { SetValue((int)attribute, value); } }
 
         public int ExtendedGetValue(int bitmask)
         {
-            int value = this.GetValue(bitmask);
-            XmlAosAttributes xaos = (XmlAosAttributes)XmlAttach.FindAttachment(this.Owner, typeof(XmlAosAttributes));
+            int value = GetValue(bitmask);
+            XmlAosAttributes xaos = (XmlAosAttributes)XmlAttach.FindAttachment(Owner, typeof(XmlAosAttributes));
 
             if (xaos != null)
             {

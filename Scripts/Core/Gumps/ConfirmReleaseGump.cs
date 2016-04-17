@@ -1,5 +1,3 @@
-using System;
-using Server;
 using Server.Mobiles;
 
 namespace Server.Gumps
@@ -41,10 +39,14 @@ namespace Server.Gumps
 					{
 						m_Pet.ControlTarget = null;
 
-						if ( m_Pet is BaseHire )
-							m_Pet.ControlOrder = OrderType.Dismiss;
-						else
-							m_Pet.ControlOrder = OrderType.Release;
+                        if (m_Pet is BaseHire)
+                        {
+                            m_Pet.ControlOrder = OrderType.Dismiss;
+                        }
+                        else
+                        {
+                            m_Pet.ControlOrder = OrderType.Release;
+                        }
 					}
 				}
 			}

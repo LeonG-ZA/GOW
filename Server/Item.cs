@@ -942,7 +942,6 @@ namespace Server
         }
         #endregion
 
-        #region Enhance Client
         private byte m_GridLocation = 0xFF;
 
         [CommandProperty(AccessLevel.GameMaster)]
@@ -955,11 +954,14 @@ namespace Server
         public void SetGridLocation(byte pos, Container parent)
         {
             if (parent.IsFreePosition(pos))
+            {
                 m_GridLocation = pos;
+            }
             else
+            {
                 m_GridLocation = parent.GetNewPosition();
+            }
         }
-        #endregion
 
 		[Flags]
 		private enum ImplFlag : byte
@@ -6432,7 +6434,9 @@ namespace Server
                                 if (!m.InRange(newLocation, GetMaxUpdateRange()))
                                 {
                                     if (removeThis == null)
-                                        removeThis = this.RemovePacket;
+                                    {
+                                        removeThis = RemovePacket;
+                                    }
 
                                     state.Send(removeThis);
                                 }
@@ -6459,12 +6463,12 @@ namespace Server
         {
             if (m_ItemID != itemID)
             {
-                int oldPileWeight = this.PileWeight;
+                int oldPileWeight = PileWeight;
 
                 m_ItemID = itemID;
                 ReleaseWorldPackets();
 
-                int newPileWeight = this.PileWeight;
+                int newPileWeight = PileWeight;
 
                 UpdateTotal(this, TotalType.Weight, newPileWeight - oldPileWeight);
 
@@ -6481,7 +6485,9 @@ namespace Server
             set
             {
                 if (m_Transport != value)
+                {
                     m_Transport = value;
+                }
             }
         }
 

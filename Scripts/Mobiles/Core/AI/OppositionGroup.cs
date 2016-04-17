@@ -56,7 +56,7 @@ namespace Server
                 typeof(Unicorn),
                 typeof(Wisp),
                 typeof(Treefellow),
-                typeof(MLDryad),
+                typeof(Dryad),
                 typeof(Satyr)
             },
             new Type[]

@@ -1,6 +1,3 @@
-using System;
-using Server;
-
 namespace Server.Buff.Icons
 {
     public enum BuffIcon : short

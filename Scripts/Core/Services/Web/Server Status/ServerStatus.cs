@@ -1,8 +1,6 @@
 using System;
 using System.IO;
 using System.Text;
-using System.Collections;
-using Server;
 using Server.Network;
 using Server.Guilds;
 using Server.Mobiles;
@@ -11,12 +9,14 @@ using Server.MainConfiguration;
 
 namespace Server.Misc
 {
-	public class StatusPage : Timer
+    public class StatusPage : Timer
 	{
 		public static void Initialize()
 		{
             if (WebConfig.WebServerStatusEnabled)
-				new StatusPage().Start();
+            {
+                new StatusPage().Start();
+            }
 		}
 
 		public StatusPage() : base( TimeSpan.FromSeconds( 5.0 ), TimeSpan.FromSeconds( 60.0 ) )
@@ -39,8 +39,10 @@ namespace Server.Misc
 
 		protected override void OnTick()
 		{
-			if ( !Directory.Exists( "Web" ) )
-				Directory.CreateDirectory( "Web" );
+            if (!Directory.Exists("Web"))
+            {
+                Directory.CreateDirectory("Web");
+            }
 
 			using ( StreamWriter op = new StreamWriter( "Web/status.html" ) )
 			{
@@ -95,10 +97,14 @@ namespace Server.Misc
 
 							string title = m.GuildTitle;
 
-							if ( title != null )
-								title = title.Trim();
-							else
-								title = "";
+                            if (title != null)
+                            {
+                                title = title.Trim();
+                            }
+                            else
+                            {
+                                title = "";
+                            }
 
 							if ( title.Length > 0 )
 							{

@@ -62,7 +62,9 @@ namespace Server.Services.BaseAttributes
                         _Values = new int[reader.ReadEncodedInt()];
 
                         for (int i = 0; i < _Values.Length; ++i)
+                        {
                             _Values[i] = reader.ReadEncodedInt();
+                        }
 
                         break;
                     }
@@ -72,7 +74,9 @@ namespace Server.Services.BaseAttributes
                         _Values = new int[reader.ReadInt()];
 
                         for (int i = 0; i < _Values.Length; ++i)
+                        {
                             _Values[i] = reader.ReadInt();
+                        }
 
                         break;
                     }
@@ -87,23 +91,31 @@ namespace Server.Services.BaseAttributes
             writer.WriteEncodedInt((int)_Values.Length);
 
             for (int i = 0; i < _Values.Length; ++i)
+            {
                 writer.WriteEncodedInt((int)_Values[i]);
+            }
         }
 
         public int GetValue(int bitmask)
         {
             if (!Core.AOS)
+            {
                 return 0;
+            }
 
             uint mask = (uint)bitmask;
 
             if ((_Names & mask) == 0)
+            {
                 return 0;
+            }
 
             int index = GetIndex(mask);
 
             if (index >= 0 && index < _Values.Length)
+            {
                 return _Values[index];
+            }
 
             return 0;
         }
@@ -113,14 +125,20 @@ namespace Server.Services.BaseAttributes
             if ((bitmask == (int)AosWeaponAttribute.DurabilityBonus) && (this is AosWeaponAttributes))
             {
                 if (_Owner is BaseWeapon)
+                {
                     ((BaseWeapon)_Owner).UnscaleDurability();
+                }
             }
             else if ((bitmask == (int)AosArmorAttribute.DurabilityBonus) && (this is AosArmorAttributes))
             {
                 if (_Owner is BaseArmor)
+                {
                     ((BaseArmor)_Owner).UnscaleDurability();
+                }
                 else if (_Owner is BaseClothing)
+                {
                     ((BaseClothing)_Owner).UnscaleDurability();
+                }
             }
 
             uint mask = (uint)bitmask;
@@ -132,7 +150,9 @@ namespace Server.Services.BaseAttributes
                     int index = GetIndex(mask);
 
                     if (index >= 0 && index < _Values.Length)
+                    {
                         _Values[index] = value;
+                    }
                 }
                 else
                 {
@@ -144,12 +164,16 @@ namespace Server.Services.BaseAttributes
                         _Values = new int[old.Length + 1];
 
                         for (int i = 0; i < index; ++i)
+                        {
                             _Values[i] = old[i];
+                        }
 
                         _Values[index] = value;
 
                         for (int i = index; i < old.Length; ++i)
+                        {
                             _Values[i + 1] = old[i];
+                        }
 
                         _Names |= mask;
                     }
@@ -173,10 +197,14 @@ namespace Server.Services.BaseAttributes
                         _Values = new int[old.Length - 1];
 
                         for (int i = 0; i < index; ++i)
+                        {
                             _Values[i] = old[i];
+                        }
 
                         for (int i = index + 1; i < old.Length; ++i)
+                        {
                             _Values[i - 1] = old[i];
+                        }
                     }
                 }
             }
@@ -184,14 +212,20 @@ namespace Server.Services.BaseAttributes
             if ((bitmask == (int)AosWeaponAttribute.DurabilityBonus) && (this is AosWeaponAttributes))
             {
                 if (_Owner is BaseWeapon)
+                {
                     ((BaseWeapon)_Owner).ScaleDurability();
+                }
             }
             else if ((bitmask == (int)AosArmorAttribute.DurabilityBonus) && (this is AosArmorAttributes))
             {
                 if (_Owner is BaseArmor)
+                {
                     ((BaseArmor)_Owner).ScaleDurability();
+                }
                 else if (_Owner is BaseClothing)
+                {
                     ((BaseClothing)_Owner).ScaleDurability();
+                }
             }
 
             if (_Owner != null && _Owner.Parent is Mobile)
@@ -210,7 +244,9 @@ namespace Server.Services.BaseAttributes
             }
 
             if (_Owner != null)
+            {
                 _Owner.InvalidateProperties();
+            }
         }
 
         private int GetIndex(uint mask)
@@ -222,14 +258,17 @@ namespace Server.Services.BaseAttributes
             while (currentBit != mask)
             {
                 if ((ourNames & currentBit) != 0)
+                {
                     ++index;
+                }
 
                 if (currentBit == 0x80000000)
+                {
                     return -1;
+                }
 
                 currentBit <<= 1;
             }
-
             return index;
         }
     }

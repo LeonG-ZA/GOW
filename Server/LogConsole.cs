@@ -45,8 +45,14 @@ namespace Server.LogConsole
                             {
                                 case "GOWConsoleBeep":
                                     {
-                                        if(split[1]=="false")  GOWConsoleBeep = false;
-                                        else GOWConsoleBeep = true;
+                                        if (split[1] == "false")
+                                        {
+                                            GOWConsoleBeep = false;
+                                        }
+                                        else
+                                        {
+                                            GOWConsoleBeep = true;
+                                        }
                                     }
                                     break;
                                 case "ConsoleLoggingEnabled":
@@ -223,7 +229,7 @@ namespace Server.LogConsole
                 CheckDirectory();
                 try
                 {
-                    m_Output.Write(String.Format(format, args));
+                    m_Output.Write(string.Format(format, args));
                 }
                 catch
                 {
@@ -271,7 +277,7 @@ namespace Server.LogConsole
                 CheckDirectory();
                 try
                 {
-                    m_Output.WriteLine(String.Format(format, args));
+                    m_Output.WriteLine(string.Format(format, args));
                 }
                 catch
                 {

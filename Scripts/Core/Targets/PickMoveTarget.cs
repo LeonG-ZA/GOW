@@ -1,4 +1,3 @@
-using System;
 using Server.Commands.Generic;
 using Server.Targeting;
 

@@ -1,12 +1,10 @@
 using System;
-using Server;
-using System.Collections;
 using System.Collections.Generic;
 using Server.Network;
 
 namespace Server.Mobiles
 {
-	public class SpeedContext
+    public class SpeedContext
 	{
         public enum SpeedState
         {

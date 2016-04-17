@@ -1,5 +1,3 @@
-using System;
-using Server;
 using Server.Mobiles;
 using Server.Network;
 
@@ -37,8 +35,10 @@ namespace Server.Gumps
 			{
 				if ( !m_Pet.Deleted && m_Pet.Controlled && m_From == m_Pet.ControlMaster && m_From.CheckAlive() )
 				{
-					if ( m_Pet.Map == m_From.Map && m_Pet.InRange( m_From, 14 ) )
-						m_Pet.Delete();
+                    if (m_Pet.Map == m_From.Map && m_Pet.InRange(m_From, 14))
+                    {
+                        m_Pet.Delete();
+                    }
 				}
 			}
 		}

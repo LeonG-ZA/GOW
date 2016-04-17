@@ -1,16 +1,12 @@
 #if !MONO
-#region References
 using System;
 using System.Collections;
-using System.Diagnostics;
 using System.Linq;
 using System.Threading;
-
 using Server.Accounting;
 using Server.Engines.Help;
 using Server.Network;
 using Server.Engines.Reports;
-#endregion
 
 namespace Server.Misc
 {
@@ -130,9 +126,7 @@ namespace Server.Misc
 
         public static void BroadcastMessage(AccessLevel ac, int hue, string message)
         {
-            foreach (
-                Mobile m in
-                    NetState.Instances.Select(state => state.Mobile).Where(m => m != null && m.AccessLevel >= ac))
+            foreach (Mobile m in NetState.Instances.Select(state => state.Mobile).Where(m => m != null && m.AccessLevel >= ac))
             {
                 m.SendMessage(hue, message);
             }
@@ -302,10 +296,7 @@ namespace Server.Misc
                     {
                         _HearConsole = !_HearConsole;
 
-                        Console.WriteLine(
-                            _HearConsole
-                                ? "Now sending all speech to the console."
-                                : "No longer sending speech to the console.");
+                        Console.WriteLine(_HearConsole ? "Now sending all speech to the console." : "No longer sending speech to the console.");
                     }
                         break;
                     case "pages":

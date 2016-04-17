@@ -351,6 +351,8 @@
     <Compile Include="Items\Core\Special\Veteran Rewards\Addons\FletchingStationComponent.cs" />
     <Compile Include="Items\Core\Special\Veteran Rewards\OrderChaosBanners.cs" />
     <Compile Include="Items\Core\Special\Veteran Rewards\RetouchingTool.cs" />
+    <Compile Include="Items\Core\Teleporters\Citadel.cs" />
+    <Compile Include="Items\Core\Teleporters\LabyrinthDoor.cs" />
     <Compile Include="Items\Core\Weapons\Abilities\SEWeaponAbility.cs" />
     <Compile Include="Items\ML\Artifacts\Craftable\CraftableArtifacts.cs" />
     <Compile Include="Items\ML\Publish 57\ScrollOfTranscendence.cs" />
@@ -2021,9 +2023,8 @@
     <Compile Include="Mobiles\HS\Bosses\Corgul\Minions\LadraoSummon.cs" />
     <Compile Include="Mobiles\HS\Bosses\Scalis\Scalis.cs" />
     <Compile Include="Items\ML\Blackrock\BlackrockDetectorAddon.cs" />
-    <Compile Include="Mobiles\ML\Blighted Grove\MLDryad.cs" />
+    <Compile Include="Mobiles\ML\Twisted Weald\Dryad.cs" />
     <Compile Include="Mobiles\ML\EliteNinjaWarrior.cs" />
-    <Compile Include="Mobiles\ML\Twisted Weald\DryadA.cs" />
     <Compile Include="Mobiles\People\ClassicTownfolk\ClassicHarborMaster.cs" />
     <Compile Include="Mobiles\People\Townfolk\EscortableWanderingHealer.cs" />
     <Compile Include="Mobiles\People\Vendors\NPC\Necromancer.cs" />
@@ -5366,7 +5367,7 @@
     <Compile Include="Mobiles\Quests\Classic Quests\Starting Quests\Uzeraan Turmoil\Items\SchmendrickScrollOfPower.cs" />
     <Compile Include="Mobiles\Quests\Classic Quests\Starting Quests\Uzeraan Turmoil\Items\UzeraanTurmoilHorn.cs" />
     <Compile Include="Mobiles\Quests\Classic Quests\Starting Quests\Uzeraan Turmoil\Items\UzeraanTurmoilTeleporter.cs" />
-    <Compile Include="Mobiles\Quests\Classic Quests\Starting Quests\Uzeraan Turmoil\Mobiles\Dryad.cs" />
+    <Compile Include="Mobiles\Quests\Classic Quests\Starting Quests\Uzeraan Turmoil\Mobiles\DryAnwinBrennaad.cs" />
     <Compile Include="Mobiles\Quests\Classic Quests\Starting Quests\Uzeraan Turmoil\Mobiles\MansionGuard.cs" />
     <Compile Include="Mobiles\Quests\Classic Quests\Starting Quests\Uzeraan Turmoil\Mobiles\MilitiaCanoneer.cs" />
     <Compile Include="Mobiles\Quests\Classic Quests\Starting Quests\Uzeraan Turmoil\Mobiles\MilitiaFighter.cs" />

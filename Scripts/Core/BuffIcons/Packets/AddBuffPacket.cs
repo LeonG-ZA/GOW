@@ -1,6 +1,5 @@
 using System;
 using Server;
-using Server.Mobiles;
 using Server.Network;
 using Server.Buff.Icons;
 
@@ -30,7 +29,9 @@ public sealed class AddBuffPacket : Packet
         m_Stream.Fill(4);
 
         if (length < TimeSpan.Zero)
+        {
             length = TimeSpan.Zero;
+        }
 
         m_Stream.Write((short)length.TotalSeconds);	//Time in seconds
 

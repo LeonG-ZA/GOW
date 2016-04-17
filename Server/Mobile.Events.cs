@@ -1,10 +1,9 @@
 ﻿using System;
-using Server;
 using Server.Items;
 
 namespace Server
 {
-	public delegate void AnimatedEventHandler( Mobile m, AnimatedEventArgs args );
+    public delegate void AnimatedEventHandler( Mobile m, AnimatedEventArgs args );
 	public delegate void DamagedEventHandler( Mobile m, DamagedEventArgs args );
 	public delegate void DeadEventHandler( Mobile m, DeadEventArgs args );
 	public delegate void ItemLiftedEventHandler( Mobile m, ItemLiftedEventArgs args );

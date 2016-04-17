@@ -1,14 +1,13 @@
-using System;
 using System.Collections.Generic;
 using Server.Items;
 using Server.Mobiles;
 
 namespace Server.Engines.Quests.Haven
 {
-    public class Dryad : BaseQuester
+    public class DryAnwinBrennaad : BaseQuester
     {
         [Constructable]
-        public Dryad()
+        public DryAnwinBrennaad()
             : base("the Dryad")
         {
             this.SetSkill(SkillName.Peacemaking, 80.0, 100.0);
@@ -20,7 +19,7 @@ namespace Server.Engines.Quests.Haven
             this.SetSkill(SkillName.Tailoring, 80.0, 100.0);
         }
 
-        public Dryad(Serial serial)
+        public DryAnwinBrennaad(Serial serial)
             : base(serial)
         {
         }

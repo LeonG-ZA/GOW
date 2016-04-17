@@ -7,106 +7,132 @@ using Server.Events;
 
 namespace Server.Buff.Icons
 {
-	public static class MobileExtensions
-	{
-		public static void Initialize()
-		{
-			EventSink.PlayerDeath += new PlayerDeathEventHandler( EventSink_PlayerDeath );
-		}
+    public static class MobileExtensions
+    {
+        public static void Initialize()
+        {
+            EventSink.PlayerDeath += new PlayerDeathEventHandler(EventSink_PlayerDeath);
+        }
 
-		private static void EventSink_PlayerDeath( PlayerDeathEventArgs e )
-		{
-			Mobile m = e.Mobile;
+        private static void EventSink_PlayerDeath(PlayerDeathEventArgs e)
+        {
+            Mobile m = e.Mobile;
 
-			if ( m_BuffTables.ContainsKey( m ) )
-			{
-				var table = m_BuffTables[m];
+            if (m_BuffTables.ContainsKey(m))
+            {
+                var table = m_BuffTables[m];
 
-				foreach ( BuffInfo buff in table.Values.ToArray() )
-				{
-					if ( !buff.RetainThroughDeath )
-						m.RemoveBuff( buff );
-				}
-			}
-		}
+                foreach (BuffInfo buff in table.Values.ToArray())
+                {
+                    if (!buff.RetainThroughDeath)
+                    {
+                        m.RemoveBuff(buff);
+                    }
+                }
+            }
+        }
 
-		private static Dictionary<Mobile, Dictionary<BuffIcon, BuffInfo>> m_BuffTables;
+        private static Dictionary<Mobile, Dictionary<BuffIcon, BuffInfo>> m_BuffTables;
 
-		static MobileExtensions()
-		{
-			m_BuffTables = new Dictionary<Mobile, Dictionary<BuffIcon, BuffInfo>>();
-		}
+        static MobileExtensions()
+        {
+            m_BuffTables = new Dictionary<Mobile, Dictionary<BuffIcon, BuffInfo>>();
+        }
 
-		public static void ResendBuffs( this Mobile m )
-		{
-			if ( !BuffInfo.Enabled || !m_BuffTables.ContainsKey( m ) )
-				return;
+        public static void ResendBuffs(this Mobile m)
+        {
+            if (!BuffInfo.Enabled || !m_BuffTables.ContainsKey(m))
+            {
+                return;
+            }
 
-			NetState state = m.NetState;
+            NetState state = m.NetState;
 
-			if ( state != null )
-			{
-				var table = m_BuffTables[m];
+            if (state != null)
+            {
+                var table = m_BuffTables[m];
 
-				foreach ( BuffInfo info in table.Values )
-					state.Send( new AddBuffPacket( m, info ) );
-			}
-		}
+                foreach (BuffInfo info in table.Values)
+                {
+                    state.Send(new AddBuffPacket(m, info));
+                }
+            }
+        }
 
-		public static void AddBuff( this Mobile m, BuffInfo b )
-		{
-			if ( !BuffInfo.Enabled || b == null )
-				return;
+        public static void AddBuff(this Mobile m, BuffInfo b)
+        {
+            if (!BuffInfo.Enabled || b == null)
+            {
+                return;
+            }
 
-			m.RemoveBuff( b ); // Check & subsequently remove the old one.
+            m.RemoveBuff(b); // Check & subsequently remove the old one.
 
-			Dictionary<BuffIcon, BuffInfo> table;
+            Dictionary<BuffIcon, BuffInfo> table;
 
-			if ( m_BuffTables.ContainsKey( m ) )
-				table = m_BuffTables[m];
-			else
-				table = m_BuffTables[m] = new Dictionary<BuffIcon, BuffInfo>();
+            if (m_BuffTables.ContainsKey(m))
+            {
+                table = m_BuffTables[m];
+            }
+            else
+            {
+                table = m_BuffTables[m] = new Dictionary<BuffIcon, BuffInfo>();
+            }
 
             table[b.ID] = b;
 
             NetState state = m.NetState;
 
-			if ( state != null )
-				state.Send( new AddBuffPacket( m, b ) );
-		}
+            if (state != null)
+            {
+                state.Send(new AddBuffPacket(m, b));
+            }
+        }
 
-		public static void RemoveBuff( this Mobile m, BuffInfo b )
-		{
-			if ( b == null )
-				return;
+        public static void RemoveBuff(this Mobile m, BuffInfo b)
+        {
+            if (b == null)
+            {
+                return;
+            }
 
             m.RemoveBuff(b.ID);
-		}
+        }
 
-		public static void RemoveBuff( this Mobile m, BuffIcon b )
-		{
-			if ( !m_BuffTables.ContainsKey( m ) )
-				return;
+        public static void RemoveBuff(this Mobile m, BuffIcon b)
+        {
+            if (!m_BuffTables.ContainsKey(m))
+            {
+                return;
+            }
 
-			var table = m_BuffTables[m];
+            var table = m_BuffTables[m];
 
-			if ( !table.ContainsKey( b ) )
-				return;
+            if (!table.ContainsKey(b))
+            {
+                return;
+            }
 
-			BuffInfo info = table[b];
+            BuffInfo info = table[b];
 
-			if ( info.Timer != null && info.Timer.Running )
-				info.Timer.Stop();
+            if (info.Timer != null && info.Timer.Running)
+            {
+                info.Timer.Stop();
+            }
 
-			table.Remove( b );
+            table.Remove(b);
 
             NetState state = m.NetState;
 
-			if ( state != null )
-				state.Send( new RemoveBuffPacket( m, b ) );
+            if (state != null)
+            {
+                state.Send(new RemoveBuffPacket(m, b));
+            }
 
-			if ( table.Count <= 0 )
-				m_BuffTables.Remove( m );
-		}
-	}
+            if (table.Count <= 0)
+            {
+                m_BuffTables.Remove(m);
+            }
+        }
+    }
 }

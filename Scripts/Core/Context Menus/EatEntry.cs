@@ -1,4 +1,3 @@
-using System;
 using Server.Items;
 
 namespace Server.ContextMenus
@@ -10,16 +9,18 @@ namespace Server.ContextMenus
         public EatEntry(Mobile from, BaseFood food)
             : base(6135, 1)
         {
-            this.m_From = from;
-            this.m_Food = food;
+            m_From = from;
+            m_Food = food;
         }
 
         public override void OnClick()
         {
-            if (this.m_Food.Deleted || !this.m_Food.Movable || !this.m_From.CheckAlive() || !this.m_Food.CheckItemUse(this.m_From))
+            if (m_Food.Deleted || !m_Food.Movable || !m_From.CheckAlive() || !m_Food.CheckItemUse(m_From))
+            {
                 return;
+            }
 
-            this.m_Food.Eat(this.m_From);
+            m_Food.Eat(m_From);
         }
     }
 }

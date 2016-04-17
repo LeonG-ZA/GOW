@@ -8,11 +8,12 @@ namespace Server.Mobiles
         public void MysticPower()
         {
             Spell spell = null;
-
-            spell = this.GetMysticSpell();
+            spell = GetMysticSpell();
 
             if (spell != null)
+            {
                 spell.Cast();
+            }
 
             return;
         }
@@ -26,10 +27,10 @@ namespace Server.Mobiles
                 case 0:
                 case 1:
                     {
-                        if (this.CheckForSleep(this.m_Mobile.Combatant))
+                        if (CheckForSleep(m_Mobile.Combatant))
                         {
-                            this.m_Mobile.DebugSay("Casting Sleep");
-                            spell = new SleepSpell(this.m_Mobile, null);
+                            m_Mobile.DebugSay("Casting Sleep");
+                            spell = new SleepSpell(m_Mobile, null);
                             break;
                         }
                         else
@@ -37,70 +38,68 @@ namespace Server.Mobiles
                     }
                 case 2:
                     {
-                        if (this.m_Mobile.Followers < 2)
+                        if (m_Mobile.Followers < 2)
                         {
                             int whichone = Utility.Random(3);
 
-                            if (this.m_Mobile.Skills[SkillName.Mysticism].Value > 80.0 && whichone > 0)
+                            if (m_Mobile.Skills[SkillName.Mysticism].Value > 80.0 && whichone > 0)
                             {
-                                this.m_Mobile.DebugSay("Casting Rising Colossus");
-                                spell = new RisingColossusSpell(this.m_Mobile, null);
+                                m_Mobile.DebugSay("Casting Rising Colossus");
+                                spell = new RisingColossusSpell(m_Mobile, null);
                             }
-                            else if (this.m_Mobile.Skills[SkillName.Mysticism].Value > 30.0)
+                            else if (m_Mobile.Skills[SkillName.Mysticism].Value > 30.0)
                             {
-                                this.m_Mobile.DebugSay("Casting Animated Weapon");
-                                spell = new AnimatedWeaponSpell(this.m_Mobile, null);
+                                m_Mobile.DebugSay("Casting Animated Weapon");
+                                spell = new AnimatedWeaponSpell(m_Mobile, null);
                             }
                         }
 
                         if (spell != null)
-                            break;
-                        else
-                            goto case 7;
-                    }
-                case 3:
-                    {
-                        if (this.m_CanShapeShift && this.m_Mobile.Skills[SkillName.Mysticism].Value > 30.0)
                         {
-                            this.m_Mobile.DebugSay("Casting Stone Form");
-                            spell = new StoneFormSpell(this.m_Mobile, null);
                             break;
                         }
                         else
+                        {
                             goto case 7;
+                        }
+                    }
+                case 3:
+                    {
+                        if (m_CanShapeShift && m_Mobile.Skills[SkillName.Mysticism].Value > 30.0)
+                        {
+                            m_Mobile.DebugSay("Casting Stone Form");
+                            spell = new StoneFormSpell(m_Mobile, null);
+                            break;
+                        }
+                        else
+                        {
+                            goto case 7;
+                        }
                     }
                 case 4:
                 case 5:
                     {
-                        if (this.m_Mobile.Skills[SkillName.Mysticism].Value > 70.0)
+                        if (m_Mobile.Skills[SkillName.Mysticism].Value > 70.0)
                         {
-                            this.m_Mobile.DebugSay("Casting Spell Plague");
-                            spell = new SpellPlagueSpell(this.m_Mobile, null);
+                            m_Mobile.DebugSay("Casting Spell Plague");
+                            spell = new SpellPlagueSpell(m_Mobile, null);
                             break;
                         }
                         else
+                        {
                             goto case 7;
+                        }
                     }
                 case 6:
                 case 7:
                     {
-                        switch( Utility.Random((int)(this.m_Mobile.Skills[SkillName.Mysticism].Value / 20)) )
+                        switch( Utility.Random((int)(m_Mobile.Skills[SkillName.Mysticism].Value / 20)) )
                         {
-                            default:
-                                spell = new NetherBoltSpell(this.m_Mobile, null);
-                                break;
-                            case 1:
-                                spell = new EagleStrikeSpell(this.m_Mobile, null);
-                                break;
-                            case 2:
-                                spell = new BombardSpell(this.m_Mobile, null);
-                                break;
-                            case 3:
-                                spell = new HailStormSpell(this.m_Mobile, null);
-                                break;
-                            case 4:
-                                spell = new NetherCycloneSpell(this.m_Mobile, null);
-                                break;
+                            default: spell = new NetherBoltSpell(m_Mobile, null); break;
+                            case 1: spell = new EagleStrikeSpell(m_Mobile, null); break;
+                            case 2: spell = new BombardSpell(m_Mobile, null); break;
+                            case 3: spell = new HailStormSpell(m_Mobile, null); break;
+                            case 4: spell = new NetherCycloneSpell(m_Mobile, null); break;
                         }
 
                         break;
@@ -121,13 +120,19 @@ namespace Server.Mobiles
                 pm = bc.ControlMaster as PlayerMobile;
 
                 if (pm == null)
+                {
                     pm = bc.SummonMaster as PlayerMobile;
+                }
             }
 
-            if (pm != null || !pm.Asleep)
+            if (pm != null && !pm.Asleep)
+            {
                 return true;
+            }
             else
+            {
                 return false;
+            }
         }
     }
 }

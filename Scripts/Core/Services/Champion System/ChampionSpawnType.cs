@@ -104,7 +104,7 @@ namespace Server.Engines.ChampionSpawns
             new ChampionSpawnInfo("Glade", typeof(Twaulo), new string[] { "Banisher", "Enforcer", "Eradicator" }, new Type[][]
             {
                 new Type[] { typeof(Pixie), typeof(ShadowWisp) },
-                new Type[] { typeof(Centaur), typeof(MLDryad) },
+                new Type[] { typeof(Centaur), typeof(Dryad) },
                 new Type[] { typeof(Satyr), typeof(CuSidhe) },
                 new Type[] { typeof(FerelTreefellow), typeof(RagingGrizzlyBear) }
             }),

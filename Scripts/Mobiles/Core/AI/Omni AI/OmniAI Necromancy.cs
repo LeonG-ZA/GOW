@@ -12,17 +12,19 @@ namespace Server.Mobiles
         {
             get
             {
-                return (this.m_Mobile is BaseVendor || this.m_Mobile is BaseEscortable);
+                return (m_Mobile is BaseVendor || m_Mobile is BaseEscortable);
             }
         }
         public void NecromancerPower()
         {
             Spell spell = null;
 
-            spell = this.GetNecromancerSpell();
+            spell = GetNecromancerSpell();
 
             if (spell != null)
+            {
                 spell.Cast();
+            }
 
             return;
         }
@@ -38,66 +40,84 @@ namespace Server.Mobiles
                     {
                         int whichone = Utility.RandomMinMax(1, 2);
 
-                        if (whichone == 2 && this.m_Mobile.Skills[SkillName.Necromancy].Value > 50.0)
+                        if (whichone == 2 && m_Mobile.Skills[SkillName.Necromancy].Value > 50.0)
                         {
-                            if (this.m_Mobile.Debug)
-                                this.m_Mobile.Say(1109, "Undead: Casting Animate Dead");
+                            if (m_Mobile.Debug)
+                            {
+                                m_Mobile.Say(1109, "Undead: Casting Animate Dead");
+                            }
 
-                            spell = new AnimateDeadSpell(this.m_Mobile, null);
+                            spell = new AnimateDeadSpell(m_Mobile, null);
                         }
-                        else if (this.m_Mobile.Followers == 0 || this.m_Mobile.Followers == 3)
+                        else if (m_Mobile.Followers == 0 || m_Mobile.Followers == 3)
                         {
-                            if (this.m_Mobile.Debug)
-                                this.m_Mobile.Say(1109, "Undead: Summoning Familiar ");
+                            if (m_Mobile.Debug)
+                            {
+                                m_Mobile.Say(1109, "Undead: Summoning Familiar ");
+                            }
 
-                            this.CreateNecromancerFamiliar();
+                            CreateNecromancerFamiliar();
                         }
                         else
+                        {
                             goto default;
+                        }
 
                         break;
                     }
                 case 2:
                 case 3: // Curse them
                     {
-                        if (this.m_Mobile.Debug)
-                            this.m_Mobile.Say(1109, "Cusing Them");
+                        if (m_Mobile.Debug)
+                        {
+                            m_Mobile.Say(1109, "Cusing Them");
+                        }
 
-                        spell = this.GetNecromancerCurseSpell();
+                        spell = GetNecromancerCurseSpell();
                         break;
                     }
                 case 4:
                 case 5:	// Reverse combat
                     {
-                        if (this.m_Mobile.Debug)
-                            this.m_Mobile.Say(1109, "Casting Blood Oath");
+                        if (m_Mobile.Debug)
+                        {
+                            m_Mobile.Say(1109, "Casting Blood Oath");
+                        }
 
-                        if (this.m_Mobile.Skills[SkillName.Necromancy].Value > 30.0)
-                            spell = new BloodOathSpell(this.m_Mobile, null);
+                        if (m_Mobile.Skills[SkillName.Necromancy].Value > 30.0)
+                        {
+                            spell = new BloodOathSpell(m_Mobile, null);
+                        }
 
                         break;
                     }
                 case 6: // Shapeshift
                     {
-                        if (this.m_CanShapeShift)
+                        if (m_CanShapeShift)
                         {
-                            if (this.m_Mobile.Debug)
-                                this.m_Mobile.Say(1109, "Shapechange ");
+                            if (m_Mobile.Debug)
+                            {
+                                m_Mobile.Say(1109, "Shapechange ");
+                            }
 
-                            spell = this.GetNecromancerShapeshiftSpell();
+                            spell = GetNecromancerShapeshiftSpell();
                         }
                         else
+                        {
                             goto case 3; // Curse them
+                        }
 
                         break;
                     }
 
                 default: // Damage them
                     {
-                        if (this.m_Mobile.Debug)
-                            this.m_Mobile.Say(1109, "Random damage spell");
+                        if (m_Mobile.Debug)
+                        {
+                            m_Mobile.Say(1109, "Random damage spell");
+                        }
 
-                        spell = this.GetNecromancerDamageSpell();
+                        spell = GetNecromancerDamageSpell();
                         break;
                     }
             }
@@ -107,27 +127,24 @@ namespace Server.Mobiles
 
         public Spell GetNecromancerDamageSpell()
         {
-            int maxCircle = (int)((this.m_Mobile.Skills[SkillName.Necromancy].Value + 20.0) / (100.0 / 7.0));
+            int maxCircle = (int)((m_Mobile.Skills[SkillName.Necromancy].Value + 20.0) / (100.0 / 7.0));
 
             if (maxCircle < 2)
+            {
                 maxCircle = 2;
+            }
 
             switch ( Utility.Random(maxCircle + 1) )
             {
                 case 0:
                 case 1:
-                case 2:
-                    return this.CheckForCurseWeapon();
+                case 2: return CheckForCurseWeapon();
                 case 3:
-                case 4:
-                    return new PoisonStrikeSpell(this.m_Mobile, null);
+                case 4: return new PoisonStrikeSpell(m_Mobile, null);
                 case 5:
-                case 6:
-                    return new WitherSpell(this.m_Mobile, null);
-                case 7:
-                    return new StrangleSpell(this.m_Mobile, null);
-                default:
-                    return this.CheckForVengefulSpiritSpell();
+                case 6: return new WitherSpell(m_Mobile, null);
+                case 7: return new StrangleSpell(m_Mobile, null);
+                default: return CheckForVengefulSpiritSpell();
             }
         }
 
@@ -135,60 +152,88 @@ namespace Server.Mobiles
         {
             int whichone = Utility.RandomMinMax(1, 4);
 
-            if (whichone == 4 && this.m_Mobile.Skills[SkillName.Necromancy].Value >= 75.0)
-                return new StrangleSpell(this.m_Mobile, null);
-            else if (whichone == 3 && this.m_Mobile.Skills[SkillName.Necromancy].Value >= 40.0)
-                return new MindRotSpell(this.m_Mobile, null);
-            else if (whichone >= 2 && this.m_Mobile.Skills[SkillName.Necromancy].Value >= 30.0)
-                return new EvilOmenSpell(this.m_Mobile, null);
+            if (whichone == 4 && m_Mobile.Skills[SkillName.Necromancy].Value >= 75.0)
+            {
+                return new StrangleSpell(m_Mobile, null);
+            }
+            else if (whichone == 3 && m_Mobile.Skills[SkillName.Necromancy].Value >= 40.0)
+            {
+                return new MindRotSpell(m_Mobile, null);
+            }
+            else if (whichone >= 2 && m_Mobile.Skills[SkillName.Necromancy].Value >= 30.0)
+            {
+                return new EvilOmenSpell(m_Mobile, null);
+            }
             else
-                return new CorpseSkinSpell(this.m_Mobile, null);
+            {
+                return new CorpseSkinSpell(m_Mobile, null);
+            }
         }
 
         public Spell GetNecromancerShapeshiftSpell()
         {
-            if (DateTime.UtcNow < this.m_NextShiftTime)
-                return this.GetNecromancerDamageSpell();
+            if (DateTime.UtcNow < m_NextShiftTime)
+            {
+                return GetNecromancerDamageSpell();
+            }
 
-            this.m_NextShiftTime = DateTime.UtcNow + TimeSpan.FromSeconds(130);
+            m_NextShiftTime = DateTime.UtcNow + TimeSpan.FromSeconds(130);
 
-            if (this.m_Mobile.Skills[SkillName.Necromancy].Value > 110.0)
-                return new VampiricEmbraceSpell(this.m_Mobile, null);
-            else if (this.m_Mobile.Skills[SkillName.Necromancy].Value > 80.0)
-                return new LichFormSpell(this.m_Mobile, null);
-            else if (this.m_Mobile.Skills[SkillName.Necromancy].Value > 50.0)
-                return new HorrificBeastSpell(this.m_Mobile, null);
-            else if (this.m_Mobile.Skills[SkillName.Necromancy].Value > 30.0)
-                return new WraithFormSpell(this.m_Mobile, null);
+            if (m_Mobile.Skills[SkillName.Necromancy].Value > 110.0)
+            {
+                return new VampiricEmbraceSpell(m_Mobile, null);
+            }
+            else if (m_Mobile.Skills[SkillName.Necromancy].Value > 80.0)
+            {
+                return new LichFormSpell(m_Mobile, null);
+            }
+            else if (m_Mobile.Skills[SkillName.Necromancy].Value > 50.0)
+            {
+                return new HorrificBeastSpell(m_Mobile, null);
+            }
+            else if (m_Mobile.Skills[SkillName.Necromancy].Value > 30.0)
+            {
+                return new WraithFormSpell(m_Mobile, null);
+            }
             else
+            {
                 return null;
+            }
         }
 
         public Spell CheckForCurseWeapon()
         {
-            if (this.m_Mobile.Skills[SkillName.Necromancy].Value > 5.0)
+            if (m_Mobile.Skills[SkillName.Necromancy].Value > 5.0)
             {
-                BaseWeapon weapon = this.m_Mobile.FindItemOnLayer(Layer.OneHanded) as BaseWeapon;
+                BaseWeapon weapon = m_Mobile.FindItemOnLayer(Layer.OneHanded) as BaseWeapon;
 
                 if (weapon == null)
-                    weapon = this.m_Mobile.FindItemOnLayer(Layer.TwoHanded) as BaseWeapon;
+                {
+                    weapon = m_Mobile.FindItemOnLayer(Layer.TwoHanded) as BaseWeapon;
+                }
 
                 if (weapon != null)
                 {
                     if (!(weapon.Cursed))
-                        return new CurseWeaponSpell(this.m_Mobile, null);
+                    {
+                        return new CurseWeaponSpell(m_Mobile, null);
+                    }
                 }
             }
 
-            return new PainSpikeSpell(this.m_Mobile, null);
+            return new PainSpikeSpell(m_Mobile, null);
         }
 
         public Spell CheckForVengefulSpiritSpell()
         {
-            if (this.m_Mobile.Followers >= 3)
-                return new PoisonStrikeSpell(this.m_Mobile, null);
+            if (m_Mobile.Followers >= 3)
+            {
+                return new PoisonStrikeSpell(m_Mobile, null);
+            }
             else
-                return new VengefulSpiritSpell(this.m_Mobile, null);
+            {
+                return new VengefulSpiritSpell(m_Mobile, null);
+            }
         }
 
         public void CreateNecromancerFamiliar()
@@ -196,20 +241,30 @@ namespace Server.Mobiles
             int whichone = Utility.RandomMinMax(1, 5);
             BaseCreature mob = null;
 
-            if (whichone == 5 && this.m_Mobile.Skills[SkillName.Necromancy].Value >= 100.0)
+            if (whichone == 5 && m_Mobile.Skills[SkillName.Necromancy].Value >= 100.0)
+            {
                 mob = new VampireBatFamiliar();
-            else if (whichone >= 4 && this.m_Mobile.Skills[SkillName.Necromancy].Value >= 80.0)
+            }
+            else if (whichone >= 4 && m_Mobile.Skills[SkillName.Necromancy].Value >= 80.0)
+            {
                 mob = new DeathAdder();
-            else if (whichone >= 3 && this.m_Mobile.Skills[SkillName.Necromancy].Value >= 60.0)
+            }
+            else if (whichone >= 3 && m_Mobile.Skills[SkillName.Necromancy].Value >= 60.0)
+            {
                 mob = new DarkWolfFamiliar();
-            else if (whichone >= 2 && this.m_Mobile.Skills[SkillName.Necromancy].Value >= 50.0)
+            }
+            else if (whichone >= 2 && m_Mobile.Skills[SkillName.Necromancy].Value >= 50.0)
+            {
                 mob = new ShadowWispFamiliar();
-            else if (this.m_Mobile.Skills[SkillName.Necromancy].Value >= 30.0)
+            }
+            else if (m_Mobile.Skills[SkillName.Necromancy].Value >= 30.0)
+            {
                 mob = new HordeMinionFamiliar();
+            }
 
             if (mob != null)
             {
-                BaseCreature.Summon(mob, this.m_Mobile, this.m_Mobile.Location, -1, TimeSpan.FromDays(1.0));
+                BaseCreature.Summon(mob, m_Mobile, m_Mobile.Location, -1, TimeSpan.FromDays(1.0));
                 mob.FixedParticles(0x3728, 1, 10, 9910, EffectLayer.Head);
                 mob.PlaySound(mob.GetIdleSound());
             }

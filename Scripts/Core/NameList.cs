@@ -16,7 +16,9 @@ namespace Server
             this.m_List = xml.InnerText.Split(',');
 
             for (int i = 0; i < this.m_List.Length; ++i)
+            {
                 this.m_List[i] = Utility.Intern(this.m_List[i].Trim());
+            }
         }
 
         static NameList()
@@ -73,8 +75,10 @@ namespace Server
         public bool ContainsName(string name)
         {
             for (int i = 0; i < this.m_List.Length; i++)
+            {
                 if (name == this.m_List[i])
                     return true;
+            }
 
             return false;
         }

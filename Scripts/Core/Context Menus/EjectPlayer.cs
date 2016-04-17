@@ -1,4 +1,3 @@
-using System;
 using Server.Multis;
 
 namespace Server.ContextMenus
@@ -11,19 +10,21 @@ namespace Server.ContextMenus
         public EjectPlayerEntry(Mobile from, Mobile target)
             : base(6206, 12)
         {
-            this.m_From = from;
-            this.m_Target = target;
-            this.m_TargetHouse = BaseHouse.FindHouseAt(this.m_Target);
+            m_From = from;
+            m_Target = target;
+            m_TargetHouse = BaseHouse.FindHouseAt(m_Target);
         }
 
         public override void OnClick()
-        { 
-            if (!this.m_From.Alive || this.m_TargetHouse.Deleted || !this.m_TargetHouse.IsFriend(this.m_From))
-                return;
-
-            if (this.m_Target is Mobile)
+        {
+            if (!m_From.Alive || m_TargetHouse.Deleted || !m_TargetHouse.IsFriend(m_From))
             {
-                this.m_TargetHouse.Kick(this.m_From, (Mobile)this.m_Target);
+                return;
+            }
+
+            if (m_Target is Mobile)
+            {
+                m_TargetHouse.Kick(m_From, (Mobile)m_Target);
             }
         }
     }

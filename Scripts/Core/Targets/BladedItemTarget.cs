@@ -1,4 +1,3 @@
-using System;
 using Server.Engines.Harvest;
 using Server.Engines.Quests;
 using Server.Engines.Quests.Hag;
@@ -14,25 +13,25 @@ namespace Server.Targets
         public BladedItemTarget(Item item)
             : base(2, false, TargetFlags.None)
         {
-            this.m_Item = item;
+            m_Item = item;
         }
 
         protected override void OnTargetOutOfRange(Mobile from, object targeted)
         {
             if (targeted is UnholyBone && from.InRange(((UnholyBone)targeted), 12))
-                ((UnholyBone)targeted).Carve(from, this.m_Item);
+                ((UnholyBone)targeted).Carve(from, m_Item);
             else
                 base.OnTargetOutOfRange(from, targeted);
         }
 
         protected override void OnTarget(Mobile from, object targeted)
         {
-            if (this.m_Item.Deleted)
+            if (m_Item.Deleted)
                 return;
 
             if (targeted is ICarvable)
             {
-                ((ICarvable)targeted).Carve(from, this.m_Item);
+                ((ICarvable)targeted).Carve(from, m_Item);
             }
             else if (targeted is SwampDragon && ((SwampDragon)targeted).HasBarding)
             {
@@ -79,7 +78,7 @@ namespace Server.Targets
                 Map map;
                 Point3D loc;
 
-                if (!system.GetHarvestDetails(from, this.m_Item, targeted, out tileID, out map, out loc))
+                if (!system.GetHarvestDetails(from, m_Item, targeted, out tileID, out map, out loc))
                 {
                     from.SendLocalizedMessage(500494); // You can't use a bladed item on that!
                 }

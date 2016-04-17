@@ -1,14 +1,12 @@
 using System;
 using System.Collections.Generic;
 using System.IO;
-using Server;
 using Server.Commands;
-using Server.Mobiles;
 using Server.CharConfiguration;
 
 namespace Server.Engines
 {
-	public class RateOverTime : Timer
+    public class RateOverTime : Timer
 	{
         private static DateTime m_LastResetTime = DateTime.UtcNow;
 

@@ -28,30 +28,30 @@ namespace Server
         public VirtueGump(Mobile beholder, Mobile beheld)
             : base(0, 0)
         {
-            this.m_Beholder = beholder;
-            this.m_Beheld = beheld;
+            m_Beholder = beholder;
+            m_Beheld = beheld;
 
-            this.Serial = beheld.Serial;
+            Serial = beheld.Serial;
 
-            this.AddPage(0);
+            AddPage(0);
 
-            this.AddImage(30, 40, 104);
+            AddImage(30, 40, 104);
 
-            this.AddPage(1);
+            AddPage(1);
 
-            this.Add(new InternalEntry(61, 71, 108, this.GetHueFor(0))); // Humility
-            this.Add(new InternalEntry(123, 46, 112, this.GetHueFor(4))); // Valor
-            this.Add(new InternalEntry(187, 70, 107, this.GetHueFor(5))); // Honor
-            this.Add(new InternalEntry(35, 135, 110, this.GetHueFor(1))); // Sacrifice
-            this.Add(new InternalEntry(211, 133, 105, this.GetHueFor(2))); // Compassion
-            this.Add(new InternalEntry(61, 195, 111, this.GetHueFor(3))); // Spiritulaity
-            this.Add(new InternalEntry(186, 195, 109, this.GetHueFor(6))); // Justice
-            this.Add(new InternalEntry(121, 221, 106, this.GetHueFor(7))); // Honesty
+            Add(new InternalEntry(61, 71, 108, GetHueFor(0))); // Humility
+            Add(new InternalEntry(123, 46, 112, GetHueFor(4))); // Valor
+            Add(new InternalEntry(187, 70, 107, GetHueFor(5))); // Honor
+            Add(new InternalEntry(35, 135, 110, GetHueFor(1))); // Sacrifice
+            Add(new InternalEntry(211, 133, 105, GetHueFor(2))); // Compassion
+            Add(new InternalEntry(61, 195, 111, GetHueFor(3))); // Spiritulaity
+            Add(new InternalEntry(186, 195, 109, GetHueFor(6))); // Justice
+            Add(new InternalEntry(121, 221, 106, GetHueFor(7))); // Honesty
 
-            if (this.m_Beholder == this.m_Beheld)
+            if (m_Beholder == m_Beheld)
             {
-                this.AddButton(57, 269, 2027, 2027, 1, GumpButtonType.Reply, 0);
-                this.AddButton(186, 269, 2071, 2071, 2, GumpButtonType.Reply, 0);
+                AddButton(57, 269, 2027, 2027, 1, GumpButtonType.Reply, 0);
+                AddButton(186, 269, 2071, 2071, 2, GumpButtonType.Reply, 0);
             }
         }
 
@@ -69,8 +69,8 @@ namespace Server
 
         public override void OnResponse(NetState state, RelayInfo info)
         {
-            if (info.ButtonID == 1 && this.m_Beholder == this.m_Beheld)
-                this.m_Beholder.SendGump(new VirtueStatusGump(this.m_Beholder));
+            if (info.ButtonID == 1 && m_Beholder == m_Beheld)
+                m_Beholder.SendGump(new VirtueStatusGump(m_Beholder));
         }
 
         private static void EventSink_VirtueItemRequest(VirtueItemRequestEventArgs e)
@@ -153,10 +153,10 @@ namespace Server
 
         private int GetHueFor(int index)
         {
-            if (this.m_Beheld.Virtues.GetValue(index) == 0)
+            if (m_Beheld.Virtues.GetValue(index) == 0)
                 return 2402;
 
-            int value = this.m_Beheld.Virtues.GetValue(index);
+            int value = m_Beheld.Virtues.GetValue(index);
 
             if (value < 4000)
                 return 2402;
@@ -190,7 +190,7 @@ namespace Server
 
             public override string Compile()
             {
-                return String.Format("{{ gumppic {0} {1} {2} hue={3} class=VirtueGumpItem }}", this.X, this.Y, this.GumpID, this.Hue);
+                return String.Format("{{ gumppic {0} {1} {2} hue={3} class=VirtueGumpItem }}", X, Y, GumpID, Hue);
             }
 
             public override void AppendTo(IGumpWriter disp)

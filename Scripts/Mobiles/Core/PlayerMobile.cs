@@ -4692,8 +4692,6 @@ namespace Server.Mobiles
 
             CheckKillDecay();
 
-            //CheckAtrophies(this);
-
             base.Serialize(writer);
 
             writer.Write(49); // version old 52
@@ -4989,8 +4987,7 @@ namespace Server.Mobiles
                 return true;
             }
 
-            if (m_DuelContext != null && m_DuelPlayer != null && !m_DuelContext.Finished && m_DuelContext.m_Tournament != null &&
-                !m_DuelPlayer.Eliminated)
+            if (m_DuelContext != null && m_DuelPlayer != null && !m_DuelContext.Finished && m_DuelContext.m_Tournament != null && !m_DuelPlayer.Eliminated)
             {
                 Mobile owner = m;
 
@@ -5042,7 +5039,9 @@ namespace Server.Mobiles
         public override bool CheckSpellCast(ISpell spell)
         {
             if (FloorTrapKit.IsAssembling(this))
+            {
                 FloorTrapKit.StopAssembling(this, 1113511); // You cast a spell and cease trap assembly.
+            }
 
             return base.CheckSpellCast(spell);
         }
@@ -5089,7 +5088,9 @@ namespace Server.Mobiles
             }
 
             if (FeaturesConfig.XmlPointsEnabled)
+            {
                 list.Add(1070722, "Kills {0} / Deaths {1} : Rank={2}", a.Kills, a.Deaths, a.Rank);
+            }
         }
 
         public class PlayerPropertiesEventArgs : EventArgs
@@ -5126,7 +5127,9 @@ namespace Server.Mobiles
             base.GetProperties(list);
 
             if (m_CurrentCollectionTitle > 0)
+            {
                 list.Add((int)m_CollectionTitles[m_CurrentCollectionTitle]);
+            }
 
             if (TestCenterConfig.TestCenterEnabled)
             {
@@ -5346,21 +5349,29 @@ namespace Server.Mobiles
                     foreach (Mobile m in this.GetMobilesInRange(4))
                     {
                         if (!IsValidPassiveDetector(m))
+                        {
                             continue;
+                        }
 
                         int tracking = m.Skills[SkillName.Tracking].Fixed;
                         int detectHidden = m.Skills[SkillName.DetectHidden].Fixed;
 
                         if (m.Race == Race.Elf)
+                        {
                             tracking = 1000;
+                        }
 
                         int distance = Math.Max(1, (int)this.GetDistanceToSqrt(m));
 
                         int chance;
                         if (divisor > 0)
+                        {
                             chance = 50 * (tracking + detectHidden) / divisor;
+                        }
                         else
+                        {
                             chance = 100;
+                        }
 
                         chance /= distance;
 

@@ -26,11 +26,11 @@ namespace Server.Mobiles
         {
             Spell spell = null;
 
-            spell = this.GetMagerySpell();
+            spell = GetMagerySpell();
 
             if (spell != null)
             {
-                this.m_NextCastTime = DateTime.UtcNow + spell.GetCastDelay() + spell.GetCastRecovery();
+                m_NextCastTime = DateTime.UtcNow + spell.GetCastDelay() + spell.GetCastRecovery();
                 spell.Cast();
             }
 
@@ -42,128 +42,154 @@ namespace Server.Mobiles
             Spell spell = null;
 
             // always check for bless, per OSI
-            spell = this.CheckBless();
+            spell = CheckBless();
 
             if (spell != null)
             {
-                if (this.m_Mobile.Debug)
-                    this.m_Mobile.Say(1156, "Blessing my self");
+                if (m_Mobile.Debug)
+                {
+                    m_Mobile.Say(1156, "Blessing my self");
+                }
 
                 return spell;
             }
 
             // always check for curse, per OSI
-            spell = this.CheckCurse();
+            spell = CheckCurse();
 
             if (spell != null)
             {
-                if (this.m_Mobile.Debug)
-                    this.m_Mobile.Say(1156, "Cursing my opponent");
+                if (m_Mobile.Debug)
+                {
+                    m_Mobile.Say(1156, "Cursing my opponent");
+                }
 
                 return spell;
             }
 
             // 25% chance to cast poison if needed
-            if (this.m_Mobile.Combatant != null && !this.m_Mobile.Combatant.Poisoned && Utility.RandomDouble() > 0.75)
+            if (m_Mobile.Combatant != null && !m_Mobile.Combatant.Poisoned && Utility.RandomDouble() > 0.75)
             {
-                if (this.m_Mobile.Debug)
-                    this.m_Mobile.Say(1156, "Casting Poison");
+                if (m_Mobile.Debug)
+                {
+                    m_Mobile.Say(1156, "Casting Poison");
+                }
 
-                spell = new PoisonSpell(this.m_Mobile, null);
+                spell = new PoisonSpell(m_Mobile, null);
             }
 
             // scaling chance to drain mana based on how much of a caster the opponent is
-            if (this.CheckManaDrain() > 0.75)
+            if (CheckManaDrain() > 0.75)
             {
-                if (this.m_Mobile.Skills[SkillName.Magery].Value > 80.0)
-                    spell = new ManaVampireSpell(this.m_Mobile, null);
-                else if (this.m_Mobile.Skills[SkillName.Magery].Value > 40.0)
-                    spell = new ManaDrainSpell(this.m_Mobile, null);
+                if (m_Mobile.Skills[SkillName.Magery].Value > 80.0)
+                {
+                    spell = new ManaVampireSpell(m_Mobile, null);
+                }
+                else if (m_Mobile.Skills[SkillName.Magery].Value > 40.0)
+                {
+                    spell = new ManaDrainSpell(m_Mobile, null);
+                }
 
                 if (spell != null)
                 {
-                    if (this.m_Mobile.Debug)
-                        this.m_Mobile.Say(1156, "Draining mana");
+                    if (m_Mobile.Debug)
+                    {
+                        m_Mobile.Say(1156, "Draining mana");
+                    }
 
                     return spell;
                 }
             }
 
             // 10% chance to summon help
-            if (this.m_CanUseMagerySummon && Utility.RandomDouble() > 0.90)
+            if (m_CanUseMagerySummon && Utility.RandomDouble() > 0.90)
             {
-                spell = this.CheckMagerySummon();
+                spell = CheckMagerySummon();
 
                 if (spell != null)
                 {
-                    if (this.m_Mobile.Debug)
-                        this.m_Mobile.Say(1156, "Summoning help");
+                    if (m_Mobile.Debug)
+                    {
+                        m_Mobile.Say(1156, "Summoning help");
+                    }
                     return spell;
                 }
             }
 
             // Let's just blast the hell out of them.
-            return this.GetRandomMageryDamageSpell();
+            return GetRandomMageryDamageSpell();
         }
 
         public Spell CheckBless()
         {
-            StatMod mod = this.m_Mobile.GetStatMod("[Magic] Str Offset");
+            StatMod mod = m_Mobile.GetStatMod("[Magic] Str Offset");
 
             if (mod != null && mod.Offset > 0)
+            {
                 return null;
+            }
 
-            if (this.m_Mobile.Skills[SkillName.Magery].Value >= 40.0)
-                return new BlessSpell(this.m_Mobile, null);
+            if (m_Mobile.Skills[SkillName.Magery].Value >= 40.0)
+            {
+                return new BlessSpell(m_Mobile, null);
+            }
 
-            mod = this.m_Mobile.GetStatMod("[Magic] Int Offset");
-
-            if (mod == null || mod.Offset < 0)
-                return new CunningSpell(this.m_Mobile, null);
-
-            mod = this.m_Mobile.GetStatMod("[Magic] Dex Offset");
+            mod = m_Mobile.GetStatMod("[Magic] Int Offset");
 
             if (mod == null || mod.Offset < 0)
-                return new AgilitySpell(this.m_Mobile, null);
+            {
+                return new CunningSpell(m_Mobile, null);
+            }
 
-            return new StrengthSpell(this.m_Mobile, null);
+            mod = m_Mobile.GetStatMod("[Magic] Dex Offset");
+
+            if (mod == null || mod.Offset < 0)
+            {
+                return new AgilitySpell(m_Mobile, null);
+            }
+
+            return new StrengthSpell(m_Mobile, null);
         }
 
         public Spell CheckCurse()
         {
-            Mobile foe = this.m_Mobile.Combatant;
+            Mobile foe = m_Mobile.Combatant;
 
             if (foe == null)
+            {
                 return null;
+            }
 
             StatMod mod = foe.GetStatMod("[Magic] Int Offset");
 
             if (mod != null && mod.Offset < 0)
+            {
                 return null;
+            }
 
-            if (this.m_Mobile.Skills[SkillName.Magery].Value >= 40.0)
-                return new CurseSpell(this.m_Mobile, null);
+            if (m_Mobile.Skills[SkillName.Magery].Value >= 40.0)
+            {
+                return new CurseSpell(m_Mobile, null);
+            }
 
             int whichone = 1;
             Spell spell = null;
 
             if ((mod = foe.GetStatMod("[Magic] Str Offset")) != null)
+            {
                 whichone++;
+            }
 
-            if ((mod = this.m_Mobile.GetStatMod("[Magic] Dex Offset")) != null)
+            if ((mod = m_Mobile.GetStatMod("[Magic] Dex Offset")) != null)
+            {
                 whichone++;
+            }
 
             switch ( whichone )
             {
-                case 1:
-                    spell = new FeeblemindSpell(this.m_Mobile, null);
-                    break;
-                case 2:
-                    spell = new WeakenSpell(this.m_Mobile, null);
-                    break;
-                case 3:
-                    spell = new ClumsySpell(this.m_Mobile, null);
-                    break;
+                case 1: spell = new FeeblemindSpell(m_Mobile, null); break;
+                case 2: spell = new WeakenSpell(m_Mobile, null); break;
+                case 3: spell = new ClumsySpell(m_Mobile, null); break;
             }
 
             return spell;
@@ -171,62 +197,100 @@ namespace Server.Mobiles
 
         public double CheckManaDrain()
         {
-            Mobile foe = this.m_Mobile.Combatant;
+            Mobile foe = m_Mobile.Combatant;
 
             if (foe == null || foe.Mana < 10)
+            {
                 return 0.0;
+            }
 
             double drain = 0.0;
 
             if (foe.Skills[SkillName.Bushido].Value > 35.0)
+            {
                 drain += 0.1;
+            }
+
             if (foe.Skills[SkillName.Chivalry].Value > 35.0)
+            {
                 drain += 0.1;
+            }
+
             if (foe.Skills[SkillName.Magery].Value > 35.0)
+            {
                 drain += 0.2;
+            }
+
             if (foe.Skills[SkillName.Necromancy].Value > 35.0)
+            {
                 drain += 0.2;
+            }
+
             if (foe.Skills[SkillName.Ninjitsu].Value > 35.0)
+            {
                 drain += 0.1;
+            }
 
             if (drain == 0.0)
+            {
                 return drain;
+            }
             else
+            {
                 return Utility.RandomDouble() + drain;
+            }
         }
 
         public Spell CheckMagerySummon()
         {
-            int slots = this.m_Mobile.FollowersMax - this.m_Mobile.Followers;
+            int slots = m_Mobile.FollowersMax - m_Mobile.Followers;
 
             if (slots < 2)
+            {
                 return null;
+            }
 
             Spell spell = null;
 
-            if (this.m_Mobile.Skills[SkillName.Magery].Value > 95.0 && this.m_Mobile.Mana > 50)
+            if (m_Mobile.Skills[SkillName.Magery].Value > 95.0 && m_Mobile.Mana > 50)
             {
                 int whichone = Utility.Random(10);
 
                 if (slots > 4 && whichone == 0)
-                    spell = new SummonDaemonSpell(this.m_Mobile, null);
+                {
+                    spell = new SummonDaemonSpell(m_Mobile, null);
+                }
                 else if (slots > 3 && whichone < 2)
-                    spell = new FireElementalSpell(this.m_Mobile, null);
+                {
+                    spell = new FireElementalSpell(m_Mobile, null);
+                }
                 else if (slots > 2 && whichone < 3)
-                    spell = new WaterElementalSpell(this.m_Mobile, null);
+                {
+                    spell = new WaterElementalSpell(m_Mobile, null);
+                }
                 else if (whichone < 4)
-                    spell = new AirElementalSpell(this.m_Mobile, null);
+                {
+                    spell = new AirElementalSpell(m_Mobile, null);
+                }
                 else if (whichone < 5)
-                    spell = new EarthElementalSpell(this.m_Mobile, null);
+                {
+                    spell = new EarthElementalSpell(m_Mobile, null);
+                }
                 else
-                    spell = new EnergyVortexSpell(this.m_Mobile, null);
+                {
+                    spell = new EnergyVortexSpell(m_Mobile, null);
+                }
             }
-            else if (this.m_Mobile.Skills[SkillName.Magery].Value > 55.0 && this.m_Mobile.Mana > 14) // 5th level
+            else if (m_Mobile.Skills[SkillName.Magery].Value > 55.0 && m_Mobile.Mana > 14) // 5th level
             {
-                if (this.m_Mobile.InitialInnocent) // peace loving hippy using nature friendly animals
-                    spell = new SummonCreatureSpell(this.m_Mobile, null);
+                if (m_Mobile.InitialInnocent) // peace loving hippy using nature friendly animals
+                {
+                    spell = new SummonCreatureSpell(m_Mobile, null);
+                }
                 else
-                    spell = new BladeSpiritsSpell(this.m_Mobile, null);
+                {
+                    spell = new BladeSpiritsSpell(m_Mobile, null);
+                }
             }
 
             return spell;
@@ -234,47 +298,50 @@ namespace Server.Mobiles
 
         public Spell GetRandomMageryDamageSpell()
         {
-            if (this.m_Mobile.Debug)
-                this.m_Mobile.Say(1156, "Random damage spell");
+            if (m_Mobile.Debug)
+            {
+                m_Mobile.Say(1156, "Random damage spell");
+            }
 
-            int whichone = (int)(this.m_Mobile.Skills[SkillName.Magery].Value / 14.2) - 1;
+            int whichone = (int)(m_Mobile.Skills[SkillName.Magery].Value / 14.2) - 1;
 
             whichone += Utility.RandomMinMax(-2, -0);
 
             if (whichone > 6)
+            {
                 whichone = 6;
+            }
             else if (whichone < 1)
+            {
                 whichone = 1;
+            }
 
             // instead of checking each spell level to wipe all all the mana out only 
             // lower it once. Failure means mana might build up for a better spell
-            if (m_MageryMana[whichone] > this.m_Mobile.Mana)
+            if (m_MageryMana[whichone] > m_Mobile.Mana)
                 whichone--;
 
             switch( whichone )
             {
                 case 6:
-                    return new FlameStrikeSpell(this.m_Mobile, null);
+                    return new FlameStrikeSpell(m_Mobile, null);
                 case 5:
                     {
-                        if (DateTime.UtcNow > this.m_LastExplosion)
+                        if (DateTime.UtcNow > m_LastExplosion)
                         {
-                            this.m_LastExplosion = DateTime.UtcNow + TimeSpan.FromSeconds(3);
-                            return new ExplosionSpell(this.m_Mobile, null);
+                            m_LastExplosion = DateTime.UtcNow + TimeSpan.FromSeconds(3);
+                            return new ExplosionSpell(m_Mobile, null);
                         }
                         else
-                            return new EnergyBoltSpell(this.m_Mobile, null);
+                        {
+                            return new EnergyBoltSpell(m_Mobile, null);
+                        }
                     }
-                case 4:
-                    return new MindBlastSpell(this.m_Mobile, null);
-                case 3:
-                    return new LightningSpell(this.m_Mobile, null);
-                case 2:
-                    return new FireballSpell(this.m_Mobile, null);
-                case 1:
-                    return new HarmSpell(this.m_Mobile, null);
-                default:
-                    return new MagicArrowSpell(this.m_Mobile, null);
+                case 4: return new MindBlastSpell(m_Mobile, null);
+                case 3: return new LightningSpell(m_Mobile, null);
+                case 2: return new FireballSpell(m_Mobile, null);
+                case 1: return new HarmSpell(m_Mobile, null);
+                default: return new MagicArrowSpell(m_Mobile, null);
             }
         }
     }

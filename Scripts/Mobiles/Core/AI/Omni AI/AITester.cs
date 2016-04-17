@@ -15,65 +15,65 @@ namespace Server.Mobiles
         public AITester(int i)
             : base(AIType.AI_Melee, FightMode.Closest, 10, 1, 0.2, 0.4)
         {
-            this.Name = "Dark Knight";
-            this.Body = 400;
-            this.Hue = 1175;
+            Name = "Dark Knight";
+            Body = 400;
+            Hue = 1175;
 
-            this.SetStr(150);
-            this.SetDex(180);
-            this.SetInt(1500);
+            SetStr(150);
+            SetDex(180);
+            SetInt(1500);
 
-            this.SetHits(5000);
-            this.SetDamage(15, 20);
+            SetHits(5000);
+            SetDamage(15, 20);
 
-            this.SetDamageType(ResistanceType.Physical, 100);
+            SetDamageType(ResistanceType.Physical, 100);
 
-            this.SetResistance(ResistanceType.Physical, 50);
-            this.SetResistance(ResistanceType.Fire, 50);
-            this.SetResistance(ResistanceType.Cold, 50);
-            this.SetResistance(ResistanceType.Poison, 50);
-            this.SetResistance(ResistanceType.Energy, 50);
+            SetResistance(ResistanceType.Physical, 50);
+            SetResistance(ResistanceType.Fire, 50);
+            SetResistance(ResistanceType.Cold, 50);
+            SetResistance(ResistanceType.Poison, 50);
+            SetResistance(ResistanceType.Energy, 50);
 
             if (i == 0)
             {
-                this.SetSkill(SkillName.EvalInt, 120.0);
-                this.SetSkill(SkillName.Magery, 120.0);
+                SetSkill(SkillName.EvalInt, 120.0);
+                SetSkill(SkillName.Magery, 120.0);
             }
             else if (i == 1)
             {
-                this.SetSkill(SkillName.Necromancy, 120.0);
-                this.SetSkill(SkillName.SpiritSpeak, 120.0);
+                SetSkill(SkillName.Necromancy, 120.0);
+                SetSkill(SkillName.SpiritSpeak, 120.0);
             }
             else if (i == 2)
             {
-                this.SetSkill(SkillName.Bushido, 120.0);
-                this.SetSkill(SkillName.Parry, 120.0);
+                SetSkill(SkillName.Bushido, 120.0);
+                SetSkill(SkillName.Parry, 120.0);
             }
             else if (i == 3)
             {
-                this.SetSkill(SkillName.Ninjitsu, 120.0);
-                this.SetSkill(SkillName.Hiding, 120.0);
-                this.SetSkill(SkillName.Stealth, 120.0);
+                SetSkill(SkillName.Ninjitsu, 120.0);
+                SetSkill(SkillName.Hiding, 120.0);
+                SetSkill(SkillName.Stealth, 120.0);
             }
             else if (i == 4)
             {
-                this.SetSkill(SkillName.Spellweaving, 120.0);
-                this.SetSkill(SkillName.EvalInt, 120.0);
+                SetSkill(SkillName.Spellweaving, 120.0);
+                SetSkill(SkillName.EvalInt, 120.0);
             }
             else if (i == 5)
             {
-                this.SetSkill(SkillName.Mysticism, 120.0);
+                SetSkill(SkillName.Mysticism, 120.0);
             }
 
-            this.SetSkill(SkillName.Anatomy, 100.0);
-            this.SetSkill(SkillName.MagicResist, 120.0);
-            this.SetSkill(SkillName.Swords, 100.0);
-            this.SetSkill(SkillName.Tactics, 100.0);
+            SetSkill(SkillName.Anatomy, 100.0);
+            SetSkill(SkillName.MagicResist, 120.0);
+            SetSkill(SkillName.Swords, 100.0);
+            SetSkill(SkillName.Tactics, 100.0);
 
-            this.Fame = 32000;
-            this.Karma = -32000;
+            Fame = 32000;
+            Karma = -32000;
 
-            this.VirtualArmor = 80;
+            VirtualArmor = 80;
 
             int hue = 1175;
             GiveItem(this, hue, new DragonHelm());
@@ -129,8 +129,8 @@ namespace Server.Mobiles
 
         public override void GenerateLoot()
         {
-            this.AddLoot(LootPack.Rich, 2);
-            this.AddLoot(LootPack.Gems, 50);
+            AddLoot(LootPack.Rich, 2);
+            AddLoot(LootPack.Gems, 50);
         }
 
         public override void Serialize(GenericWriter writer)

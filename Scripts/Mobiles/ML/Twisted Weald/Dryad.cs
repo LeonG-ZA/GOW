@@ -1,41 +1,33 @@
 using System;
 using Server.Engines.Plants;
-using Server.Items;
 
 namespace Server.Mobiles
 {
     [CorpseName("a dryad's corpse")]
-    public class MLDryad : BaseCreature
+    public class Dryad : BaseCreature
     {
-        public override bool InitialInnocent
-        {
-            get
-            {
-                return true;
-            }
-        }
+        public override bool InitialInnocent { get { return true; } }
 
-        public override OppositionGroup OppositionGroup
-        {
-            get
-            {
-                return OppositionGroup.FeyAndUndead;
-            }
-        }
+        public override int GetDeathSound() { return 0x57A; }
+        public override int GetAttackSound() { return 0x57B; }
+        public override int GetIdleSound() { return 0x57C; }
+        public override int GetAngerSound() { return 0x57D; }
+        public override int GetHurtSound() { return 0x57E; }
+
+        public override OppositionGroup OppositionGroup { get { return OppositionGroup.FeyAndUndead; } }
 
         [Constructable]
-        public MLDryad()
+        public Dryad()
             : base(AIType.AI_Mage, FightMode.Evil, 10, 1, 0.2, 0.4)
         {
             Name = "a dryad";
             Body = 266;
-            BaseSoundID = 0x57B;
 
-            SetStr(132, 149);
-            SetDex(152, 168);
-            SetInt(251, 280);
+            SetStr(130, 150); // TODO: All Values are taken from Stratics and will change along with the info taken from stratics/OSI.
+            SetDex(150, 170);
+            SetInt(250, 275);
 
-            SetHits(304, 321);
+            SetHits(310, 320);
 
             SetDamage(11, 20);
 
@@ -47,21 +39,22 @@ namespace Server.Mobiles
             SetResistance(ResistanceType.Poison, 30, 40);
             SetResistance(ResistanceType.Energy, 25, 35);
 
-            SetSkill(SkillName.Meditation, 80.0, 90.0);
-            SetSkill(SkillName.EvalInt, 70.0, 80.0);
-            SetSkill(SkillName.Magery, 70.0, 80.0);
-            SetSkill(SkillName.Anatomy, 0);
-            SetSkill(SkillName.MagicResist, 100.0, 120.0);
-            SetSkill(SkillName.Tactics, 70.0, 80.0);
-            SetSkill(SkillName.Wrestling, 70.0, 80.0);
+            SetSkill(SkillName.Meditation, 80, 90);
+            SetSkill(SkillName.EvalInt, 70, 80);
+            SetSkill(SkillName.Magery, 70, 80);
+            SetSkill(SkillName.MagicResist, 110, 120);
+            SetSkill(SkillName.Tactics, 70, 80);
+            SetSkill(SkillName.Wrestling, 70, 80);
 
-            Fame = 5000;
-            Karma = 5000;
+            Fame = 1250;
+            Karma = 1250;
 
-            VirtualArmor = 28; // Don't know what it should be
+            PackSpellweavingScroll();
 
-            if (Core.ML && Utility.RandomDouble() < .60)
-                this.PackItem(Seed.RandomPeculiarSeed(1));
+            if (Utility.RandomDouble() < .33)
+            {
+                PackItem(Seed.RandomPeculiarSeed(1));
+            }
         }
 
         public override void GenerateLoot()
@@ -157,7 +150,7 @@ namespace Server.Mobiles
 
         #endregion
 
-        public MLDryad(Serial serial)
+        public Dryad(Serial serial)
             : base(serial)
         {
         }

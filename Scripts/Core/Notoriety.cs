@@ -10,7 +10,6 @@ using Server.Multis;
 using Server.Engines.ConPVP;
 using Server.Engines.Quests;
 using Server.Spells.Chivalry;
-using Server.Spells.Seventh;
 using Server.Spells.Necromancy;
 using Server.Spells.Ninjitsu;
 

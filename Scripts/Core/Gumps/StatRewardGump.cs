@@ -1,12 +1,10 @@
-using System;
-using Server;
 using Server.Engines.VeteranRewards;
 using Server.Mobiles;
 using Server.Network;
 
 namespace Server.Gumps
 {
-	public class StatRewardGump : Gump
+    public class StatRewardGump : Gump
 	{
 		public override int TypeID { get { return 0x193; } }
 

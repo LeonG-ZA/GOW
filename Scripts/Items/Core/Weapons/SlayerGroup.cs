@@ -41,7 +41,7 @@ namespace Server.Items
             undead.Entries = new SlayerEntry[0];
 
             fey.Opposition = new SlayerGroup[] { abyss };
-            fey.Super = new SlayerEntry(SlayerName.Fey, typeof(Centaur), typeof(CuSidhe), typeof(EtherealWarrior), typeof(Kirin), typeof(LordOaks), typeof(Pixie), typeof(PixieRenowned), typeof(Silvani), typeof(Treefellow), typeof(Unicorn), typeof(Wisp), typeof(MLDryad), typeof(Satyr),/* Mondain's Legacy */ typeof(InsaneDryad), typeof(CorporealBrume), typeof(CrystalLatticeSeeker), typeof(LadyMelisande) /* End */, typeof(FeralTreefellow));
+            fey.Super = new SlayerEntry(SlayerName.Fey, typeof(Centaur), typeof(CuSidhe), typeof(EtherealWarrior), typeof(Kirin), typeof(LordOaks), typeof(Pixie), typeof(PixieRenowned), typeof(Silvani), typeof(Treefellow), typeof(Unicorn), typeof(Wisp), typeof(Dryad), typeof(Satyr),/* Mondain's Legacy */ typeof(InsaneDryad), typeof(CorporealBrume), typeof(CrystalLatticeSeeker), typeof(LadyMelisande) /* End */, typeof(FeralTreefellow));
             fey.Entries = new SlayerEntry[0];
 
             elemental.Opposition = new SlayerGroup[] { abyss };
