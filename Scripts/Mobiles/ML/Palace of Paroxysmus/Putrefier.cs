@@ -1,4 +1,3 @@
-using System;
 using Server.Items;
 
 namespace Server.Mobiles
@@ -10,42 +9,42 @@ namespace Server.Mobiles
         public Putrefier()
         {
 
-            this.Name = "Putrefier";
-            this.Hue = 63;
+            Name = "Putrefier";
+            Hue = 63;
 
-            this.SetStr(1057, 1400);
-            this.SetDex(232, 560);
-            this.SetInt(201, 440);
+            SetStr(1057, 1400);
+            SetDex(232, 560);
+            SetInt(201, 440);
 
-            this.SetHits(3010, 4092);
+            SetHits(3010, 4092);
 
-            this.SetDamage(27, 34);
+            SetDamage(27, 34);
 
-            this.SetDamageType(ResistanceType.Physical, 50);
-            this.SetDamageType(ResistanceType.Fire, 0);
-            this.SetDamageType(ResistanceType.Poison, 50);
-            this.SetDamageType(ResistanceType.Energy, 0);
+            SetDamageType(ResistanceType.Physical, 50);
+            SetDamageType(ResistanceType.Fire, 0);
+            SetDamageType(ResistanceType.Poison, 50);
+            SetDamageType(ResistanceType.Energy, 0);
 
-            this.SetResistance(ResistanceType.Physical, 65, 80);
-            this.SetResistance(ResistanceType.Fire, 65, 80);
-            this.SetResistance(ResistanceType.Cold, 50, 60);
-            this.SetResistance(ResistanceType.Poison, 100);
-            this.SetResistance(ResistanceType.Energy, 40, 50);
+            SetResistance(ResistanceType.Physical, 65, 80);
+            SetResistance(ResistanceType.Fire, 65, 80);
+            SetResistance(ResistanceType.Cold, 50, 60);
+            SetResistance(ResistanceType.Poison, 100);
+            SetResistance(ResistanceType.Energy, 40, 50);
 
-            this.SetSkill(SkillName.Wrestling, 111.2, 128.0);
-            this.SetSkill(SkillName.Tactics, 115.2, 125.2);
-            this.SetSkill(SkillName.MagicResist, 143.4, 170.0);
-            this.SetSkill(SkillName.Anatomy, 44.6, 67.0);
-            this.SetSkill(SkillName.Magery, 117.6, 118.8);
-            this.SetSkill(SkillName.EvalInt, 113.0, 128.8);
-            this.SetSkill(SkillName.Meditation, 41.4, 85.0);
-            this.SetSkill(SkillName.Poisoning, 45.0, 50.0);
+            SetSkill(SkillName.Wrestling, 111.2, 128.0);
+            SetSkill(SkillName.Tactics, 115.2, 125.2);
+            SetSkill(SkillName.MagicResist, 143.4, 170.0);
+            SetSkill(SkillName.Anatomy, 44.6, 67.0);
+            SetSkill(SkillName.Magery, 117.6, 118.8);
+            SetSkill(SkillName.EvalInt, 113.0, 128.8);
+            SetSkill(SkillName.Meditation, 41.4, 85.0);
+            SetSkill(SkillName.Poisoning, 45.0, 50.0);
 
-            this.Fame = 24000;
-            this.Karma = -24000;
+            Fame = 24000;
+            Karma = -24000;
 
-            this.PackScroll(4, 7);
-            this.PackScroll(4, 7);
+            PackScroll(4, 7);
+            PackScroll(4, 7);
         }
 
         public Putrefier(Serial serial)
@@ -92,7 +91,7 @@ namespace Server.Mobiles
         //Needs to be double checked
         public override void GenerateLoot()
         {
-            this.AddLoot(LootPack.UltraRich, 3);
+            AddLoot(LootPack.UltraRich, 3);
         }
 
         public override void Serialize(GenericWriter writer)

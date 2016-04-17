@@ -1,4 +1,3 @@
-using System;
 using Server.Items;
 
 namespace Server.Mobiles
@@ -10,35 +9,35 @@ namespace Server.Mobiles
         public LadySabrix()
         {
 
-            this.Name = "Lady Sabrix";
-            this.Hue = 0x497;
+            Name = "Lady Sabrix";
+            Hue = 0x497;
 
-            this.SetStr(82, 130);
-            this.SetDex(117, 146);
-            this.SetInt(50, 98);
+            SetStr(82, 130);
+            SetDex(117, 146);
+            SetInt(50, 98);
 
-            this.SetHits(233, 361);
-            this.SetStam(117, 146);
-            this.SetMana(50, 98);
+            SetHits(233, 361);
+            SetStam(117, 146);
+            SetMana(50, 98);
 
-            this.SetDamage(15, 22);
+            SetDamage(15, 22);
 
-            this.SetDamageType(ResistanceType.Physical, 100);
+            SetDamageType(ResistanceType.Physical, 100);
 
-            this.SetResistance(ResistanceType.Physical, 40, 50);
-            this.SetResistance(ResistanceType.Fire, 30, 40);
-            this.SetResistance(ResistanceType.Cold, 30, 39);
-            this.SetResistance(ResistanceType.Poison, 70, 80);
-            this.SetResistance(ResistanceType.Energy, 35, 44);
+            SetResistance(ResistanceType.Physical, 40, 50);
+            SetResistance(ResistanceType.Fire, 30, 40);
+            SetResistance(ResistanceType.Cold, 30, 39);
+            SetResistance(ResistanceType.Poison, 70, 80);
+            SetResistance(ResistanceType.Energy, 35, 44);
 
-            this.SetSkill(SkillName.Wrestling, 109.8, 122.8);
-            this.SetSkill(SkillName.Tactics, 102.8, 120.0);
-            this.SetSkill(SkillName.MagicResist, 79.4, 95.1);
-            this.SetSkill(SkillName.Anatomy, 68.8, 105.1);
-            this.SetSkill(SkillName.Poisoning, 97.8, 116.7);
+            SetSkill(SkillName.Wrestling, 109.8, 122.8);
+            SetSkill(SkillName.Tactics, 102.8, 120.0);
+            SetSkill(SkillName.MagicResist, 79.4, 95.1);
+            SetSkill(SkillName.Anatomy, 68.8, 105.1);
+            SetSkill(SkillName.Poisoning, 97.8, 116.7);
 
-            this.Fame = 18900;
-            this.Karma = -18900;
+            Fame = 18900;
+            Karma = -18900;
         }
 
         public LadySabrix(Serial serial)
@@ -75,7 +74,7 @@ namespace Server.Mobiles
         }
         public override void GenerateLoot()
         {
-            this.AddLoot(LootPack.UltraRich, 2);
+            AddLoot(LootPack.UltraRich, 2);
         }
 
         public override WeaponAbility GetWeaponAbility()

@@ -12,36 +12,36 @@ namespace Server.Mobiles
         public Swoop()
         {
 
-            this.Name = "Swoop";
-            this.Hue = 0xE0;
+            Name = "Swoop";
+            Hue = 0xE0;
 
-            this.AI = AIType.AI_Melee;
+            AI = AIType.AI_Melee;
 
-            this.SetStr(100, 150);
-            this.SetDex(400, 500);
-            this.SetInt(80, 90);
+            SetStr(100, 150);
+            SetDex(400, 500);
+            SetInt(80, 90);
 
-            this.SetHits(1500, 2000);
+            SetHits(1500, 2000);
 
-            this.SetDamage(20, 30);
+            SetDamage(20, 30);
 
-            this.SetDamageType(ResistanceType.Physical, 100);
+            SetDamageType(ResistanceType.Physical, 100);
 
-            this.SetResistance(ResistanceType.Physical, 75, 90);
-            this.SetResistance(ResistanceType.Fire, 60, 77);
-            this.SetResistance(ResistanceType.Cold, 70, 85);
-            this.SetResistance(ResistanceType.Poison, 55, 85);
-            this.SetResistance(ResistanceType.Energy, 50, 60);
+            SetResistance(ResistanceType.Physical, 75, 90);
+            SetResistance(ResistanceType.Fire, 60, 77);
+            SetResistance(ResistanceType.Cold, 70, 85);
+            SetResistance(ResistanceType.Poison, 55, 85);
+            SetResistance(ResistanceType.Energy, 50, 60);
 
-            this.SetSkill(SkillName.Wrestling, 120.0, 140.0);
-            this.SetSkill(SkillName.Tactics, 120.0, 140.0);
-            this.SetSkill(SkillName.MagicResist, 95.0, 105.0);
+            SetSkill(SkillName.Wrestling, 120.0, 140.0);
+            SetSkill(SkillName.Tactics, 120.0, 140.0);
+            SetSkill(SkillName.MagicResist, 95.0, 105.0);
 
-            this.Fame = 18000;
-            this.Karma = 0;
+            Fame = 18000;
+            Karma = 0;
 
-            this.PackReg(4);
-            this.PackArcaneScroll(0, 1);
+            PackReg(4);
+            PackArcaneScroll(0, 1);
 
             Tamable = false; 
         }
@@ -109,7 +109,7 @@ namespace Server.Mobiles
         }
         public override void GenerateLoot()
         {
-            this.AddLoot(LootPack.UltraRich, 2);
+            AddLoot(LootPack.UltraRich, 2);
         }
 
         // TODO: Put this attack shared with Hiryu and Lesser Hiryu in one place
@@ -163,22 +163,22 @@ namespace Server.Mobiles
             public ExpireTimer(Mobile m, ResistanceMod mod, TimeSpan delay)
                 : base(delay)
             {
-                this.m_Mobile = m;
-                this.m_Mod = mod;
-                this.Priority = TimerPriority.TwoFiftyMS;
+                m_Mobile = m;
+                m_Mod = mod;
+                Priority = TimerPriority.TwoFiftyMS;
             }
 
             public void DoExpire()
             {
-                this.m_Mobile.RemoveResistanceMod(this.m_Mod);
-                this.Stop();
-                m_Table.Remove(this.m_Mobile);
+                m_Mobile.RemoveResistanceMod(m_Mod);
+                Stop();
+                m_Table.Remove(m_Mobile);
             }
 
             protected override void OnTick()
             {
-                this.m_Mobile.SendLocalizedMessage(1070838); // Your resistance to physical attacks has returned.
-                this.DoExpire();
+                m_Mobile.SendLocalizedMessage(1070838); // Your resistance to physical attacks has returned.
+                DoExpire();
             }
         }
     }

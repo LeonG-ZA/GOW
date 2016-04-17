@@ -1,10 +1,5 @@
 using System;
-using Server;
-using Server.Items;
 using Server.Gumps;
-using System.Collections;
-using Server.Misc;
-using Server.Spells;
 
 namespace Server.Mobiles
 {
@@ -110,7 +105,7 @@ namespace Server.Mobiles
 
         private void DoFocusedLeech(Mobile combatant, string message)
         {
-            this.Say(true, message);
+            Say(true, message);
 
             Timer.DelayCall(TimeSpan.FromSeconds(0.5), new TimerStateCallback(DoFocusedLeech_Stage1), combatant);
         }
@@ -119,11 +114,11 @@ namespace Server.Mobiles
         {
             Mobile combatant = (Mobile)state;
 
-            if (this.CanBeHarmful(combatant))
+            if (CanBeHarmful(combatant))
             {
-                this.MovingParticles(combatant, 0x36FA, 1, 0, false, false, 1108, 0, 9533, 1, 0, (EffectLayer)255, 0x100);
-                this.MovingParticles(combatant, 0x0001, 1, 0, false, true, 1108, 0, 9533, 9534, 0, (EffectLayer)255, 0);
-                this.PlaySound(0x1FB);
+                MovingParticles(combatant, 0x36FA, 1, 0, false, false, 1108, 0, 9533, 1, 0, (EffectLayer)255, 0x100);
+                MovingParticles(combatant, 0x0001, 1, 0, false, true, 1108, 0, 9533, 9534, 0, (EffectLayer)255, 0);
+                PlaySound(0x1FB);
 
                 Timer.DelayCall(TimeSpan.FromSeconds(1.0), new TimerStateCallback(DoFocusedLeech_Stage2), combatant);
             }
@@ -133,14 +128,14 @@ namespace Server.Mobiles
         {
             Mobile combatant = (Mobile)state;
 
-            if (this.CanBeHarmful(combatant))
+            if (CanBeHarmful(combatant))
             {
                 combatant.MovingParticles(this, 0x36F4, 1, 0, false, false, 32, 0, 9535, 1, 0, (EffectLayer)255, 0x100);
                 combatant.MovingParticles(this, 0x0001, 1, 0, false, true, 32, 0, 9535, 9536, 0, (EffectLayer)255, 0);
 
-                this.PlaySound(0x209);
-                this.DoHarmful(combatant);
-                this.Hits += ItemAttributes.Damage(combatant, this, Utility.RandomMinMax(40, 80) - (Core.AOS ? 0 : 10), 100, 0, 0, 0, 0);
+                PlaySound(0x209);
+                DoHarmful(combatant);
+                Hits += ItemAttributes.Damage(combatant, this, Utility.RandomMinMax(40, 80) - (Core.AOS ? 0 : 10), 100, 0, 0, 0, 0);
             }
         }
 
@@ -150,7 +145,7 @@ namespace Server.Mobiles
 
         private void DoFocusedLeechMana(Mobile combatant, string message)
         {
-            this.Say(true, message);
+            Say(true, message);
 
             Timer.DelayCall(TimeSpan.FromSeconds(0.5), new TimerStateCallback(DoFocusedLeechMana_Stage2), combatant);
         }
@@ -159,11 +154,11 @@ namespace Server.Mobiles
         {
             Mobile combatant = (Mobile)state;
 
-            if (this.CanBeHarmful(combatant))
+            if (CanBeHarmful(combatant))
             {
-                this.MovingParticles(combatant, 0x36FA, 1, 0, false, false, 1108, 0, 9533, 1, 0, (EffectLayer)255, 0x100);
-                this.MovingParticles(combatant, 0x0001, 1, 0, false, true, 1108, 0, 9533, 9534, 0, (EffectLayer)255, 0);
-                this.PlaySound(0x1FB);
+                MovingParticles(combatant, 0x36FA, 1, 0, false, false, 1108, 0, 9533, 1, 0, (EffectLayer)255, 0x100);
+                MovingParticles(combatant, 0x0001, 1, 0, false, true, 1108, 0, 9533, 9534, 0, (EffectLayer)255, 0);
+                PlaySound(0x1FB);
 
                 Timer.DelayCall(TimeSpan.FromSeconds(1.0), new TimerStateCallback(DoFocusedLeechMana_Stage2), combatant);
             }
@@ -173,17 +168,17 @@ namespace Server.Mobiles
         {
             Mobile combatant = (Mobile)state;
 
-            if (this.CanBeHarmful(combatant))
+            if (CanBeHarmful(combatant))
             {
                 combatant.MovingParticles(this, 0x36F4, 1, 0, false, false, 88, 0, 9535, 1, 0, (EffectLayer)255, 0x100);
                 combatant.MovingParticles(this, 0x0001, 1, 0, false, true, 88, 0, 9535, 9536, 0, (EffectLayer)255, 0);
 
-                this.PlaySound(0x209);
+                PlaySound(0x209);
                 int manaLeech1 = (int)(combatant.ManaMax * .50);
                 int manaLeech2 = (int)(combatant.ManaMax * .90);
                 int manaLeech3 = Utility.Random(manaLeech1, manaLeech2);
                 combatant.Mana -= manaLeech3;
-                this.Mana += manaLeech3;
+                Mana += manaLeech3;
             }
         }
 
@@ -193,7 +188,7 @@ namespace Server.Mobiles
 
         private void DoFocusedLeechStamina(Mobile combatant, string message)
         {
-            this.Say(true, message);
+            Say(true, message);
 
             Timer.DelayCall(TimeSpan.FromSeconds(0.5), new TimerStateCallback(DoFocusedLeechStamina_Stage2), combatant);
         }
@@ -202,11 +197,11 @@ namespace Server.Mobiles
         {
             Mobile combatant = (Mobile)state;
 
-            if (this.CanBeHarmful(combatant))
+            if (CanBeHarmful(combatant))
             {
-                this.MovingParticles(combatant, 0x36FA, 1, 0, false, false, 1108, 0, 9533, 1, 0, (EffectLayer)255, 0x100);
-                this.MovingParticles(combatant, 0x0001, 1, 0, false, true, 1108, 0, 9533, 9534, 0, (EffectLayer)255, 0);
-                this.PlaySound(0x1FB);
+                MovingParticles(combatant, 0x36FA, 1, 0, false, false, 1108, 0, 9533, 1, 0, (EffectLayer)255, 0x100);
+                MovingParticles(combatant, 0x0001, 1, 0, false, true, 1108, 0, 9533, 9534, 0, (EffectLayer)255, 0);
+                PlaySound(0x1FB);
 
                 Timer.DelayCall(TimeSpan.FromSeconds(1.0), new TimerStateCallback(DoFocusedLeechStamina_Stage2), combatant);
             }
@@ -216,17 +211,17 @@ namespace Server.Mobiles
         {
             Mobile combatant = (Mobile)state;
 
-            if (this.CanBeHarmful(combatant))
+            if (CanBeHarmful(combatant))
             {
                 combatant.MovingParticles(this, 0x36F4, 1, 0, false, false, 900, 0, 9535, 1, 0, (EffectLayer)255, 0x100);
                 combatant.MovingParticles(this, 0x0001, 1, 0, false, true, 900, 0, 9535, 9536, 0, (EffectLayer)255, 0);
 
-                this.PlaySound(0x209);
+                PlaySound(0x209);
                 int stamLeech1 = (int)(combatant.StamMax * .50);
                 int stamLeech2 = (int)(combatant.StamMax * .90);
                 int stamLeech3 = Utility.Random(stamLeech1, stamLeech2);
                 combatant.Stam -= stamLeech3;
-                this.Stam += stamLeech3;
+                Stam += stamLeech3;
             }
         }
 
@@ -237,9 +232,9 @@ namespace Server.Mobiles
         {
             if (DateTime.UtcNow >= m_NextAbilityTime)
             {
-                Mobile combatant = this.Combatant;
+                Mobile combatant = Combatant;
 
-                if (combatant != null && combatant.Map == this.Map && combatant.InRange(this, 12))
+                if (combatant != null && combatant.Map == Map && combatant.InRange(this, 12))
                 {
                     m_NextAbilityTime = DateTime.UtcNow + TimeSpan.FromSeconds(Utility.RandomMinMax(10, 15));
 

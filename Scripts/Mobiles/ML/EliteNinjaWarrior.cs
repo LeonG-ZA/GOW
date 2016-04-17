@@ -1,13 +1,9 @@
 using System;
-using System.Collections;
 using Server.Items;
-using Server.ContextMenus;
-using Server.Misc;
-using Server.Network;
 
 namespace Server.Mobiles
 {
-	[CorpseName( "an elite ninja corpse" )] 
+    [CorpseName( "an elite ninja corpse" )] 
       public class EliteNinjaWarrior : BaseCreature
 	{
 		private DateTime m_DecayTime;

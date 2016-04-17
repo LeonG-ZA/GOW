@@ -59,7 +59,7 @@ namespace Server.Mobiles
 
         public override void GenerateLoot()
         {
-            this.AddLoot(LootPack.Rich);
+            AddLoot(LootPack.Rich);
         }
 
         public override int Meat
@@ -74,8 +74,8 @@ namespace Server.Mobiles
         {
             base.OnThink();
 
-            this.AreaPeace();
-            this.AreaUndress();
+            AreaPeace();
+            AreaUndress();
         }
 
         #region Area Peace
@@ -83,16 +83,16 @@ namespace Server.Mobiles
 
         public void AreaPeace()
         {
-            if (this.Combatant == null || this.Deleted || !this.Alive || this.m_NextPeace > DateTime.UtcNow || 0.1 < Utility.RandomDouble())
+            if (Combatant == null || Deleted || !Alive || m_NextPeace > DateTime.UtcNow || 0.1 < Utility.RandomDouble())
                 return;
 
             TimeSpan duration = TimeSpan.FromSeconds(Utility.RandomMinMax(20, 80));
 
-            foreach (Mobile m in this.GetMobilesInRange(this.RangePerception))
+            foreach (Mobile m in GetMobilesInRange(RangePerception))
             {
                 PlayerMobile p = m as PlayerMobile;
 
-                if (this.IsValidTarget(p))
+                if (IsValidTarget(p))
                 {
                     p.PeacedUntil = DateTime.UtcNow + duration;
                     p.SendLocalizedMessage(1072065); // You gaze upon the dryad's beauty, and forget to continue battling!
@@ -101,13 +101,13 @@ namespace Server.Mobiles
                 }
             }
 
-            this.m_NextPeace = DateTime.UtcNow + TimeSpan.FromSeconds(10);
-            this.PlaySound(0x1D3);
+            m_NextPeace = DateTime.UtcNow + TimeSpan.FromSeconds(10);
+            PlaySound(0x1D3);
         }
 
         public bool IsValidTarget(PlayerMobile m)
         {
-            if (m != null && m.PeacedUntil < DateTime.UtcNow && !m.Hidden && m.IsPlayer() && this.CanBeHarmful(m))
+            if (m != null && m.PeacedUntil < DateTime.UtcNow && !m.Hidden && m.IsPlayer() && CanBeHarmful(m))
                 return true;
 
             return false;
@@ -120,24 +120,24 @@ namespace Server.Mobiles
 
         public void AreaUndress()
         {
-            if (this.Combatant == null || this.Deleted || !this.Alive || this.m_NextUndress > DateTime.UtcNow || 0.005 < Utility.RandomDouble())
+            if (Combatant == null || Deleted || !Alive || m_NextUndress > DateTime.UtcNow || 0.005 < Utility.RandomDouble())
                 return;
 
-            foreach (Mobile m in this.GetMobilesInRange(this.RangePerception))
+            foreach (Mobile m in GetMobilesInRange(RangePerception))
             {
-                if (m != null && m.Player && !m.Female && !m.Hidden && m.IsPlayer() && this.CanBeHarmful(m))
+                if (m != null && m.Player && !m.Female && !m.Hidden && m.IsPlayer() && CanBeHarmful(m))
                 {
-                    this.UndressItem(m, Layer.OuterTorso);
-                    this.UndressItem(m, Layer.InnerTorso);
-                    this.UndressItem(m, Layer.MiddleTorso);
-                    this.UndressItem(m, Layer.Pants);
-                    this.UndressItem(m, Layer.Shirt);
+                    UndressItem(m, Layer.OuterTorso);
+                    UndressItem(m, Layer.InnerTorso);
+                    UndressItem(m, Layer.MiddleTorso);
+                    UndressItem(m, Layer.Pants);
+                    UndressItem(m, Layer.Shirt);
 
                     m.SendLocalizedMessage(1072197); // The dryad's beauty makes your blood race. Your clothing is too confining.
                 }
             }
 
-            this.m_NextUndress = DateTime.UtcNow + TimeSpan.FromMinutes(1);
+            m_NextUndress = DateTime.UtcNow + TimeSpan.FromMinutes(1);
         }
 
         public void UndressItem(Mobile m, Layer layer)

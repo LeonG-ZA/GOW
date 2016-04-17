@@ -1,10 +1,8 @@
-using System;
-using System.Collections;
 using Server.Items;
 
 namespace Server.Mobiles
 {
-	[CorpseName( "a black order assassin corpse" )]
+    [CorpseName( "a black order assassin corpse" )]
 	public class BlackOrderAssassin : BaseCreature
 	{
 		[Constructable]

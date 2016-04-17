@@ -8,33 +8,33 @@ namespace Server.Mobiles
         private DateTime m_NextRestore;
         public DarkWolfFamiliar()
         {
-            this.Name = "a dark wolf";
-            this.Body = 99;
-            this.Hue = 0x901;
-            this.BaseSoundID = 0xE5;
+            Name = "a dark wolf";
+            Body = 99;
+            Hue = 0x901;
+            BaseSoundID = 0xE5;
 
-            this.SetStr(100);
-            this.SetDex(90);
-            this.SetInt(90);
+            SetStr(100);
+            SetDex(90);
+            SetInt(90);
 
-            this.SetHits(60);
-            this.SetStam(90);
-            this.SetMana(0);
+            SetHits(60);
+            SetStam(90);
+            SetMana(0);
 
-            this.SetDamage(5, 10);
+            SetDamage(5, 10);
 
-            this.SetDamageType(ResistanceType.Physical, 100);
+            SetDamageType(ResistanceType.Physical, 100);
 
-            this.SetResistance(ResistanceType.Physical, 40, 50);
-            this.SetResistance(ResistanceType.Fire, 25, 40);
-            this.SetResistance(ResistanceType.Cold, 25, 40);
-            this.SetResistance(ResistanceType.Poison, 25, 40);
-            this.SetResistance(ResistanceType.Energy, 25, 40);
+            SetResistance(ResistanceType.Physical, 40, 50);
+            SetResistance(ResistanceType.Fire, 25, 40);
+            SetResistance(ResistanceType.Cold, 25, 40);
+            SetResistance(ResistanceType.Poison, 25, 40);
+            SetResistance(ResistanceType.Energy, 25, 40);
 
-            this.SetSkill(SkillName.Wrestling, 85.1, 90.0);
-            this.SetSkill(SkillName.Tactics, 50.0);
+            SetSkill(SkillName.Wrestling, 85.1, 90.0);
+            SetSkill(SkillName.Tactics, 50.0);
 
-            this.ControlSlots = 1;
+            ControlSlots = 1;
         }
 
         public DarkWolfFamiliar(Serial serial)
@@ -46,15 +46,15 @@ namespace Server.Mobiles
         {
             base.OnThink();
 
-            if (DateTime.UtcNow < this.m_NextRestore)
+            if (DateTime.UtcNow < m_NextRestore)
                 return;
 
-            this.m_NextRestore = DateTime.UtcNow + TimeSpan.FromSeconds(2.0);
+            m_NextRestore = DateTime.UtcNow + TimeSpan.FromSeconds(2.0);
 
-            Mobile caster = this.ControlMaster;
+            Mobile caster = ControlMaster;
 
             if (caster == null)
-                caster = this.SummonMaster;
+                caster = SummonMaster;
 
             if (caster != null)
                 ++caster.Stam;

@@ -1,13 +1,10 @@
-#region References
 using System;
 using System.Collections;
 using System.Collections.Generic;
-
 using Server.ContextMenus;
 using Server.Gumps;
 using Server.Items;
 using Server.Network;
-#endregion
 
 namespace Server.Mobiles
 {

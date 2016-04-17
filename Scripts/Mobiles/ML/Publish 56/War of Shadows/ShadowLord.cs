@@ -1,13 +1,8 @@
-using System;
-using Server.Misc;
-using Server.Network;
-using System.Collections;
 using Server.Items;
-using Server.Targeting;
 
 namespace Server.Mobiles
 {
-	public class ShadowLord : BaseCreature
+    public class ShadowLord : BaseCreature
 	{
 
 		[Constructable]

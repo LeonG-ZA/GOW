@@ -1,13 +1,8 @@
-using System;
-using Server.Misc;
-using Server.Network;
-using System.Collections;
 using Server.Items;
-using Server.Targeting;
 
 namespace Server.Mobiles
 {
-	public class VanguardController : BaseCreature
+    public class VanguardController : BaseCreature
 	{
 		public override bool ClickTitle{ get{ return false; } }
 		public override bool ShowFameTitle{ get{ return false; } }
@@ -72,7 +67,7 @@ namespace Server.Mobiles
 
 		public void SpawnBrigand( Mobile target )
 		{
-			Map map = this.Map;
+			Map map = Map;
 
 			if ( map == null )
 				return;
@@ -83,11 +78,11 @@ namespace Server.Mobiles
 			{
 				Brigand Brigand = new Brigand();
 
-				Brigand.Team = this.Team;
+				Brigand.Team = Team;
 				Brigand.FightMode = FightMode.Closest;
 
 				bool validLocation = false;
-				Point3D loc = this.Location;
+				Point3D loc = Location;
 
 				for ( int j = 0; !validLocation && j < 10; ++j )
 				{
@@ -95,7 +90,7 @@ namespace Server.Mobiles
 					int y = Y + Utility.Random( 3 ) - 1;
 					int z = map.GetAverageZ( x, y );
 
-					if ( validLocation = map.CanFit( x, y, this.Z, 16, false, false ) )
+					if ( validLocation = map.CanFit( x, y, Z, 16, false, false ) )
 						loc = new Point3D( x, y, Z );
 					else if ( validLocation = map.CanFit( x, y, z, 16, false, false ) )
 						loc = new Point3D( x, y, z );
@@ -108,7 +103,7 @@ namespace Server.Mobiles
 
 		public void SpawnLich( Mobile target )
 		{
-			Map map = this.Map;
+			Map map = Map;
 
 			if ( map == null )
 				return;
@@ -119,11 +114,11 @@ namespace Server.Mobiles
 			{
 				Lich Lich = new Lich();
 
-				Lich.Team = this.Team;
+				Lich.Team = Team;
 				Lich.FightMode = FightMode.Closest;
 
 				bool validLocation = false;
-				Point3D loc = this.Location;
+				Point3D loc = Location;
 
 				for ( int j = 0; !validLocation && j < 10; ++j )
 				{
@@ -131,7 +126,7 @@ namespace Server.Mobiles
 					int y = Y + Utility.Random( 3 ) - 1;
 					int z = map.GetAverageZ( x, y );
 
-					if ( validLocation = map.CanFit( x, y, this.Z, 16, false, false ) )
+					if ( validLocation = map.CanFit( x, y, Z, 16, false, false ) )
 						loc = new Point3D( x, y, Z );
 					else if ( validLocation = map.CanFit( x, y, z, 16, false, false ) )
 						loc = new Point3D( x, y, z );
@@ -145,7 +140,7 @@ namespace Server.Mobiles
 
 		public void SpawnZombie( Mobile target )
 		{
-			Map map = this.Map;
+			Map map = Map;
 
 			if ( map == null )
 				return;
@@ -156,11 +151,11 @@ namespace Server.Mobiles
 			{
 				Zombie Zombie = new Zombie();
 
-				Zombie.Team = this.Team;
+				Zombie.Team = Team;
 				Zombie.FightMode = FightMode.Closest;
 
 				bool validLocation = false;
-				Point3D loc = this.Location;
+				Point3D loc = Location;
 
 				for ( int j = 0; !validLocation && j < 10; ++j )
 				{
@@ -168,7 +163,7 @@ namespace Server.Mobiles
 					int y = Y + Utility.Random( 3 ) - 1;
 					int z = map.GetAverageZ( x, y );
 
-					if ( validLocation = map.CanFit( x, y, this.Z, 16, false, false ) )
+					if ( validLocation = map.CanFit( x, y, Z, 16, false, false ) )
 						loc = new Point3D( x, y, Z );
 					else if ( validLocation = map.CanFit( x, y, z, 16, false, false ) )
 						loc = new Point3D( x, y, z );
@@ -180,7 +175,7 @@ namespace Server.Mobiles
 		}
 		public void SpawnDaemon( Mobile target )
 		{
-			Map map = this.Map;
+			Map map = Map;
 
 			if ( map == null )
 				return;
@@ -191,11 +186,11 @@ namespace Server.Mobiles
 			{
 				Daemon Daemon = new Daemon();
 
-				Daemon.Team = this.Team;
+				Daemon.Team = Team;
 				Daemon.FightMode = FightMode.Closest;
 
 				bool validLocation = false;
-				Point3D loc = this.Location;
+				Point3D loc = Location;
 
 				for ( int j = 0; !validLocation && j < 10; ++j )
 				{
@@ -203,7 +198,7 @@ namespace Server.Mobiles
 					int y = Y + Utility.Random( 3 ) - 1;
 					int z = map.GetAverageZ( x, y );
 
-					if ( validLocation = map.CanFit( x, y, this.Z, 16, false, false ) )
+					if ( validLocation = map.CanFit( x, y, Z, 16, false, false ) )
 						loc = new Point3D( x, y, Z );
 					else if ( validLocation = map.CanFit( x, y, z, 16, false, false ) )
 						loc = new Point3D( x, y, z );
@@ -216,7 +211,7 @@ namespace Server.Mobiles
 
 		public void SpawnShadowIronElemental( Mobile target )
 		{
-			Map map = this.Map;
+			Map map = Map;
 
 			if ( map == null )
 				return;
@@ -227,11 +222,11 @@ namespace Server.Mobiles
 			{
 				ShadowIronElemental ShadowIronElemental = new ShadowIronElemental();
 
-				ShadowIronElemental.Team = this.Team;
+				ShadowIronElemental.Team = Team;
 				ShadowIronElemental.FightMode = FightMode.Closest;
 
 				bool validLocation = false;
-				Point3D loc = this.Location;
+				Point3D loc = Location;
 
 				for ( int j = 0; !validLocation && j < 10; ++j )
 				{
@@ -239,7 +234,7 @@ namespace Server.Mobiles
 					int y = Y + Utility.Random( 3 ) - 1;
 					int z = map.GetAverageZ( x, y );
 
-					if ( validLocation = map.CanFit( x, y, this.Z, 16, false, false ) )
+					if ( validLocation = map.CanFit( x, y, Z, 16, false, false ) )
 						loc = new Point3D( x, y, Z );
 					else if ( validLocation = map.CanFit( x, y, z, 16, false, false ) )
 						loc = new Point3D( x, y, z );
@@ -252,7 +247,7 @@ namespace Server.Mobiles
 
 		public void SpawnRestlessSoul( Mobile target )
 		{
-			Map map = this.Map;
+			Map map = Map;
 
 			if ( map == null )
 				return;
@@ -263,11 +258,11 @@ namespace Server.Mobiles
 			{
 				RestlessSoul RestlessSoul = new RestlessSoul();
 
-				RestlessSoul.Team = this.Team;
+				RestlessSoul.Team = Team;
 				RestlessSoul.FightMode = FightMode.Closest;
 
 				bool validLocation = false;
-				Point3D loc = this.Location;
+				Point3D loc = Location;
 
 				for ( int j = 0; !validLocation && j < 10; ++j )
 				{
@@ -275,7 +270,7 @@ namespace Server.Mobiles
 					int y = Y + Utility.Random( 3 ) - 1;
 					int z = map.GetAverageZ( x, y );
 
-					if ( validLocation = map.CanFit( x, y, this.Z, 16, false, false ) )
+					if ( validLocation = map.CanFit( x, y, Z, 16, false, false ) )
 						loc = new Point3D( x, y, Z );
 					else if ( validLocation = map.CanFit( x, y, z, 16, false, false ) )
 						loc = new Point3D( x, y, z );
@@ -288,7 +283,7 @@ namespace Server.Mobiles
 
 		public void SpawnNightmare( Mobile target )
 		{
-			Map map = this.Map;
+			Map map = Map;
 
 			if ( map == null )
 				return;
@@ -299,11 +294,11 @@ namespace Server.Mobiles
 			{
 				Nightmare Nightmare = new Nightmare();
 
-				Nightmare.Team = this.Team;
+				Nightmare.Team = Team;
 				Nightmare.FightMode = FightMode.Closest;
 
 				bool validLocation = false;
-				Point3D loc = this.Location;
+				Point3D loc = Location;
 
 				for ( int j = 0; !validLocation && j < 10; ++j )
 				{
@@ -311,7 +306,7 @@ namespace Server.Mobiles
 					int y = Y + Utility.Random( 3 ) - 1;
 					int z = map.GetAverageZ( x, y );
 
-					if ( validLocation = map.CanFit( x, y, this.Z, 16, false, false ) )
+					if ( validLocation = map.CanFit( x, y, Z, 16, false, false ) )
 						loc = new Point3D( x, y, Z );
 					else if ( validLocation = map.CanFit( x, y, z, 16, false, false ) )
 						loc = new Point3D( x, y, z );
@@ -324,7 +319,7 @@ namespace Server.Mobiles
 
 		public void SpawnDarkWolf( Mobile target )
 		{
-			Map map = this.Map;
+			Map map = Map;
 
 			if ( map == null )
 				return;
@@ -335,11 +330,11 @@ namespace Server.Mobiles
 			{
 				DarkWolf DarkWolf = new DarkWolf();
 
-				DarkWolf.Team = this.Team;
+				DarkWolf.Team = Team;
 				DarkWolf.FightMode = FightMode.Closest;
 
 				bool validLocation = false;
-				Point3D loc = this.Location;
+				Point3D loc = Location;
 
 				for ( int j = 0; !validLocation && j < 10; ++j )
 				{
@@ -347,7 +342,7 @@ namespace Server.Mobiles
 					int y = Y + Utility.Random( 3 ) - 1;
 					int z = map.GetAverageZ( x, y );
 
-					if ( validLocation = map.CanFit( x, y, this.Z, 16, false, false ) )
+					if ( validLocation = map.CanFit( x, y, Z, 16, false, false ) )
 						loc = new Point3D( x, y, Z );
 					else if ( validLocation = map.CanFit( x, y, z, 16, false, false ) )
 						loc = new Point3D( x, y, z );
@@ -359,7 +354,7 @@ namespace Server.Mobiles
 		}
 		public void SpawnSuperDarkWisp( Mobile target )
 		{
-			Map map = this.Map;
+			Map map = Map;
 
 			if ( map == null )
 				return;
@@ -370,11 +365,11 @@ namespace Server.Mobiles
 			{
 				SuperDarkWisp SuperDarkWisp = new SuperDarkWisp();
 
-				SuperDarkWisp.Team = this.Team;
+				SuperDarkWisp.Team = Team;
 				SuperDarkWisp.FightMode = FightMode.Closest;
 
 				bool validLocation = false;
-				Point3D loc = this.Location;
+				Point3D loc = Location;
 
 				for ( int j = 0; !validLocation && j < 10; ++j )
 				{
@@ -382,7 +377,7 @@ namespace Server.Mobiles
 					int y = Y + Utility.Random( 3 ) - 1;
 					int z = map.GetAverageZ( x, y );
 
-					if ( validLocation = map.CanFit( x, y, this.Z, 16, false, false ) )
+					if ( validLocation = map.CanFit( x, y, Z, 16, false, false ) )
 						loc = new Point3D( x, y, Z );
 					else if ( validLocation = map.CanFit( x, y, z, 16, false, false ) )
 						loc = new Point3D( x, y, z );

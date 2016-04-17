@@ -1,11 +1,6 @@
-using System;
-using Server;
-using Server.Misc;
-using Server.Items;
-
 namespace Server.Mobiles
 {
-	[CorpseName( "a pixie corpse" )]
+    [CorpseName( "a pixie corpse" )]
 	public class LesserFey : BaseCreature
 	{
 		public override double DispelDifficulty { get { return 110; } }

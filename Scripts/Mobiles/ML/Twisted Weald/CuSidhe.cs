@@ -1,5 +1,4 @@
 using System;
-using Server.Mobiles;
 using Server.Items;
 
 namespace Server.Mobiles
@@ -134,7 +133,7 @@ namespace Server.Mobiles
         {
             Mobile m = ControlMaster;
 
-            if (this.InRange(m, 1) && m.Alive && m.Hits < (m.HitsMax / 3))
+            if (InRange(m, 1) && m.Alive && m.Hits < (m.HitsMax / 3))
             {
                 if (BandageContext.GetContext(this) == null)
                     BandageContext.BeginHeal(this, ControlMaster, null);
@@ -158,7 +157,7 @@ namespace Server.Mobiles
             }
             else if (from.Race != Race.Elf)
             {
-                from.SendLocalizedMessage(1072203); // Only Elves may use this.
+                from.SendLocalizedMessage(1072203); // Only Elves may use 
                 return;
             }
 

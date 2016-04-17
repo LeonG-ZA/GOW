@@ -1,4 +1,3 @@
-using System;
 using Server.Items;
 
 namespace Server.Mobiles
@@ -10,33 +9,33 @@ namespace Server.Mobiles
         public Gnaw()
         {
 
-            this.Name = "Gnaw";
-            this.Hue = 0x130;
+            Name = "Gnaw";
+            Hue = 0x130;
 
-            this.SetStr(151, 172);
-            this.SetDex(124, 145);
-            this.SetInt(60, 86);
+            SetStr(151, 172);
+            SetDex(124, 145);
+            SetInt(60, 86);
 
-            this.SetHits(817, 857);
-            this.SetStam(124, 145);
-            this.SetMana(52, 86);
+            SetHits(817, 857);
+            SetStam(124, 145);
+            SetMana(52, 86);
 
-            this.SetDamage(16, 22);
+            SetDamage(16, 22);
 
-            this.SetDamageType(ResistanceType.Physical, 100);
+            SetDamageType(ResistanceType.Physical, 100);
 
-            this.SetResistance(ResistanceType.Physical, 64, 69);
-            this.SetResistance(ResistanceType.Fire, 53, 56);
-            this.SetResistance(ResistanceType.Cold, 22, 27);
-            this.SetResistance(ResistanceType.Poison, 27, 30);
-            this.SetResistance(ResistanceType.Energy, 21, 34);
+            SetResistance(ResistanceType.Physical, 64, 69);
+            SetResistance(ResistanceType.Fire, 53, 56);
+            SetResistance(ResistanceType.Cold, 22, 27);
+            SetResistance(ResistanceType.Poison, 27, 30);
+            SetResistance(ResistanceType.Energy, 21, 34);
 
-            this.SetSkill(SkillName.Wrestling, 106.4, 116.5);
-            this.SetSkill(SkillName.Tactics, 84.1, 103.2);
-            this.SetSkill(SkillName.MagicResist, 96.8, 110.7);
+            SetSkill(SkillName.Wrestling, 106.4, 116.5);
+            SetSkill(SkillName.Tactics, 84.1, 103.2);
+            SetSkill(SkillName.MagicResist, 96.8, 110.7);
 
-            this.Fame = 17500;
-            this.Karma = -17500;
+            Fame = 17500;
+            Karma = -17500;
 
             Tamable = false; 
         }
@@ -77,7 +76,7 @@ namespace Server.Mobiles
         }
         public override void GenerateLoot()
         {
-            this.AddLoot(LootPack.FilthyRich, 2);
+            AddLoot(LootPack.FilthyRich, 2);
         }
 
         public override void Serialize(GenericWriter writer)

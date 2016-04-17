@@ -1,10 +1,6 @@
-using System;
-using Server;
-using Server.Items;
-
 namespace Server.Mobiles
 {
-	[CorpseName( "a nature's fury corpse" )]
+    [CorpseName( "a nature's fury corpse" )]
 	public class NaturesFury : BaseCreature
 	{
 		public override bool DeleteCorpseOnDeath { get { return Summoned; } }

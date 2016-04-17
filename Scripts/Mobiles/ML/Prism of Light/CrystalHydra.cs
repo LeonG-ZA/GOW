@@ -10,40 +10,40 @@ namespace Server.Mobiles
         public CrystalHydra()
             : base(AIType.AI_Melee, FightMode.Closest, 10, 1, 0.2, 0.4)
         {
-            this.Name = "a crystal hydra";
-            this.Body = 0x109;
-            this.Hue = 0x47E;
-            this.BaseSoundID = 0x16A;
+            Name = "a crystal hydra";
+            Body = 0x109;
+            Hue = 0x47E;
+            BaseSoundID = 0x16A;
 
-            this.SetStr(800, 830);
-            this.SetDex(100, 120);
-            this.SetInt(100, 120);
+            SetStr(800, 830);
+            SetDex(100, 120);
+            SetInt(100, 120);
 
-            this.SetHits(1450, 1500);
+            SetHits(1450, 1500);
 
-            this.SetDamage(21, 26);
+            SetDamage(21, 26);
 
-            this.SetDamageType(ResistanceType.Physical, 5);
-            this.SetDamageType(ResistanceType.Fire, 5);
-            this.SetDamageType(ResistanceType.Cold, 80);
-            this.SetDamageType(ResistanceType.Poison, 5);
-            this.SetDamageType(ResistanceType.Energy, 5);
+            SetDamageType(ResistanceType.Physical, 5);
+            SetDamageType(ResistanceType.Fire, 5);
+            SetDamageType(ResistanceType.Cold, 80);
+            SetDamageType(ResistanceType.Poison, 5);
+            SetDamageType(ResistanceType.Energy, 5);
 
-            this.SetResistance(ResistanceType.Physical, 65, 75);
-            this.SetResistance(ResistanceType.Fire, 20, 30);
-            this.SetResistance(ResistanceType.Cold, 80, 100);
-            this.SetResistance(ResistanceType.Poison, 35, 45);
-            this.SetResistance(ResistanceType.Energy, 80, 100);
+            SetResistance(ResistanceType.Physical, 65, 75);
+            SetResistance(ResistanceType.Fire, 20, 30);
+            SetResistance(ResistanceType.Cold, 80, 100);
+            SetResistance(ResistanceType.Poison, 35, 45);
+            SetResistance(ResistanceType.Energy, 80, 100);
 
-            this.SetSkill(SkillName.Wrestling, 100.0, 120.0);
-            this.SetSkill(SkillName.Tactics, 100.0, 110.0);
-            this.SetSkill(SkillName.MagicResist, 80.0, 100.0);
-            this.SetSkill(SkillName.Anatomy, 70.0, 80.0);
+            SetSkill(SkillName.Wrestling, 100.0, 120.0);
+            SetSkill(SkillName.Tactics, 100.0, 110.0);
+            SetSkill(SkillName.MagicResist, 80.0, 100.0);
+            SetSkill(SkillName.Anatomy, 70.0, 80.0);
 			
-            this.Fame = 17000;
-            this.Karma = -17000;
+            Fame = 17000;
+            Karma = -17000;
 
-            this.PackArcaneScroll(0, 1);
+            PackArcaneScroll(0, 1);
         }
 		
         public CrystalHydra(Serial serial)
@@ -53,8 +53,8 @@ namespace Server.Mobiles
 		
         public override void GenerateLoot()
         {
-            this.AddLoot(LootPack.UltraRich, 2);
-            this.AddLoot(LootPack.Parrot);
+            AddLoot(LootPack.UltraRich, 2);
+            AddLoot(LootPack.Parrot);
         }
 		
         public override void OnDeath(Container c)
@@ -134,23 +134,23 @@ namespace Server.Mobiles
 		
         public override void BreathStart(Mobile target)
         { 
-            this.BreathStallMovement();
-            this.BreathPlayAngerSound();
-            this.BreathPlayAngerAnimation();
+            BreathStallMovement();
+            BreathPlayAngerSound();
+            BreathPlayAngerAnimation();
 						
-            this.Direction = this.GetDirectionTo(target);
+            Direction = GetDirectionTo(target);
 			
             int count = 0;
 			
-            foreach (Mobile m in this.GetMobilesInRange(this.BreathRange))
+            foreach (Mobile m in GetMobilesInRange(BreathRange))
             {
                 if (count++ > 3)
                     break;
 					
-                if (m != null && m != target && m.Alive && !m.IsDeadBondedPet && this.CanBeHarmful(m) && m.Map == this.Map && !this.IsDeadBondedPet && m.InRange(this, this.BreathRange) && this.InLOS(m) && !this.BardPacified)
-                    Timer.DelayCall(TimeSpan.FromSeconds(this.BreathEffectDelay), new TimerStateCallback(BreathEffect_Callback), m);
+                if (m != null && m != target && m.Alive && !m.IsDeadBondedPet && CanBeHarmful(m) && m.Map == Map && !IsDeadBondedPet && m.InRange(this, BreathRange) && InLOS(m) && !BardPacified)
+                    Timer.DelayCall(TimeSpan.FromSeconds(BreathEffectDelay), new TimerStateCallback(BreathEffect_Callback), m);
             }
-            Timer.DelayCall(TimeSpan.FromSeconds(this.BreathEffectDelay), new TimerStateCallback(BreathEffect_Callback), target);
+            Timer.DelayCall(TimeSpan.FromSeconds(BreathEffectDelay), new TimerStateCallback(BreathEffect_Callback), target);
         }
 
         #endregion

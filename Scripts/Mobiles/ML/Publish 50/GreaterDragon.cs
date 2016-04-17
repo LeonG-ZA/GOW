@@ -1,4 +1,3 @@
-using System;
 using Server.Items;
 
 namespace Server.Mobiles
@@ -43,11 +42,11 @@ namespace Server.Mobiles
             ControlSlots = 5;
             MinTameSkill = 104.7;
 
-            this.Skills[SkillName.Wrestling].Cap = 120;
-            this.Skills[SkillName.Tactics].Cap = 120;
-            this.Skills[SkillName.Magery].Cap = 110;
-            this.Skills[SkillName.EvalInt].Cap = 110;
-            this.Skills[SkillName.MagicResist].Cap = 120;
+            Skills[SkillName.Wrestling].Cap = 120;
+            Skills[SkillName.Tactics].Cap = 120;
+            Skills[SkillName.Magery].Cap = 110;
+            Skills[SkillName.EvalInt].Cap = 110;
+            Skills[SkillName.MagicResist].Cap = 120;
 
             if (0.025 > Utility.RandomDouble())
             {

@@ -1,13 +1,8 @@
-using System;
-using Server.Misc;
-using Server.Network;
-using System.Collections;
 using Server.Items;
-using Server.Targeting;
 
 namespace Server.Mobiles
 {
-	public class ShadowLordEthereal : BaseCreature
+    public class ShadowLordEthereal : BaseCreature
 	{
 		[Constructable]
         public ShadowLordEthereal()
@@ -77,8 +72,8 @@ namespace Server.Mobiles
 		public override bool OnBeforeDeath()
 		{
 			ShadowLord rm = new ShadowLord();
-			rm.Team = this.Team;
-			rm.Combatant = this.Combatant;
+			rm.Team = Team;
+			rm.Combatant = Combatant;
 			rm.NoKillAwards = true;
 
 			if ( rm.Backpack == null )

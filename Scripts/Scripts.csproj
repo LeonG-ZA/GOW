@@ -4432,7 +4432,7 @@
     <Compile Include="Mobiles\Original UO\Animals\Rodents\Rat.cs" />
     <Compile Include="Mobiles\Core\BaseClasses\BaseCreature.cs" />
     <Compile Include="Mobiles\Core\BaseClasses\BaseRenowned.cs" />
-    <Compile Include="Mobiles\AOS\Familiars\BaseFamiliar.cs" />
+    <Compile Include="Mobiles\Core\BaseClasses\BaseFamiliar.cs" />
     <Compile Include="Mobiles\AOS\Familiars\DarkWolf.cs" />
     <Compile Include="Mobiles\AOS\Familiars\DeathAdder.cs" />
     <Compile Include="Mobiles\AOS\Familiars\HordeMinion.cs" />

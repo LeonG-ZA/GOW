@@ -1,9 +1,6 @@
-#region References
 using System.Collections.Generic;
-
 using Server.ContextMenus;
 using Server.Items;
-#endregion
 
 namespace Server.Mobiles
 {
@@ -144,8 +141,7 @@ namespace Server.Mobiles
 		{
 			if (from == null || (!Deleted && Controlled && from == ControlMaster && from.CheckAlive()))
 			{
-				Effects.SendLocationParticles(
-					EffectItem.Create(Location, Map, EffectItem.DefaultDuration), 0x3728, 1, 13, 2100, 3, 5042, 0);
+				Effects.SendLocationParticles(EffectItem.Create(Location, Map, EffectItem.DefaultDuration), 0x3728, 1, 13, 2100, 3, 5042, 0);
 				PlaySound(0x201);
 				Delete();
 			}
