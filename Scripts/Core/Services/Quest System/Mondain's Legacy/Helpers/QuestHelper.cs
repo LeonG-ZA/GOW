@@ -685,13 +685,11 @@ namespace Server.Engines.Quests
 
         public static bool CheckItem(PlayerMobile player, Item item)
         {
-            #region New Vendor Check
             if (XmlAttach.FindAttachment(item, typeof(XmlData), "VendorBought") != null)
             {
                 player.SendMessage("You cannot use vendor bought goods as quest items.");
                 return false;
             }
-            #endregion
 
             for (int i = player.Quests.Count - 1; i >= 0; i --)
             {
@@ -715,7 +713,6 @@ namespace Server.Engines.Quests
                             return true;
                         }
                     }
-                    #region New Objectives
                     else if (objective is GuildCraftObjective)
                     {
                         GuildCraftObjective craft = (GuildCraftObjective)objective;
@@ -730,7 +727,6 @@ namespace Server.Engines.Quests
                             return true;
                         }
                     }
-                    #endregion
                 }
             }
 			
@@ -906,11 +902,11 @@ namespace Server.Engines.Quests
 
         public override void OnClick()
         {
-            if (!this.Owner.From.Alive)
+            if (!Owner.From.Alive)
                 return;
 				
-            this.Owner.From.SendLocalizedMessage(1072352); // Target the item you wish to toggle Quest Item status on <ESC> to cancel			
-            this.Owner.From.BeginTarget(-1, false, TargetFlags.None, new TargetCallback(ToggleQuestItem_Callback));
+            Owner.From.SendLocalizedMessage(1072352); // Target the item you wish to toggle Quest Item status on <ESC> to cancel			
+            Owner.From.BeginTarget(-1, false, TargetFlags.None, new TargetCallback(ToggleQuestItem_Callback));
         }
 
         private void ToggleQuestItem_Callback(Mobile from, object obj)
@@ -918,19 +914,23 @@ namespace Server.Engines.Quests
             if (from is PlayerMobile)
             {
                 PlayerMobile player = (PlayerMobile)from;
-		
+
                 if (obj is Item)
                 {
                     Item item = (Item)obj;
-					
+
                     if (item.IsChildOf(player.Backpack))
                     {
                         if (!QuestHelper.CheckItem(player, item))
+                        {
                             player.SendLocalizedMessage(1072355, null, 0x23); // That item does not match any of your quest criteria
+                        }
                     }
                 }
                 else
+                {
                     player.SendLocalizedMessage(1074769); // An item must be in your backpack (and not in a container within) to be toggled as a quest item.
+                }
 				
                 player.BeginTarget(-1, false, TargetFlags.None, new TargetCallback(ToggleQuestItem_Callback));
             }

@@ -61,27 +61,39 @@ namespace Server.Engines.Quests
 			AddImage( 90, 33, 0x232D );
 			AddImageTiled( 130, 65, 175, 1, 0x238D );
 
-			if ( ( buttons & GenericQuestGumpButton.Accept ) != 0 )
-				AddButton( 95, 395, 0x2EE0, 0x2EE2, 1, GumpButtonType.Reply, 0 );
+            if ((buttons & GenericQuestGumpButton.Accept) != 0)
+            {
+                AddButton(95, 395, 0x2EE0, 0x2EE2, 1, GumpButtonType.Reply, 0);
+            }
 
-			if ( ( buttons & GenericQuestGumpButton.Refuse ) != 0 )
-				AddButton( 313, 395, 0x2EF2, 0x2EF4, 0, GumpButtonType.Reply, 0 );
+            if ((buttons & GenericQuestGumpButton.Refuse) != 0)
+            {
+                AddButton(313, 395, 0x2EF2, 0x2EF4, 0, GumpButtonType.Reply, 0);
+            }
 
-			if ( ( buttons & GenericQuestGumpButton.Continue ) != 0 )
-				AddButton( 95, 395, 0x2EE9, 0x2EEB, 1, GumpButtonType.Reply, 0 );
+            if ((buttons & GenericQuestGumpButton.Continue) != 0)
+            {
+                AddButton(95, 395, 0x2EE9, 0x2EEB, 1, GumpButtonType.Reply, 0);
+            }
 
-			if ( ( buttons & GenericQuestGumpButton.Close ) != 0 )
-				AddButton( 95, 395, 0x2EE6, 0x2EE8, 1, GumpButtonType.Reply, 0 );
+            if ((buttons & GenericQuestGumpButton.Close) != 0)
+            {
+                AddButton(95, 395, 0x2EE6, 0x2EE8, 1, GumpButtonType.Reply, 0);
+            }
 		}
 
         public override void OnResponse(NetState sender, RelayInfo info)
 		{
 			sender.Mobile.CloseGump( typeof( GenericQuestGump ) );
 
-			if ( info.ButtonID == 1 && m_OnAccept != null )
-				m_OnAccept( sender.Mobile );
-			else if ( m_OnCancel != null )
-				m_OnCancel( sender.Mobile );
+            if (info.ButtonID == 1 && m_OnAccept != null)
+            {
+                m_OnAccept(sender.Mobile);
+            }
+            else if (m_OnCancel != null)
+            {
+                m_OnCancel(sender.Mobile);
+            }
 		}
 	}
 }

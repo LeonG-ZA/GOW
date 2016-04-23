@@ -54,23 +54,32 @@ namespace Server.Engines.Craft
 
         public override int CanCraft(Mobile from, IUsesRemaining tool, Type itemType)
         {
-            if (tool == null || ((Item)tool).Deleted || tool.UsesRemaining < 0)
+            if (tool is BaseAddon)
             {
-                return 1044038; // You have worn out your tool!
+                if (tool.UsesRemaining <= 0)
+                {
+                    return 502412; // There are no charges left on that item.  
+                }
             }
-            else if (!BaseTool.CheckTool((BaseTool)tool, from))
+            else
             {
-                return 1048146; // If you have a tool equipped, you must use that tool.
+                if (tool == null || ((Item)tool).Deleted || tool.UsesRemaining < 0)
+                {
+                    return 1044038; // You have worn out your tool!
+                }
+                else if (!BaseTool.CheckTool((BaseTool)tool, from))
+                {
+                    return 1048146; // If you have a tool equipped, you must use that tool.
+                }
+                else if (!(from is PlayerMobile && ((PlayerMobile)from).Masonry && from.Skills[SkillName.Carpentry].Base >= 100.0))
+                {
+                    return 1044633; // You havent learned stonecraft.
+                }
+                else if (!BaseTool.CheckAccessible((BaseTool)tool, from))
+                {
+                    return 1044263; // The tool must be on your person to use.
+                }
             }
-            else if (!(from is PlayerMobile && ((PlayerMobile)from).Masonry && from.Skills[SkillName.Carpentry].Base >= 100.0))
-            {
-                return 1044633; // You havent learned stonecraft.
-            }
-            else if (!BaseTool.CheckAccessible((BaseTool)tool, from))
-            {
-                return 1044263; // The tool must be on your person to use.
-            }
-
             return 0;
         }
         /*

@@ -13,6 +13,7 @@ namespace Server.Engines.Quests
         private DateTime m_LastSeenEscorter;
         private Timer m_DeleteTimer;
         private bool m_Checked;
+
         public BaseEscort()
             : base()
         {

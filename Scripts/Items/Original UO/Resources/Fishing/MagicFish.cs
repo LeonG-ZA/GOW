@@ -1,6 +1,3 @@
-using System;
-using Server.Network;
-
 namespace Server.Items
 {
     public class PrizedFish : BaseMagicFish
@@ -50,8 +47,10 @@ namespace Server.Items
 
             int version = reader.ReadInt();
 
-            if (this.Hue == 151)
-                this.Hue = 51;
+            if (Hue == 151)
+            {
+                Hue = 51;
+            }
         }
     }
 
@@ -102,8 +101,10 @@ namespace Server.Items
 
             int version = reader.ReadInt();
 
-            if (this.Hue == 286)
-                this.Hue = 86;
+            if (Hue == 286)
+            {
+                Hue = 86;
+            }
         }
     }
 
@@ -154,8 +155,10 @@ namespace Server.Items
 
             int version = reader.ReadInt();
 
-            if (this.Hue == 376)
-                this.Hue = 76;
+            if (Hue == 376)
+            {
+                Hue = 76;
+            }
         }
     }
 
@@ -198,8 +201,10 @@ namespace Server.Items
 
             int version = reader.ReadInt();
 
-            if (this.Hue == 266)
-                this.Hue = 66;
+            if (Hue == 266)
+            {
+                Hue = 66;
+            }
         }
     }
 }

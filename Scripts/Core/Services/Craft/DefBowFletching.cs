@@ -68,15 +68,25 @@ namespace Server.Engines.Craft
 
         public override int CanCraft(Mobile from, IUsesRemaining tool, Type itemType)
         {
-            if (tool == null || ((Item)tool).Deleted || tool.UsesRemaining < 0)
-            {
-                return 1044038; // You have worn out your tool!
-            }
-            else if (!BaseTool.CheckAccessible((BaseTool)tool, from))
-            {
-                return 1044263; // The tool must be on your person to use.
-            }
 
+            if (tool is BaseAddon)
+            {
+                if (tool.UsesRemaining <= 0)
+                {
+                    return 502412; // There are no charges left on that item.  
+                }
+            }
+            else
+            {
+                if (tool == null || ((Item)tool).Deleted || tool.UsesRemaining < 0)
+                {
+                    return 1044038; // You have worn out your tool!
+                }
+                else if (!BaseTool.CheckAccessible((BaseTool)tool, from))
+                {
+                    return 1044263; // The tool must be on your person to use.
+                }
+            }
             return 0;
         }
         /*

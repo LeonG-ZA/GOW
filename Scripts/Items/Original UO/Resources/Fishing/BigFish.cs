@@ -9,8 +9,8 @@ namespace Server.Items
         public BigFish()
             : base(0x09CC)
         {
-            this.Weight = Utility.RandomMinMax(3, 200);
-            this.Hue = Utility.RandomBool() ? 0x847 : 0x58C;
+            Weight = Utility.RandomMinMax(3, 200);
+            Hue = Utility.RandomBool() ? 0x847 : 0x58C;
         }
 
         public BigFish(Serial serial)
@@ -23,12 +23,12 @@ namespace Server.Items
         {
             get
             {
-                return this.m_Fisher;
+                return m_Fisher;
             }
             set
             {
-                this.m_Fisher = value;
-                this.InvalidateProperties();
+                m_Fisher = value;
+                InvalidateProperties();
             }
         }
         public override int LabelNumber
@@ -40,19 +40,21 @@ namespace Server.Items
         }// a big fish
         public void Carve(Mobile from, Item item)
         {
-            base.ScissorHelper(from, new RawFishSteak(), Math.Max(16, (int)this.Weight) / 4, false);
+            base.ScissorHelper(from, new RawFishSteak(), Math.Max(16, (int)Weight) / 4, false);
         }
 
         public override void GetProperties(ObjectPropertyList list)
         {
             base.GetProperties(list);
 
-            if (this.Weight >= 20)
+            if (Weight >= 20)
             {
-                if (this.m_Fisher != null)
-                    list.Add(1070857, this.m_Fisher.Name); // Caught by ~1_fisherman~
+                if (m_Fisher != null)
+                {
+                    list.Add(1070857, m_Fisher.Name); // Caught by ~1_fisherman~
+                }
 
-                list.Add(1070858, ((int)this.Weight).ToString()); // ~1_weight~ stones
+                list.Add(1070858, ((int)Weight).ToString()); // ~1_weight~ stones
             }
         }
 
@@ -62,7 +64,7 @@ namespace Server.Items
 
             writer.Write((int)1); // version
 
-            writer.Write((Mobile)this.m_Fisher);
+            writer.Write((Mobile)m_Fisher);
         }
 
         public override void Deserialize(GenericReader reader)
@@ -75,12 +77,12 @@ namespace Server.Items
             {
                 case 1:
                     {
-                        this.m_Fisher = reader.ReadMobile();
+                        m_Fisher = reader.ReadMobile();
                         break;
                     }
                 case 0:
                     {
-                        this.Weight = Utility.RandomMinMax(3, 200);
+                        Weight = Utility.RandomMinMax(3, 200);
                         break;
                     }
             }

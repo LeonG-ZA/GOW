@@ -1,11 +1,9 @@
-using System;
-using Server;
 using Server.Gumps;
 using Server.Network;
 
 namespace Server.Engines.Quests
 {
-	public delegate void QuestQuestionEvent( Mobile m );
+    public delegate void QuestQuestionEvent( Mobile m );
 
 	public class QuestQuestionGump : Gump
 	{
@@ -51,17 +49,23 @@ namespace Server.Engines.Quests
 		{
 			Mobile from = sender.Mobile;
 
-			if ( info.ButtonID == 1 )
-			{
-				m_CurrentQuestion++;
+            if (info.ButtonID == 1)
+            {
+                m_CurrentQuestion++;
 
-				if ( m_CurrentQuestion >= m_Questions.Length )
-					m_OnPassed( from );
-				else
-					from.SendGump( new QuestQuestionGump( m_Questions, m_CurrentQuestion, m_OnPassed, m_OnFailed ) );
-			}
-			else
-				m_OnFailed( from );
+                if (m_CurrentQuestion >= m_Questions.Length)
+                {
+                    m_OnPassed(from);
+                }
+                else
+                {
+                    from.SendGump(new QuestQuestionGump(m_Questions, m_CurrentQuestion, m_OnPassed, m_OnFailed));
+                }
+            }
+            else
+            {
+                m_OnFailed(from);
+            }
 		}
 	}
 

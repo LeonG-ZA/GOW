@@ -1244,8 +1244,9 @@ namespace Server.Engines.Craft
 
 			if (badCraft > 0)
 			{
-                if (tool != null && !((Item)tool).Deleted && tool.UsesRemaining > 0)
-				{
+                //if (tool != null && !((Item)tool).Deleted && tool.UsesRemaining > 0)
+                if (tool != null && !((Item)tool).Deleted && (tool.UsesRemaining > 0 || tool is BaseAddon))
+                {
 					from.SendGump(new CraftGump(from, craftSystem, tool, badCraft));
 				}
 				else
@@ -1264,8 +1265,9 @@ namespace Server.Engines.Craft
 			// Not enough resource to craft it
 			if (!ConsumeRes(from, typeRes, craftSystem, ref checkResHue, ref checkMaxAmount, ConsumeType.None, ref checkMessage))
 			{
-                if (tool != null && !((Item)tool).Deleted && tool.UsesRemaining > 0)
-				{
+                //if (tool != null && !((Item)tool).Deleted && tool.UsesRemaining > 0)
+                if (tool != null && !((Item)tool).Deleted && (tool.UsesRemaining > 0 || tool is BaseAddon))
+                {
 					from.SendGump(new CraftGump(from, craftSystem, tool, checkMessage));
 				}
 				else if (checkMessage is int && (int)checkMessage > 0)
@@ -1283,8 +1285,9 @@ namespace Server.Engines.Craft
 			}
 			else if (!ConsumeAttributes(from, ref checkMessage, false))
 			{
-                if (tool != null && !((Item)tool).Deleted && tool.UsesRemaining > 0)
-				{
+                //if (tool != null && !((Item)tool).Deleted && tool.UsesRemaining > 0)
+                if (tool != null && !((Item)tool).Deleted && (tool.UsesRemaining > 0 || tool is BaseAddon))
+                {
 					from.SendGump(new CraftGump(from, craftSystem, tool, checkMessage));
 				}
 				else if (checkMessage is int && (int)checkMessage > 0)
@@ -1319,8 +1322,9 @@ namespace Server.Engines.Craft
 				// Not enough resource to craft it
 				if (!ConsumeRes(from, typeRes, craftSystem, ref resHue, ref maxAmount, ConsumeType.All, ref message))
 				{
-                    if (tool != null && !((Item)tool).Deleted && tool.UsesRemaining > 0)
-					{
+                    //if (tool != null && !((Item)tool).Deleted && tool.UsesRemaining > 0)
+                    if (tool != null && !((Item)tool).Deleted && (tool.UsesRemaining > 0 || tool is BaseAddon))
+                    {
 						from.SendGump(new CraftGump(from, craftSystem, tool, message));
 					}
 					else if (message is int && (int)message > 0)
@@ -1338,8 +1342,9 @@ namespace Server.Engines.Craft
 				}
 				else if (!ConsumeAttributes(from, ref message, true))
 				{
-                    if (tool != null && !((Item)tool).Deleted/*tool.Deleted*/ && tool.UsesRemaining > 0)
-					{
+                    //if (tool != null && !((Item)tool).Deleted/*tool.Deleted*/ && tool.UsesRemaining > 0)
+                    if (tool != null && !((Item)tool).Deleted && (tool.UsesRemaining > 0 || tool is BaseAddon))
+                    {
 						from.SendGump(new CraftGump(from, craftSystem, tool, message));
 					}
 					else if (message is int && (int)message > 0)
@@ -1661,8 +1666,9 @@ namespace Server.Engines.Craft
 				{
 					from.SendGump(new FactionImbueGump(quality, item, from, craftSystem, tool, num, availableSilver, faction, def));
 				}
-                else if (tool != null && !((Item)tool).Deleted && tool.UsesRemaining > 0)
-				{
+                //else if (tool != null && !((Item)tool).Deleted && tool.UsesRemaining > 0)
+                else if (tool != null && !((Item)tool).Deleted && (tool.UsesRemaining > 0 || tool is BaseAddon))
+                {
 					from.SendGump(new CraftGump(from, craftSystem, tool, num));
 				}
 				else if (num > 0)
@@ -1672,8 +1678,9 @@ namespace Server.Engines.Craft
 			}
 			else if (!allRequiredSkills)
 			{
-                if (tool != null && !((Item)tool).Deleted && tool.UsesRemaining > 0)
-				{
+                //if (tool != null && !((Item)tool).Deleted && tool.UsesRemaining > 0)
+                if (tool != null && !((Item)tool).Deleted && (tool.UsesRemaining > 0 || tool is BaseAddon))
+                {
 					from.SendGump(new CraftGump(from, craftSystem, tool, 1044153));
 				}
 				else
@@ -1694,8 +1701,9 @@ namespace Server.Engines.Craft
 				// Not enough resource to craft it
 				if (!ConsumeRes(from, typeRes, craftSystem, ref resHue, ref maxAmount, consumeType, ref message, true))
 				{
-                    if (tool != null && !((Item)tool).Deleted && tool.UsesRemaining > 0)
-					{
+                    //if (tool != null && !((Item)tool).Deleted && tool.UsesRemaining > 0)
+                    if (tool != null && !((Item)tool).Deleted && (tool.UsesRemaining > 0 || tool is BaseAddon))
+                    {
 						from.SendGump(new CraftGump(from, craftSystem, tool, message));
 					}
 					else if (message is int && (int)message > 0)
@@ -1728,8 +1736,9 @@ namespace Server.Engines.Craft
 				// SkillCheck failed.
 				int num = craftSystem.PlayEndingEffect(from, true, true, toolBroken, endquality, false, this);
 
-                if (tool != null && !((Item)tool).Deleted && tool.UsesRemaining > 0)
-				{
+                //if (tool != null && !((Item)tool).Deleted && tool.UsesRemaining > 0)
+                if (tool != null && !((Item)tool).Deleted && (tool.UsesRemaining > 0 || tool is BaseAddon))
+                {
 					from.SendGump(new CraftGump(from, craftSystem, tool, num));
 				}
 				else if (num > 0)
@@ -1783,8 +1792,9 @@ namespace Server.Engines.Craft
 
 					if (badCraft > 0)
 					{
-                        if (m_Tool != null && !((Item)m_Tool).Deleted && m_Tool.UsesRemaining > 0)
-						{
+                        //if (m_Tool != null && !((Item)m_Tool).Deleted && m_Tool.UsesRemaining > 0)
+                        if (m_Tool != null && !((Item)m_Tool).Deleted && (m_Tool.UsesRemaining > 0 || m_Tool is BaseAddon))
+                        {
 							m_From.SendGump(new CraftGump(m_From, m_CraftSystem, m_Tool, badCraft));
 						}
 						else

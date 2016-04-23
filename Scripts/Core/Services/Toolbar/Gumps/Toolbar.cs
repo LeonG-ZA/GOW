@@ -1,16 +1,13 @@
-﻿#region References
-using System;
+﻿using System;
 using Server;
 using Server.Commands;
 using Server.Gumps;
 using Server.Network;
 using Services.Toolbar.Core;
-using Server.Mobiles;
-#endregion
 
 namespace Services.Toolbar.Gumps
 {
-	public class ToolbarGump : Gump
+    public class ToolbarGump : Gump
 	{
 		/*******************
         *	BUTTON ID'S
@@ -153,7 +150,18 @@ namespace Services.Toolbar.Gumps
 					break;
 				default: // Command
 					{
-						mob.SendGump(this);
+                        //testing fixes
+                        if (_Info.Entries.Count <= 0)
+                        {
+                            return;
+                        }
+
+                        if (info.ButtonID - 10 <= 0)
+                        {
+                            return;
+                        }
+
+                        mob.SendGump(this);
 
 						if (_Info.Entries[info.ButtonID - 10].StartsWith(CommandSystem.Prefix))
 						{
