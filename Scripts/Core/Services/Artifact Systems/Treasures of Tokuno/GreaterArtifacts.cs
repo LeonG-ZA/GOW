@@ -498,13 +498,12 @@ namespace Server.Items
         public TomeOfLostKnowledge()
             : base()
         {
-            this.LootType = LootType.Regular;
-            this.Hue = 0x530;
+            Hue = 0x530;
 
-            this.SkillBonuses.SetValues(0, SkillName.Magery, 15.0);
-            this.Attributes.BonusInt = 8;
-            this.Attributes.LowerManaCost = 15;
-            this.Attributes.SpellDamage = 15;
+            SkillBonuses.SetValues(0, SkillName.Magery, 15.0);
+            Attributes.BonusInt = 8;
+            Attributes.LowerManaCost = 15;
+            Attributes.SpellDamage = 15;
         }
 
         public TomeOfLostKnowledge(Serial serial)
@@ -530,7 +529,13 @@ namespace Server.Items
         {
             base.Deserialize(reader);
 
-            int version = reader.ReadInt();
+            /*int version = */
+            reader.ReadInt();
+
+            if (LootType == LootType.Regular)
+            {
+                LootType = LootType.Blessed;
+            }
         }
     }
 

@@ -7,74 +7,85 @@ using Server.CharConfiguration;
 namespace Server.Engines
 {
     public class RateOverTime : Timer
-	{
+    {
         private static DateTime m_LastResetTime = DateTime.UtcNow;
 
-		public static bool Enabled = CharConfig.CharROTEnabled;
+        public static bool Enabled = CharConfig.CharROTEnabled;
 
         public static TimeSpan ResetTime = CharConfig.CharROTResetTime;
         public static string SavePath = CharConfig.CharROTSavePath;
         public static string SaveFile = CharConfig.CharROTSaveFile;
 
-		public static bool StatGainAllowed( Mobile from )
-		{
-			if ( from.Player )
-			{
-				MobileRateInfo info = MobileRateInfo.GetMobileInfo( from );
+        public static bool StatGainAllowed(Mobile from)
+        {
+            if (from.Player)
+            {
+                MobileRateInfo info = MobileRateInfo.GetMobileInfo(from);
 
                 // STAT GAIN RESTRICTIONS
                 // Here you can edit restrictions suitable for your needs 
-				if ( info.StatGainsCount < 8 )
+                if (info.StatGainsCount < 8)
                 // END!
-				{
-					info.StatGainsCount++;
-				}
-				else
-				{
-					return false;
-				}
-			}
+                {
+                    info.StatGainsCount++;
+                }
+                else
+                {
+                    return false;
+                }
+            }
 
-			return true;
-		}
+            return true;
+        }
 
-		public static bool SkillGainAllowed( Mobile from, Skill skill )
-		{
-			if ( from.Player )
-			{
-				MobileRateInfo mobileInfo = MobileRateInfo.GetMobileInfo( from );
-				SkillRateInfo skillInfo = mobileInfo.GetSkillInfo( skill );
+        public static bool SkillGainAllowed(Mobile from, Skill skill)
+        {
+            if (from.Player)
+            {
+                MobileRateInfo mobileInfo = MobileRateInfo.GetMobileInfo(from);
+                SkillRateInfo skillInfo = mobileInfo.GetSkillInfo(skill);
 
                 // SKILL GAIN RESTRICTIONS
                 // Here you can edit restrictions suitable for your needs 
-				if ( skill.Base >= 100.0 && ( mobileInfo.SkillGainsCount >= 72 || DateTime.UtcNow - skillInfo.LastGainTime < TimeSpan.FromMinutes( 5.0 ) ) )
-					return false;
-				if ( skill.Base >= 90.0 && ( mobileInfo.SkillGainsCount >= 30 || DateTime.UtcNow - skillInfo.LastGainTime < TimeSpan.FromMinutes( 10.0 ) ) )
-					return false;
+                if (skill.Base >= 100.0 && (mobileInfo.SkillGainsCount >= 72 || DateTime.UtcNow - skillInfo.LastGainTime < TimeSpan.FromMinutes(5.0)))
+                {
+                    return false;
+                }
+
+                if (skill.Base >= 90.0 && (mobileInfo.SkillGainsCount >= 30 || DateTime.UtcNow - skillInfo.LastGainTime < TimeSpan.FromMinutes(10.0)))
+                {
+                    return false;
+                }
                 else if (skill.Base >= 80.0 && (mobileInfo.SkillGainsCount >= 60 || DateTime.UtcNow - skillInfo.LastGainTime < TimeSpan.FromMinutes(5.0)))
-					return false;
+                {
+                    return false;
+                }
                 else if (skill.Base >= 70.0 && (mobileInfo.SkillGainsCount >= 100 || DateTime.UtcNow - skillInfo.LastGainTime < TimeSpan.FromMinutes(3.0)))
-					return false;
-				else if ( skill.Base < 70.0 )
-					return true;
+                {
+                    return false;
+                }
+                else if (skill.Base < 70.0)
+                {
+                    return true;
+                }
                 // End!
 
-				mobileInfo.SkillGainsCount++;
+                mobileInfo.SkillGainsCount++;
 
                 skillInfo.LastGainTime = DateTime.UtcNow;
-				skillInfo.GainsCount++;
-			}
+                skillInfo.GainsCount++;
+            }
 
-			return true;
-		}
+            return true;
+        }
 
-		public static void Reset()
-		{
+        public static void Reset()
+        {
             m_LastResetTime = DateTime.UtcNow;
 
-			MobileRateInfo.Entries.Clear();
+            MobileRateInfo.Entries.Clear();
 
-			/*foreach ( MobileRateInfo mobileInfo in MobileRateInfo.Entries.Values )
+            /*foreach ( MobileRateInfo mobileInfo in MobileRateInfo.Entries.Values )
 			{
 				mobileInfo.SkillGainsCount = 0;
 				mobileInfo.StatGainsCount = 0;
@@ -85,270 +96,270 @@ namespace Server.Engines
 					skillInfo.LastGainTime = DateTime.MinValue;
 				}
 			}*/
-		}
+        }
 
-		public static void Initialize()
-		{
-			if ( Enabled )
-			{
-				CommandSystem.Register( "RoTReset", AccessLevel.Administrator, new CommandEventHandler( Reset_OnCommand ) );
+        public static void Initialize()
+        {
+            if (Enabled)
+            {
+                CommandSystem.Register("RoTReset", AccessLevel.Administrator, new CommandEventHandler(Reset_OnCommand));
 
-				new RateOverTime().Start();
-			}
-		}
+                new RateOverTime().Start();
+            }
+        }
 
-		[Usage( "RoTReset" )]
-		[Description( "Reset all information stored by Rate over Time system." )]
-		private static void Reset_OnCommand( CommandEventArgs e )
-		{
-			Reset();
+        [Usage("RoTReset")]
+        [Description("Reset all information stored by Rate over Time system.")]
+        private static void Reset_OnCommand(CommandEventArgs e)
+        {
+            Reset();
 
-			e.Mobile.SendMessage( "Rate over Time system has being reseted." );
-		}
+            e.Mobile.SendMessage("Rate over Time system has being reseted.");
+        }
 
-		public static void Configure()
-		{
-			if ( Enabled )
-			{
-				EventSink.WorldLoad += new WorldLoadEventHandler( OnLoad );
-				EventSink.WorldSave += new WorldSaveEventHandler( OnSave );
-			}
-		}
+        public static void Configure()
+        {
+            if (Enabled)
+            {
+                EventSink.WorldLoad += new WorldLoadEventHandler(OnLoad);
+                EventSink.WorldSave += new WorldSaveEventHandler(OnSave);
+            }
+        }
 
-		private static void OnSave( WorldSaveEventArgs args )
-		{
-			if ( !Directory.Exists( SavePath ) )
-			{
-				Directory.CreateDirectory( SavePath );
-			}
+        private static void OnSave(WorldSaveEventArgs args)
+        {
+            if (!Directory.Exists(SavePath))
+            {
+                Directory.CreateDirectory(SavePath);
+            }
 
-			GenericWriter writer = new BinaryFileWriter( Path.Combine( SavePath, SaveFile ), true );
+            GenericWriter writer = new BinaryFileWriter(Path.Combine(SavePath, SaveFile), true);
 
-			writer.Write( m_LastResetTime );
+            writer.Write(m_LastResetTime);
 
-			writer.Write( MobileRateInfo.Entries.Count );
+            writer.Write(MobileRateInfo.Entries.Count);
 
-			foreach ( KeyValuePair<Mobile, MobileRateInfo> kvp in MobileRateInfo.Entries )
-			{
-				writer.Write( (Mobile)kvp.Key );
+            foreach (KeyValuePair<Mobile, MobileRateInfo> kvp in MobileRateInfo.Entries)
+            {
+                writer.Write((Mobile)kvp.Key);
 
-				MobileRateInfo info = (MobileRateInfo)kvp.Value;
+                MobileRateInfo info = (MobileRateInfo)kvp.Value;
 
-				info.Serialize( writer );
-			}
+                info.Serialize(writer);
+            }
 
-			writer.Close();
-		}
+            writer.Close();
+        }
 
-		private static void OnLoad()
-		{
-			if ( !File.Exists( Path.Combine( SavePath, SaveFile ) ) )
-			{
-				return;
-			}
+        private static void OnLoad()
+        {
+            if (!File.Exists(Path.Combine(SavePath, SaveFile)))
+            {
+                return;
+            }
 
-			using ( FileStream bin = new FileStream( Path.Combine( SavePath, SaveFile ), FileMode.Open, FileAccess.Read, FileShare.Read ) )
-			{
-				GenericReader reader = new BinaryFileReader( new BinaryReader( bin ) );
+            using (FileStream bin = new FileStream(Path.Combine(SavePath, SaveFile), FileMode.Open, FileAccess.Read, FileShare.Read))
+            {
+                GenericReader reader = new BinaryFileReader(new BinaryReader(bin));
 
-				m_LastResetTime = reader.ReadDateTime();
+                m_LastResetTime = reader.ReadDateTime();
 
-				int count = reader.ReadInt();
+                int count = reader.ReadInt();
 
-				for ( int i = 0; i < count; ++i )
-				{
-					Mobile mobile = reader.ReadMobile();
+                for (int i = 0; i < count; ++i)
+                {
+                    Mobile mobile = reader.ReadMobile();
 
-					MobileRateInfo info = new MobileRateInfo();
+                    MobileRateInfo info = new MobileRateInfo();
 
-					info.Deserialize( reader );
+                    info.Deserialize(reader);
 
-					if ( mobile != null )
-					{
-						MobileRateInfo.Entries.Add( mobile, info );
-					}
-				}
-			}
-		}
+                    if (mobile != null)
+                    {
+                        MobileRateInfo.Entries.Add(mobile, info);
+                    }
+                }
+            }
+        }
 
-		public RateOverTime()
-			: base( TimeSpan.FromSeconds( 30.0 ), TimeSpan.FromSeconds( 30.0 ) )
-		{
-			Priority = TimerPriority.FiveSeconds;
-		}
+        public RateOverTime()
+            : base(TimeSpan.FromSeconds(30.0), TimeSpan.FromSeconds(30.0))
+        {
+            Priority = TimerPriority.FiveSeconds;
+        }
 
-		protected override void OnTick()
-		{
-			if ( !Enabled )
-				return;
+        protected override void OnTick()
+        {
+            if (!Enabled)
+                return;
 
             if (DateTime.UtcNow >= DateTime.UtcNow.Date + ResetTime && DateTime.UtcNow.Date != m_LastResetTime.Date)
-			{
-				Reset();
-			}
-		}
+            {
+                Reset();
+            }
+        }
 
-		private class MobileRateInfo
-		{
-			private static Dictionary<Mobile, MobileRateInfo> m_Entries = new Dictionary<Mobile, MobileRateInfo>();
+        private class MobileRateInfo
+        {
+            private static Dictionary<Mobile, MobileRateInfo> m_Entries = new Dictionary<Mobile, MobileRateInfo>();
 
-			public static Dictionary<Mobile, MobileRateInfo> Entries
-			{
-				get { return m_Entries; }
-				set { m_Entries = value; }
-			}
+            public static Dictionary<Mobile, MobileRateInfo> Entries
+            {
+                get { return m_Entries; }
+                set { m_Entries = value; }
+            }
 
-			public static MobileRateInfo GetMobileInfo( Mobile from )
-			{
-				MobileRateInfo info = null;
+            public static MobileRateInfo GetMobileInfo(Mobile from)
+            {
+                MobileRateInfo info = null;
 
-				if ( !Entries.TryGetValue( from, out info ) )
-				{
-					info = new MobileRateInfo();
+                if (!Entries.TryGetValue(from, out info))
+                {
+                    info = new MobileRateInfo();
 
-					Entries.Add( from, info );
-				}
+                    Entries.Add(from, info);
+                }
 
-				return info;
-			}
+                return info;
+            }
 
-			private Dictionary<int, SkillRateInfo> m_SkillRates;
+            private Dictionary<int, SkillRateInfo> m_SkillRates;
 
-			private int m_SkillGainsCount = 0;
-			private int m_StatGainsCount = 0;
+            private int m_SkillGainsCount = 0;
+            private int m_StatGainsCount = 0;
 
-			public Dictionary<int, SkillRateInfo> SkillRates
-			{
-				get { return m_SkillRates; }
-				set { m_SkillRates = value; }
-			}
+            public Dictionary<int, SkillRateInfo> SkillRates
+            {
+                get { return m_SkillRates; }
+                set { m_SkillRates = value; }
+            }
 
-			public int SkillGainsCount
-			{
-				get { return m_SkillGainsCount; }
-				set { m_SkillGainsCount = value; }
-			}
+            public int SkillGainsCount
+            {
+                get { return m_SkillGainsCount; }
+                set { m_SkillGainsCount = value; }
+            }
 
-			public int StatGainsCount
-			{
-				get { return m_StatGainsCount; }
-				set { m_StatGainsCount = value; }
-			}
+            public int StatGainsCount
+            {
+                get { return m_StatGainsCount; }
+                set { m_StatGainsCount = value; }
+            }
 
-			public SkillRateInfo GetSkillInfo( Skill skill )
-			{
-				SkillRateInfo info = null;
+            public SkillRateInfo GetSkillInfo(Skill skill)
+            {
+                SkillRateInfo info = null;
 
-				if ( !m_SkillRates.TryGetValue( skill.SkillID, out info ) )
-				{
-					info = new SkillRateInfo();
+                if (!m_SkillRates.TryGetValue(skill.SkillID, out info))
+                {
+                    info = new SkillRateInfo();
 
-					SkillRates.Add( skill.SkillID, info );
-				}
+                    SkillRates.Add(skill.SkillID, info);
+                }
 
-				return info;
-			}
+                return info;
+            }
 
-			public MobileRateInfo()
-			{
-				m_SkillRates = new Dictionary<int, SkillRateInfo>();
-			}
+            public MobileRateInfo()
+            {
+                m_SkillRates = new Dictionary<int, SkillRateInfo>();
+            }
 
-			public void Serialize( GenericWriter writer )
-			{
-				writer.Write( (int)1 ); // version
+            public void Serialize(GenericWriter writer)
+            {
+                writer.Write((int)1); // version
 
-				writer.Write( m_SkillRates.Count );
+                writer.Write(m_SkillRates.Count);
 
-				foreach ( KeyValuePair<int, SkillRateInfo> kvp in m_SkillRates )
-				{
-					writer.Write( (int)kvp.Key );
+                foreach (KeyValuePair<int, SkillRateInfo> kvp in m_SkillRates)
+                {
+                    writer.Write((int)kvp.Key);
 
-					SkillRateInfo info = (SkillRateInfo)kvp.Value;
+                    SkillRateInfo info = (SkillRateInfo)kvp.Value;
 
-					info.Serialize( writer );
-				}
+                    info.Serialize(writer);
+                }
 
-				writer.Write( m_SkillGainsCount );
-				writer.Write( m_StatGainsCount );
-			}
+                writer.Write(m_SkillGainsCount);
+                writer.Write(m_StatGainsCount);
+            }
 
-			public void Deserialize( GenericReader reader )
-			{
-				int version = reader.ReadInt();
+            public void Deserialize(GenericReader reader)
+            {
+                int version = reader.ReadInt();
 
-				switch ( version )
-				{
-					case 1:
-					{
-						int count = reader.ReadInt();
+                switch (version)
+                {
+                    case 1:
+                        {
+                            int count = reader.ReadInt();
 
-						for ( int i = 0; i < count; i++ )
-						{
-							int id = reader.ReadInt();
+                            for (int i = 0; i < count; i++)
+                            {
+                                int id = reader.ReadInt();
 
-							SkillRateInfo info = new SkillRateInfo();
+                                SkillRateInfo info = new SkillRateInfo();
 
-							info.Deserialize( reader );
+                                info.Deserialize(reader);
 
-							m_SkillRates.Add( id, info );
-						}
+                                m_SkillRates.Add(id, info);
+                            }
 
-						m_SkillGainsCount = reader.ReadInt();
-						m_StatGainsCount = reader.ReadInt();
+                            m_SkillGainsCount = reader.ReadInt();
+                            m_StatGainsCount = reader.ReadInt();
 
-						break;
-					}
-				}
-			}
-		}
+                            break;
+                        }
+                }
+            }
+        }
 
-		private class SkillRateInfo
-		{
-			private DateTime m_LastGainTime;
-			private int m_GainsCount;
+        private class SkillRateInfo
+        {
+            private DateTime m_LastGainTime;
+            private int m_GainsCount;
 
-			public DateTime LastGainTime
-			{
-				get { return m_LastGainTime; }
-				set { m_LastGainTime = value; }
-			}
+            public DateTime LastGainTime
+            {
+                get { return m_LastGainTime; }
+                set { m_LastGainTime = value; }
+            }
 
-			public int GainsCount
-			{
-				get { return m_GainsCount; }
-				set { m_GainsCount = value; }
-			}
+            public int GainsCount
+            {
+                get { return m_GainsCount; }
+                set { m_GainsCount = value; }
+            }
 
-			public SkillRateInfo()
-			{
-				m_LastGainTime = DateTime.MinValue;
-				m_GainsCount = 0;
-			}
+            public SkillRateInfo()
+            {
+                m_LastGainTime = DateTime.MinValue;
+                m_GainsCount = 0;
+            }
 
-			public void Serialize( GenericWriter writer )
-			{
-				writer.Write( (int)1 ); // version
+            public void Serialize(GenericWriter writer)
+            {
+                writer.Write((int)1); // version
 
-				writer.Write( m_LastGainTime );
-				writer.Write( m_GainsCount );
-			}
+                writer.Write(m_LastGainTime);
+                writer.Write(m_GainsCount);
+            }
 
-			public void Deserialize( GenericReader reader )
-			{
-				int version = reader.ReadInt();
+            public void Deserialize(GenericReader reader)
+            {
+                int version = reader.ReadInt();
 
-				switch ( version )
-				{
-					case 1:
-					{
-						m_LastGainTime = reader.ReadDateTime();
-						m_GainsCount = reader.ReadInt();
+                switch (version)
+                {
+                    case 1:
+                        {
+                            m_LastGainTime = reader.ReadDateTime();
+                            m_GainsCount = reader.ReadInt();
 
-						break;
-					}
-				}
-			}
-		}
-	}
+                            break;
+                        }
+                }
+            }
+        }
+    }
 }

@@ -36,10 +36,14 @@ namespace Server.T2AConfiguration
         public static void LoadSettings()
         {
             if (!Directory.Exists("Data/Settings"))
+            {
                 Directory.CreateDirectory("Data/Settings");
+            }
 
             if (!File.Exists("Data/Settings/SettingsT2A.xml"))
+            {
                 File.Create("Data/Settings/SettingsT2A.xml");
+            }
 
             try
             {
@@ -49,7 +53,9 @@ namespace Server.T2AConfiguration
                 XmlElement root = doc["SettingsT2A"];
 
                 if (root == null)
+                {
                     return;
+                }
 
                 ReadNode(root, "T2AHouseGumpEnabled", ref s_T2AHouseGumpEnabled);
                 ReadNode(root, "T2AHouseDoorKeysEnabled", ref s_T2AHouseDoorKeysEnabled);
@@ -67,10 +73,14 @@ namespace Server.T2AConfiguration
         public static void SaveSettings()
         {
             if (!Directory.Exists("Data/Settings"))
+            {
                 Directory.CreateDirectory("Data/Settings");
+            }
 
             if (!File.Exists("Data/Settings/SettingsT2A.xml"))
+            {
                 File.Create("Data/Settings/SettingsT2A.xml");
+            }
 
             try
             {
@@ -101,24 +111,32 @@ namespace Server.T2AConfiguration
         public static void ReadNode(XmlElement root, string dungeon, ref bool val)
         {
             if (root == null)
+            {
                 return;
+            }
 
             foreach (XmlElement element in root.SelectNodes(dungeon))
             {
                 if (element.HasAttribute("active"))
+                {
                     val = XmlConvert.ToBoolean(element.GetAttribute("active"));
+                }
             }
         }
 
         public static void UpdateNode(XmlElement root, string dungeon, bool val)
         {
             if (root == null)
+            {
                 return;
+            }
 
             foreach (XmlElement element in root.SelectNodes(dungeon))
             {
                 if (element.HasAttribute("active"))
+                {
                     element.SetAttribute("active", XmlConvert.ToString(val));
+                }
             }
         }
 
@@ -133,7 +151,9 @@ namespace Server.T2AConfiguration
         private static void SettingsT2A_OnCommand(CommandEventArgs e)
         {
             if (e.Mobile.HasGump(typeof(T2ASettingsGump)))
+            {
                 e.Mobile.CloseGump(typeof(T2ASettingsGump));
+            }
             e.Mobile.SendGump(new T2ASettingsGump());
         }
     }
@@ -213,7 +233,9 @@ namespace Server.T2AConfiguration
                     break;
             }
             if (info.ButtonID > 0)
+            {
                 sender.Mobile.SendGump(new T2ASettingsGump());
+            }
         }
     }
 }

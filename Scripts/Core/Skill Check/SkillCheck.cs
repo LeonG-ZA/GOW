@@ -93,14 +93,20 @@ namespace Server.Misc
             Skill skill = from.Skills[skillName];
 
             if (skill == null)
+            {
                 return false;
+            }
 
             double value = skill.Value;
 
             if (value < minSkill)
+            {
                 return false; // Too difficult
+            }
             else if (value >= maxSkill)
+            {
                 return true; // No challenge
+            }
 
             double chance = (value - minSkill) / (maxSkill - minSkill);
 
@@ -123,14 +129,20 @@ namespace Server.Misc
             Skill skill = from.Skills[skillName];
 
             if (skill == null)
+            {
                 return false;
+            }
 
             //CrystalBallOfKnowledge.TellSkillDifficulty(from, skillName, chance);
 
             if (chance < 0.0)
+            {
                 return false; // Too difficult
+            }
             else if (chance >= 1.0)
+            {
                 return true; // No challenge
+            }
 
             Point2D loc = new Point2D(from.Location.X / LocationSize, from.Location.Y / LocationSize);
             return CheckSkill(from, skill, loc, chance);
@@ -139,7 +151,9 @@ namespace Server.Misc
         public static bool CheckSkill(Mobile from, Skill skill, object amObj, double chance)
         {
             if (from.Skills.Cap == 0)
+            {
                 return false;
+            }
 
             bool success = (chance >= Utility.RandomDouble());
             double gc = (double)(from.Skills.Cap - from.Skills.Total) / from.Skills.Cap;
@@ -152,13 +166,19 @@ namespace Server.Misc
             gc *= skill.Info.GainFactor;
 
             if (gc < 0.01)
+            {
                 gc = 0.01;
+            }
 
             if (from is BaseCreature && ((BaseCreature)from).Controlled)
+            {
                 gc *= 2;
+            }
 
             if (from.Alive && ((gc >= Utility.RandomDouble() && AllowGain(from, skill, amObj)) || skill.Base < 10.0 || (GuaranteedGainSystem.Enabled && GuaranteedGainSystem.ForceSkillGain(from, skill))))
+            {
                 Gain(from, skill);
+            }
 
             return success;
         }
@@ -168,14 +188,20 @@ namespace Server.Misc
             Skill skill = from.Skills[skillName];
 
             if (skill == null)
+            {
                 return false;
+            }
 
             double value = skill.Value;
 
             if (value < minSkill)
+            {
                 return false; // Too difficult
+            }
             else if (value >= maxSkill)
+            {
                 return true; // No challenge
+            }
 
             double chance = (value - minSkill) / (maxSkill - minSkill);
 
@@ -198,32 +224,48 @@ namespace Server.Misc
             Skill skill = from.Skills[skillName];
 
             if (skill == null)
+            {
                 return false;
+            }
 
             //CrystalBallOfKnowledge.TellSkillDifficulty(from, skillName, chance);
 
             if (chance < 0.0)
+            {
                 return false; // Too difficult
+            }
             else if (chance >= 1.0)
+            {
                 return true; // No challenge
+            }
 
             return CheckSkill(from, skill, target, chance);
         }
 
         private static bool AllowGain(Mobile from, Skill skill, object obj)
         {
-            if (Core.AOS && Faction.InSkillLoss(from))	//Changed some time between the introduction of AoS and SE.
+            if (Core.AOS && Faction.InSkillLoss(from))  //Changed some time between the introduction of AoS and SE.
+            {
                 return false;
+            }
 
             if (from is PlayerMobile && from.Race == Race.Gargoyle && skill.Info.SkillID == (int)SkillName.Archery)
+            {
                 return false;
+            }
             else if (from is PlayerMobile && from.Race != Race.Gargoyle && skill.Info.SkillID == (int)SkillName.Throwing)
+            {
                 return false;
+            }
 
             if (AntiMacroCode && from is PlayerMobile && UseAntiMacro[skill.Info.SkillID])
+            {
                 return ((PlayerMobile)from).AntiMacroCheck(skill, obj);
+            }
             else
+            {
                 return true;
+            }
         }
 
         public enum Stat
@@ -236,13 +278,19 @@ namespace Server.Misc
         public static void Gain(Mobile from, Skill skill)
         {
             if (from.Region.IsPartOf(typeof(Regions.Jail)))
+            {
                 return;
+            }
 
             if (from is BaseCreature && ((BaseCreature)from).IsDeadPet)
+            {
                 return;
+            }
 
             if (skill.SkillName == SkillName.Focus && from is BaseCreature)
+            {
                 return;
+            }
 
             if (skill.Base < skill.Cap && skill.Lock == SkillLock.Up)
             {
@@ -251,7 +299,9 @@ namespace Server.Misc
                 int toGain = 1;
 
                 if (skill.Base <= 10.0)
+                {
                     toGain = Utility.Random(4) + 1;
+                }
 
                 Skills skills = from.Skills;
 
@@ -270,8 +320,12 @@ namespace Server.Misc
                 }
 
                 if (from is PlayerMobile)
+                {
                     if (QuestHelper.EnhancedSkill((PlayerMobile)from, skill))
+                    {
                         toGain *= Utility.RandomMinMax(2, 4);
+                    }
+                }
 
                 PlayerMobile pm = from as PlayerMobile;
 
@@ -289,12 +343,16 @@ namespace Server.Misc
                     skill.BaseFixedPoint += toGain;
 
                     if (GuaranteedGainSystem.Enabled)
+                    {
                         GuaranteedGainSystem.RegisterSkillGain(from, skill);
+                    }
                 }
             }
 
             if (from is PlayerMobile)
+            {
                 QuestHelper.CheckSkill((PlayerMobile)from, skill);
+            }
 
             if (skill.Lock == SkillLock.Up)
             {
@@ -307,39 +365,55 @@ namespace Server.Misc
                         case 0:
                             {
                                 if (from.StrLock == StatLockType.Up)
+                                {
                                     GainStat(from, Stat.Str);
+                                }
                                 break;
                             }
                         case 1:
                             {
                                 if (from.DexLock == StatLockType.Up)
+                                {
                                     GainStat(from, Stat.Dex);
+                                }
                                 break;
                             }
                         case 2:
                             {
                                 if (from.IntLock == StatLockType.Up)
+                                {
                                     GainStat(from, Stat.Int);
+                                }
                                 break;
                             }
                     }
                 }
                 else if (from.StrLock == StatLockType.Up && (info.StrGain / 33.3) > Utility.RandomDouble())
+                {
                     GainStat(from, Stat.Str);
+                }
                 else if (from.DexLock == StatLockType.Up && (info.DexGain / 33.3) > Utility.RandomDouble())
+                {
                     GainStat(from, Stat.Dex);
+                }
                 else if (from.IntLock == StatLockType.Up && (info.IntGain / 33.3) > Utility.RandomDouble())
+                {
                     GainStat(from, Stat.Int);
+                }
             }
         }
 
         public static bool HasAcceleratedSkillGain(Mobile from, Skill skill)
         {
             if (ScrollOfAlacrity.HasAcceleratedSkillGain(from, skill))
+            {
                 return true;
+            }
 
             if (from is PlayerMobile && QuestHelper.EnhancedSkill((PlayerMobile)from, skill))
+            {
                 return true;
+            }
 
             return false;
         }
@@ -347,10 +421,14 @@ namespace Server.Misc
         public static bool HasAnyAcceleratedSkillGain(Mobile from)
         {
             if (ScrollOfAlacrity.HasAnyAcceleratedSkillGain(from))
+            {
                 return true;
+            }
 
             if (from is PlayerMobile && ((PlayerMobile)from).Quests.Any(q => q.Objectives.OfType<ApprenticeObjective>().Any()))
+            {
                 return true;
+            }
 
             return false;
         }
@@ -375,7 +453,9 @@ namespace Server.Misc
             if (!(from is BaseCreature && ((BaseCreature)from).Controlled))
             {
                 if (from.RawStatTotal >= from.StatCap)
+                {
                     return false;
+                }
             }
 
             switch ( stat )
@@ -402,9 +482,13 @@ namespace Server.Misc
                         if (atrophy)
                         {
                             if (CanLower(from, Stat.Dex) && (from.RawDex < from.RawInt || !CanLower(from, Stat.Int)))
+                            {
                                 --from.RawDex;
+                            }
                             else if (CanLower(from, Stat.Int))
+                            {
                                 --from.RawInt;
+                            }
                         }
 
                         if (CanRaise(from, Stat.Str))
@@ -412,7 +496,9 @@ namespace Server.Misc
                             ++from.RawStr;
 
                             if (GuaranteedGainSystem.Enabled)
+                            {
                                 GuaranteedGainSystem.RegisterStatGain(from);
+                            }
                         }
 
                         break;
@@ -422,9 +508,13 @@ namespace Server.Misc
                         if (atrophy)
                         {
                             if (CanLower(from, Stat.Str) && (from.RawStr < from.RawInt || !CanLower(from, Stat.Int)))
+                            {
                                 --from.RawStr;
+                            }
                             else if (CanLower(from, Stat.Int))
+                            {
                                 --from.RawInt;
+                            }
                         }
 
                         if (CanRaise(from, Stat.Dex))
@@ -433,7 +523,9 @@ namespace Server.Misc
 
 
                             if (GuaranteedGainSystem.Enabled)
+                            {
                                 GuaranteedGainSystem.RegisterStatGain(from);
+                            }
                         }
 
                         break;
@@ -443,9 +535,13 @@ namespace Server.Misc
                         if (atrophy)
                         {
                             if (CanLower(from, Stat.Str) && (from.RawStr < from.RawDex || !CanLower(from, Stat.Dex)))
+                            {
                                 --from.RawStr;
+                            }
                             else if (CanLower(from, Stat.Dex))
+                            {
                                 --from.RawDex;
+                            }
                         }
 
                         if (CanRaise(from, Stat.Int))
@@ -453,7 +549,9 @@ namespace Server.Misc
                             ++from.RawInt;
 
                             if (GuaranteedGainSystem.Enabled)
+                            {
                                 GuaranteedGainSystem.RegisterStatGain(from);
+                            }
                         }
 
                         break;
@@ -473,10 +571,14 @@ namespace Server.Misc
                         if (from is BaseCreature && ((BaseCreature)from).Controlled)
                         {
                             if ((from.LastStrGain + m_PetStatGainDelay) >= DateTime.UtcNow)
+                            {
                                 return;
+                            }
                         }
                         else if ((from.LastStrGain + m_StatGainDelay) >= DateTime.UtcNow || (RateOverTime.Enabled && !RateOverTime.StatGainAllowed(from)))
+                        {
                             return;
+                        }
 
                         from.LastStrGain = DateTime.UtcNow;
                         break;
@@ -486,10 +588,14 @@ namespace Server.Misc
                         if (from is BaseCreature && ((BaseCreature)from).Controlled)
                         {
                             if ((from.LastDexGain + m_PetStatGainDelay) >= DateTime.UtcNow)
+                            {
                                 return;
+                            }
                         }
                         else if ((from.LastDexGain + m_StatGainDelay) >= DateTime.UtcNow || (RateOverTime.Enabled && !RateOverTime.StatGainAllowed(from)))
+                        {
                             return;
+                        }
 
                         from.LastDexGain = DateTime.UtcNow;
                         break;
@@ -499,7 +605,9 @@ namespace Server.Misc
                         if (from is BaseCreature && ((BaseCreature)from).Controlled)
                         {
                             if ((from.LastIntGain + m_PetStatGainDelay) >= DateTime.UtcNow)
+                            {
                                 return;
+                            }
                         }
                         else if ((from.LastIntGain + m_StatGainDelay) >= DateTime.UtcNow || (RateOverTime.Enabled && !RateOverTime.StatGainAllowed(from)))
                             return;
